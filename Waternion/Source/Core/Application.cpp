@@ -10,10 +10,14 @@ namespace Waternion {
     }
 
     Application::Application() {
-        mWindow.reset(new Window());
+        
     }
 
     bool Application::InitWindow(int width, int height, const std::string& title, const std::string& version) {
+        mCoordinator.reset(new ECS::Coordinator());
+        mScene.reset(new ECS::Scene());
+        mWindow.reset(new Window());
+        
         if (!mWindow->Init(width, height, title)) {
             WATERNION_LOG_ERROR("Init Window succesfully");
         }
@@ -35,9 +39,6 @@ namespace Waternion {
     }
 
     void Application::LoadData() {
-        mCoordinator.reset(new ECS::Coordinator());
-
-        mScene.reset(new ECS::Scene());
         mScene->Load();
         mScene->Start();
     }
@@ -64,11 +65,11 @@ namespace Waternion {
 
     void Application::Shutdown() {
         mWindow->Shutdown();
+        mScene->Shutdown();
     }
 
     void Application::ProcessInput() {
-        mWindow->ProcessInput();
-        mScene->ProcessInput();
+        mWindow->PollInputEvents();
     }
 
     void Application::Update(float deltaTime) {

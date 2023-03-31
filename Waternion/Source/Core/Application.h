@@ -20,6 +20,7 @@ namespace Waternion {
             WATERNION_API void Run();
             WATERNION_API void Shutdown();
             WATERNION_INLINE Shared<ECS::Coordinator> GetCoordinator() { return mCoordinator; }
+            WATERNION_INLINE Shared<ECS::Scene> GetScene() { return mScene; }
         private:
             Application();
             void LoadData();

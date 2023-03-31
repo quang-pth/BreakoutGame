@@ -13,7 +13,20 @@ namespace Waternion {
             Shared<Entity> entity;
             entity.reset(new Entity());
             this->RegisterSystem<InputSystem>();
+            
+            if (!this->InitSystems()) {
+                return false;
+            }            
+
             return true;
+        }
+
+        void Scene::Shutdown() {
+            for (auto& [_, systems] : mSystemsMap) {
+                for(Shared<System> system : systems) {
+                    system->Shutdown();
+                }
+            }
         }
 
         void Scene::Start() {
@@ -21,12 +34,6 @@ namespace Waternion {
                 for(Shared<System> system : systems) {
                     system->Start();
                 }
-            }
-        }
-
-        void Scene::ProcessInput() {
-            for(Shared<System> system : mSystemsMap[GetTypeID<InputSystem>()]) {
-                StaticPtrCast<InputSystem>(system)->ProcessInput();
             }
         }
 
@@ -40,6 +47,18 @@ namespace Waternion {
 
         void Scene::Render(float deltaTime) {
 
+        }
+
+        bool Scene::InitSystems() {
+            for (auto& [_, systems] : mSystemsMap) {
+                for(Shared<System> system : systems) {
+                    if (!system->Init()) {
+                        return false; 
+                    }                    
+                }
+            }
+
+            return true;
         }
     } // namespace ECS
 } // namespace Waternion

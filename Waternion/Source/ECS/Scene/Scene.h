@@ -15,8 +15,8 @@ namespace Waternion
                 WATERNION_INLINE Scene(const Scene&) = default;
 
                 bool Load();
+                void Shutdown();
                 void Start();
-                void ProcessInput();
                 void Update(float);
                 void Render(float);
 
@@ -26,7 +26,15 @@ namespace Waternion
                     WATERNION_STATIC_ASSERT(std::is_base_of<System, T>::value);
                     mSystemsMap[systemType].emplace_back(std::make_shared<T>(std::forward<Args>(args)...));
                 }
+
+                template<typename T>
+                WATERNION_INLINE std::vector<Shared<System>> GetSystems() {
+                    UUID systemType = GetTypeID<T>();
+                    WATERNION_STATIC_ASSERT(std::is_base_of<System, T>::value);
+                    return mSystemsMap[systemType];
+                }
             private:
+                bool InitSystems();
                 std::unordered_map<UUID, std::vector<Shared<System>>> mSystemsMap;
                 std::vector<Shared<InputSystem>> mInputSystems;
                 std::shared_ptr<Coordinator> mCoordinator;

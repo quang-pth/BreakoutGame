@@ -8,6 +8,8 @@
 
 namespace Waternion {
     namespace ECS {
+      
+
         class System {
             public:
                 System();
@@ -21,10 +23,14 @@ namespace Waternion {
                     }
                     return entities;
                 }
+                WATERNION_INLINE virtual bool Init() { return true; }
+                WATERNION_INLINE virtual void Shutdown() {}
                 WATERNION_INLINE virtual void Start() {}
                 WATERNION_INLINE virtual void Update(float deltaTime) {}
+                WATERNION_INLINE const std::string& GetName() { return mName; }
             protected:
                 Shared<Coordinator> mCoordinator;
+                std::string mName;
         };
     }
 }
