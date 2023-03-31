@@ -1,6 +1,7 @@
 #pragma once
 
 #include"pch.h"
+#include"Window/Window.h"
 
 namespace Waternion {
     struct WindowConfig {
@@ -22,6 +23,6 @@ namespace Waternion {
             void Render(float deltaTime);
         private:
             WindowConfig mConfig;
-            bool mIsRunning;
+            std::unique_ptr<Window> mWindow;
     };
 } 
