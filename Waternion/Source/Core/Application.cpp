@@ -1,6 +1,14 @@
 #include"Application.h"
 
 namespace Waternion {
+    Shared<Application> Application::GetInstance() {
+        static Shared<Application> application;
+        if (application == nullptr) {
+            application.reset(new Application());
+        }
+        return application;
+    }
+
     Application::Application() {
         mWindow.reset(new Window());
     }
@@ -21,7 +29,17 @@ namespace Waternion {
             return false; 
         }
 
+        this->LoadData();
+
         return true;
+    }
+
+    void Application::LoadData() {
+        mCoordinator.reset(new ECS::Coordinator());
+
+        mScene.reset(new ECS::Scene());
+        mScene->Load();
+        mScene->Start();
     }
 
     void Application::Run() {
@@ -50,13 +68,14 @@ namespace Waternion {
 
     void Application::ProcessInput() {
         mWindow->ProcessInput();
+        mScene->ProcessInput();
     }
 
     void Application::Update(float deltaTime) {
-
+        mScene->Update(deltaTime);
     }
 
     void Application::Render(float deltaTime) {
-        
+        mScene->Render(deltaTime);
     }
 }

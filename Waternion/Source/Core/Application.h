@@ -2,6 +2,8 @@
 
 #include"pch.h"
 #include"Window/Window.h"
+#include"ECS/Coordinator.h"
+#include"ECS/Scene/Scene.h"
 
 namespace Waternion {
     struct WindowConfig {
@@ -13,16 +15,20 @@ namespace Waternion {
 
     class Application {
         public:
-            WATERNION_API Application();
+            WATERNION_API static Shared<Application> GetInstance();
             WATERNION_API bool InitWindow(int width, int height, const std::string& title, const std::string& version);
             WATERNION_API void Run();
             WATERNION_API void Shutdown();
+            WATERNION_INLINE Shared<ECS::Coordinator> GetCoordinator() { return mCoordinator; }
         private:
+            Application();
+            void LoadData();
             void ProcessInput();
             void Update(float deltaTime);
             void Render(float deltaTime);
         private:
-            WindowConfig mConfig;
-            std::unique_ptr<Window> mWindow;
+            Unique<Window> mWindow;
+            Shared<ECS::Coordinator> mCoordinator;
+            Shared<ECS::Scene> mScene;
     };
 } 

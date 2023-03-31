@@ -53,7 +53,7 @@
 #endif
 
 // Dynamic runtime assert
-#define WATERNION_ASSSERT assert
+#define WATERNION_ASSERT assert
 
 // Static Assert
 #if defined(__clang__) || defined(__gcc__)
@@ -91,9 +91,7 @@
 namespace Waternion {
     template<typename T> using Shared = std::shared_ptr<T>;
     template<typename T> using Unique = std::unique_ptr<T>;
-    // template<typename T, typename... Args> using MakeShared = std::make_shared<T>(std::forward<Args>(args)...)
-    // template<typename T, typename... Args> using MakeUnique = std::make_unique<T>(std::forward<Args>(args)...)
-    
+
     template<typename To, typename From>
     WATERNION_API WATERNION_INLINE To DynamicCast(From source)
     {
@@ -118,4 +116,10 @@ namespace Waternion {
 
     using UUID = size_t;
     WATERNION_API UUID GenerateUUID();
+
+    template<typename T>
+    WATERNION_INLINE UUID GetTypeID() {
+        static UUID id = GenerateUUID();
+        return id;
+    }
 }

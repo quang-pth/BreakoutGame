@@ -1,12 +1,12 @@
 #include<Core/Application.h>
 
 int main() {
-    Waternion::Application application;
-    bool success = application.InitWindow(800, 600, "BreakOut", "v0.1");
+    bool success = Waternion::Application::GetInstance()->InitWindow(800, 600, "BreakOut", "v0.1");
+    
     if (success) {
-        application.Run();
+        Waternion::Application::GetInstance()->Run();
     }
 
-    application.Shutdown();
+    Waternion::Application::GetInstance()->Shutdown();
     return 1;
 }
