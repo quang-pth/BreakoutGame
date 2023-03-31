@@ -1,0 +1,13 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Windows",
+            "type": "cppvsdbg",
+            "request": "launch",
+            "console": "integratedTerminal",
+            "cwd": "${workspaceFolder}/build/bin/Debug",
+            "program": "${workspaceFolder}/build/bin/Debug/Game.exe"
+        }
+    ]
+}

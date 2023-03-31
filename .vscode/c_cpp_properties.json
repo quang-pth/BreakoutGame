@@ -1,0 +1,16 @@
+{
+    "configurations": [
+        {
+            "name": "configs",
+            "includePath": [
+                "${workspaceFolder}/External/include/**",
+                "${workspaceFolder}/Waternion/Source/**"
+            ],
+            "defines": ["_DEBUG", "WATERNION_EXPORT"],
+            "cStandard": "c17",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "${default}"
+        }
+    ],
+    "version": 4
+}
