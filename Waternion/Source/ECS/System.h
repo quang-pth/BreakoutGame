@@ -8,8 +8,6 @@
 
 namespace Waternion {
     namespace ECS {
-      
-
         class System {
             public:
                 System();

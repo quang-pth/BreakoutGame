@@ -92,6 +92,16 @@ namespace Waternion {
     template<typename T> using Shared = std::shared_ptr<T>;
     template<typename T> using Unique = std::unique_ptr<T>;
 
+    template<typename T, typename... Args>
+    WATERNION_API WATERNION_INLINE Shared<T> MakeShared(Args&&... args) {
+        return std::make_shared<T>(std::forward<Args>(args)...);
+    }
+    
+    template<typename T, typename... Args>
+    WATERNION_API WATERNION_INLINE Unique<T> MakeUnique(Args&&... args) {
+        return std::make_unique<T>(std::forward<Args>(args)...);
+    }
+
     template<typename To, typename From>
     WATERNION_API WATERNION_INLINE To DynamicCast(From source)
     {
@@ -112,6 +122,11 @@ namespace Waternion {
     template<typename To, typename From>
     WATERNION_API WATERNION_INLINE Shared<To> StaticPtrCast(Shared<From> source) {
         return std::static_pointer_cast<To>(source);
+    }
+
+    template<typename To, typename From>
+    WATERNION_API WATERNION_INLINE To ReintepretCast(From source) {
+        return reinterpret_cast<To>(source);
     }
 
     using UUID = size_t;

@@ -23,16 +23,12 @@ namespace Waternion {
 
         void InputSystem::ProcessInput(const InputState& inputState) {
             if (inputState.Keyboard.GetKeyState(GLFW_KEY_W) == ButtonState::EPressed) {
-                WATERNION_LOG_INFO("W key pressed");
             }
             if (inputState.Keyboard.GetKeyState(GLFW_KEY_W) == ButtonState::EReleased) {
-                WATERNION_LOG_INFO("W key released");
             }
             if (inputState.Keyboard.GetKeyState(GLFW_KEY_W) == ButtonState::EHeld) {
-                WATERNION_LOG_INFO("W key held");
             }
             if (inputState.Keyboard.GetKeyState(GLFW_KEY_W) == ButtonState::ENone) {
-                WATERNION_LOG_INFO("W key none");
             }
         }
     }
