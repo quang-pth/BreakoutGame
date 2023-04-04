@@ -1,4 +1,5 @@
 #include"InputSystem.h"
+#include"Core/Application.h"
 
 namespace Waternion {
     namespace ECS {
@@ -8,6 +9,7 @@ namespace Waternion {
 
         bool InputSystem::Init() {
             System::Init();
+            Application::GetInstance()->GetScene()->RegisterSystem<InputSystem>();            
             WATERNION_LOG_INFO("%s initialized successfully!", mName.c_str());
             return true;
         }

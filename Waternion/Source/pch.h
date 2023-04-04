@@ -10,6 +10,7 @@
 #include<cassert>
 #include<sstream>
 #include<istream>
+#include<fstream>
 #include<assert.h>
 #include<iostream>
 #include<algorithm>

@@ -5,6 +5,7 @@
 #include"Coordinator.h"
 
 #include"Component/Defaults.h"
+#include"Component/SpriteComponent.h"
 
 namespace Waternion {
     namespace ECS {

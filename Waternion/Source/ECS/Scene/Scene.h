@@ -36,7 +36,6 @@ namespace Waternion
             private:
                 bool InitSystems();
                 std::unordered_map<UUID, std::vector<Shared<System>>> mSystemsMap;
-                std::vector<Shared<InputSystem>> mInputSystems;
                 std::shared_ptr<Coordinator> mCoordinator;
         };
     } // namespace ECS
