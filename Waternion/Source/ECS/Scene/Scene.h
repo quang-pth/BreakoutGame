@@ -2,8 +2,8 @@
 
 #include"pch.h"
 
-#include"ECS/System/InputSystem.h"
 #include"ECS/Coordinator.h"
+#include"ECS/System.h"
 
 namespace Waternion
 {

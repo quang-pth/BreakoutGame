@@ -1,7 +1,7 @@
 #pragma once
 
 #include"pch.h"
-#include"Math/Utils.h"
+#include"Utils.h"
 
 namespace Waternion
 {

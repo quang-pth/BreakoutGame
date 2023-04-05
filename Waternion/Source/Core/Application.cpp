@@ -13,7 +13,7 @@ namespace Waternion {
         
     }
 
-    bool Application::InitWindow(int width, int height, const std::string& title, const std::string& version) {
+    bool Application::Init(int width, int height, const std::string& title, const std::string& version) {
         mCoordinator.reset(new ECS::Coordinator());
         mScene.reset(new ECS::Scene());
         mWindow.reset(new Window());
@@ -77,6 +77,8 @@ namespace Waternion {
     }
 
     void Application::Render(float deltaTime) {
+        mWindow->ClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         mScene->Render(deltaTime);
+        mWindow->SwapBuffers();
     }
 }

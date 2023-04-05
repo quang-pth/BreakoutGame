@@ -8,7 +8,7 @@ namespace Waternion
         public:
             VertexArray() = default;
             VertexArray(const VertexArray&) = default;
-            VertexArray(const float* vertices, uint32_t numOfVertices, const uint32_t* indices, uint32_t numOfIndices);
+            VertexArray(const float* vertices, int32_t numOfVertices, const int32_t* indices, int32_t numOfIndices);
             ~VertexArray();
             void Bind();
             void Unbind();

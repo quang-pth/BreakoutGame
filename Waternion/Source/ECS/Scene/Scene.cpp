@@ -2,7 +2,9 @@
 #include"Core/Application.h"
 #include"Render/Shader.h"
 #include"Core/Manager/ResourceManager.h"
+
 #include"ECS/System/Renderer.h"
+#include"ECS/System/InputSystem.h"
 
 namespace Waternion {
     namespace ECS
@@ -10,12 +12,15 @@ namespace Waternion {
         Scene::Scene() {
             mCoordinator = Application::GetInstance()->GetCoordinator();
             WATERNION_ASSERT(mCoordinator != nullptr && "Reference Coordinator as nullptr");
+
+            this->RegisterSystem<InputSystem>();
+            this->RegisterSystem<SpriteRenderer>();
         }
 
         bool Scene::Load() {
             Shared<Entity> entity;
             entity.reset(new Entity());
-            entity->AddComponent<SpriteComponent>("assets/textures/awesomeface.png", true, "Awesomeface");
+            entity->AddComponent<SpriteComponent>()->Init("assets/textures/awesomeface.png", true, "Awesomeface");
 
             if (!this->InitSystems()) {
                 return false;
@@ -50,10 +55,10 @@ namespace Waternion {
 
         void Scene::Render(float deltaTime) {
             Shared<Shader> shader = ResourceManager::LoadShader("assets/shaders/sprite_vs.glsl", "assets/shaders/sprite_fs.glsl", "", "SpriteShader");
-            for(auto& [_, system] : mSystemsMap) {
-                for(Shared<System> system : system) {
-                    StaticPtrCast<Renderer>(system)->Draw(shader);
-                }
+            shader->Use();
+            shader->SetMatrix4("Projection", Math::Matrix4::CreateSimpleViewProj(Application::GetInstance()->GetWindowWidth(), Application::GetInstance()->GetWindowHeight()));
+            for(Shared<System> system : mSystemsMap[GetTypeID<SpriteRenderer>()]) {
+                StaticPtrCast<SpriteRenderer>(system)->Draw(shader);
             }
         }
 

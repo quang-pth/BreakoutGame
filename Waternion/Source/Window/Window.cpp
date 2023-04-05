@@ -30,6 +30,9 @@ namespace Waternion {
     }
 
     bool Window::Init(int width, int height, const std::string& name) {
+        mWidth = width;
+        mHeight = height;
+
         glfwInit();
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -65,5 +68,16 @@ namespace Waternion {
 
     void Window::PollInputEvents() {
         glfwPollEvents();
+    }
+
+    void Window::ClearColor(float r, float g, float b, float a) {
+        glClearColor(r, g, b, a);
+        glClear(GL_COLOR_BUFFER_BIT);
+        glEnable(GL_BLEND);
+	    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }
+
+    void Window::SwapBuffers() {
+        glfwSwapBuffers(mInstance);
     }
 }

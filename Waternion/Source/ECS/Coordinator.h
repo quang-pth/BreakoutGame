@@ -84,6 +84,14 @@ namespace Waternion {
                     }
                     return StaticPtrCast<ComponentArray<T>>(mComponentArrayMap.at(GetTypeID<T>()));                       
                 }
+
+                template<typename T>
+                WATERNION_INLINE EntityID GetEntityID(UUID componentID) {
+                    if (mComponentArrayMap.count(GetTypeID<T>()) == 0) {
+                        return INVALID_ID;
+                    }
+                    return StaticPtrCast<ComponentArray<T>>(mComponentArrayMap.at(GetTypeID<T>()))->GetEntityID(componentID);                       
+                }
             private:
                 template<typename T> 
                 WATERNION_INLINE void AddComponentArray() {

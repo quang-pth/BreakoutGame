@@ -16,11 +16,13 @@ namespace Waternion {
     class Application {
         public:
             WATERNION_API static Shared<Application> GetInstance();
-            WATERNION_API bool InitWindow(int width, int height, const std::string& title, const std::string& version);
+            WATERNION_API bool Init(int width, int height, const std::string& title, const std::string& version);
             WATERNION_API void Run();
             WATERNION_API void Shutdown();
             WATERNION_INLINE Shared<ECS::Coordinator> GetCoordinator() { return mCoordinator; }
             WATERNION_INLINE Shared<ECS::Scene> GetScene() { return mScene; }
+            WATERNION_INLINE float GetWindowWidth() { return mWindow->GetWidth(); }
+            WATERNION_INLINE float GetWindowHeight() { return mWindow->GetHeight(); }
         private:
             Application();
             void LoadData();

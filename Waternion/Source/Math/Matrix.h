@@ -1,6 +1,7 @@
 #pragma once
 
 #include"Math/Vec.h"
+#include"Math/Utils.h"
 
 namespace Waternion
 {
@@ -21,6 +22,7 @@ namespace Waternion
                 }
 
                 friend Matrix4 operator*(Matrix4& a, Matrix4& b);
+                friend Matrix4 operator*=(Matrix4& a, Matrix4& b);
 
                 const float* GetAsFloatPtr() const {
                     return ReintepretCast<const float*>(&mValue[0][0]);
@@ -106,6 +108,16 @@ namespace Waternion
                     return Matrix4(value);
                 }
                 
+                static WATERNION_INLINE Matrix4 CreateSimpleViewProj(float width, float height) {
+                    float value[4][4] = {
+                        {2.0f / width, 0.0f, 0.0f, 0.0f},
+                        {0.0f, 2.0f / height, 0.0f, 0.0f},
+                        {0.0f, 0.0f, 1.0f, 0.0f},
+                        {0.0f, 0.0f, 1.0f, 1.0f},
+                    };
+                    return Matrix4(value);
+                }
+
                 static Matrix4 Identity;
             private:
                 float mValue[4][4];

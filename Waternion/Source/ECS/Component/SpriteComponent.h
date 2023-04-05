@@ -1,19 +1,20 @@
 #pragma once
 
-#include"pch.h"
+#include"Defaults.h"
 #include"Render/Texture.h"
 #include"Render/VertexArray.h"
 #include"Render/Shader.h"
 
 namespace Waternion {
     namespace ECS {
-        class SpriteComponent {
+        class SpriteComponent : public Component {
             public:
-                SpriteComponent() = default;
+                SpriteComponent() : Component() {}
                 SpriteComponent(const SpriteComponent&) = default;
-                SpriteComponent(const char* filepath, bool alpha, const char* name);
+                void Init(const char* filepath, bool alpha, const char* name);
                 void Draw(Shared<Shader> shader);
             private:
+                void CheckError();
                 Shared<Texture2D> mTexture;
                 Shared<VertexArray> mVAO;
         };

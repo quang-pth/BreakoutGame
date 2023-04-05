@@ -36,5 +36,10 @@ namespace Waternion
             resultMat[3][3] = a[3][0] * b[0][3] + a[3][1] * b[1][3] + a[3][2] * b[2][3] + a[3][3] * b[3][3];
             return resultMat;
         }
+
+        Matrix4 operator*=(Matrix4& a, Matrix4& b) {
+            a = a * b;
+            return a;
+        }
     }
 } // namespace Waternion

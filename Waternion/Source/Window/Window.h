@@ -14,7 +14,12 @@ namespace Waternion {
             WATERNION_INLINE bool WindowShouldClose() {
                 return StaticCast<bool>(glfwWindowShouldClose(mInstance));
             }
+            WATERNION_API void ClearColor(float r, float g, float b, float a);
+            WATERNION_API void SwapBuffers();
+            WATERNION_INLINE float GetWidth() const { return mWidth; }
+            WATERNION_INLINE float GetHeight() const { return mHeight; }
         private:
             GLFWwindow* mInstance;
+            float mWidth, mHeight;
     };
 }

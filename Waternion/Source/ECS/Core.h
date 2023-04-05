@@ -1,19 +1,16 @@
 #pragma once
 
 #include"pch.h"
+#include"Type.h"
 
 namespace Waternion {
     namespace ECS {
-        using EntityID = size_t;
-        using ComponentID = uint32_t;
-        using Signature = std::set<ComponentID>;
-        using EntityIDList =  std::set<EntityID>;
-        
         class ComponentEntryBase {
             public:
                 WATERNION_INLINE virtual ~ComponentEntryBase() = default;
                 virtual operator EntityID() const = 0;                
                 virtual EntityID GetEntityID() const = 0;       
+                virtual UUID GetComponentID() const = 0;       
         };
 
         template<typename T>
@@ -23,7 +20,8 @@ namespace Waternion {
                     : mEntityID(entID), mComponent(component) {}
                 WATERNION_INLINE virtual operator EntityID() const override { return mEntityID; }                
                 WATERNION_INLINE virtual EntityID GetEntityID() const override { return mEntityID; }       
-                WATERNION_INLINE Shared<T> GetComponent() { return mComponent; }         
+                WATERNION_INLINE virtual UUID GetComponentID() const override { return mComponent->GetID(); }       
+                WATERNION_INLINE Shared<T> GetComponent() const { return mComponent; }         
             private:
                 EntityID mEntityID;
                 Shared<T> mComponent;
@@ -41,14 +39,14 @@ namespace Waternion {
                 WATERNION_INLINE ComponentArray() : mComponentEntries() {}
 
                 WATERNION_INLINE Shared<T> Add(EntityID entID, Shared<T> component) {
-                    if (this->IsExisted(entID) == mComponentEntries.end()) {
+                    if (this->IsEntityExisted(entID) == mComponentEntries.end()) {
                         mComponentEntries.emplace_back(std::make_shared<ComponentEntry<T>>(entID, component));
                     }
                     return component;      
                 }
 
                 WATERNION_INLINE virtual bool Erase(EntityID entID) override {
-                    auto iter = this->IsExisted(entID);
+                    auto iter = this->IsEntityExisted(entID);
                     if (iter != mComponentEntries.end()) {
                         mComponentEntries.erase(iter);
                     }
@@ -56,17 +54,37 @@ namespace Waternion {
                     return true;
                 }
 
-                WATERNION_INLINE Shared<T> GetComponent(EntityID entID) {
-                    auto iter = this->IsExisted(entID);
-                    WATERNION_ASSERT(iter != mComponentEntries.end() && "Get non-existing component");
+                WATERNION_INLINE Shared<T> GetComponent(EntityID id) {
+                    auto iter = this->IsEntityExisted(id);
+                    WATERNION_ASSERT(iter != mComponentEntries.end() && "Get non-existing entity");
                     return StaticPtrCast<ComponentEntry<T>>((*iter))->GetComponent();
                 }
+
+                WATERNION_INLINE EntityID GetEntityID(UUID componentID) {
+                    for (auto iter = mComponentEntries.begin(); iter != mComponentEntries.end(); iter++) {
+                        Shared<ComponentEntryBase> entry = *iter;
+                        UUID id = entry->GetComponentID();
+                        if (id == componentID) {
+                            return entry->GetEntityID();
+                        }
+                    }
+                    return INVALID_ID;
+                }
+
+                WATERNION_INLINE const std::vector<Shared<T>>& GetComponents() {
+                    std::vector<Shared<T>> components;
+                    for(Shared<ComponentEntryBase> entry : mComponentEntries) {
+                        components.emplace_back(StaticPtrCast<ComponentEntry<T>>(entry)->GetComponent());
+                    }
+                    return components;
+                }
             private:
-                WATERNION_INLINE std::vector<Shared<ComponentEntryBase>>::iterator IsExisted(EntityID entID) {
+                WATERNION_INLINE std::vector<Shared<ComponentEntryBase>>::iterator IsEntityExisted(EntityID id) {
                     return std::find_if(mComponentEntries.begin(), mComponentEntries.end(), [&](Shared<ComponentEntryBase> entry) {
-                        return entry->GetEntityID() == entID;
+                        return entry->GetEntityID() == id;
                     });
                 }
+            private:
                 std::vector<Shared<ComponentEntryBase>> mComponentEntries;
         };
     }
