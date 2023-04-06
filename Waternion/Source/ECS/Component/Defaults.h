@@ -12,16 +12,15 @@ namespace Waternion
             public:
                 Component();
                 virtual ~Component() = default;
+                WATERNION_INLINE Shared<Entity> GetOwner() const { 
+                    return MakeShared<Entity>(mOwnerID, mCoordinator); 
+                }
+                WATERNION_INLINE void SetOwner(EntityID id) { mOwnerID = id; }
                 WATERNION_INLINE UUID GetID() const { return mID; }
                 WATERNION_INLINE void SetID(UUID id) { mID = id; }
-                template<typename T>
-                WATERNION_INLINE Shared<Entity> GetEntity() {
-                    EntityID id = mCoordinator->GetEntityID<T>(mID);
-                    return MakeShared<Entity>(id, mCoordinator);
-                }
             protected:
                 UUID mID = INVALID_ID;
-                Shared<Entity> mOwner;
+                EntityID mOwnerID;
             private:
                 Shared<class Coordinator> mCoordinator;
         };
@@ -49,10 +48,10 @@ namespace Waternion
                 WATERNION_INLINE void SetScale(float x, float y, float z) { mScale.x = x; mScale.y = y; mScale.z = z; mRecomputeTransform = true; }
                 WATERNION_INLINE void SetScale(float value) { mScale.x = value; mScale.y = value; mScale.z = value; mRecomputeTransform = true; }
                 WATERNION_INLINE void SetRotation(float rotation) { mRotation = rotation;  mRecomputeTransform = true; }
-                WATERNION_INLINE const Math::Vector3& GetPosition() { return mPosition; }
-                WATERNION_INLINE const Math::Vector3& GetScale() { return mScale; }
-                WATERNION_INLINE float GetRotation() { return mRotation; }
-                WATERNION_INLINE const Math::Matrix4& GetWorldTransform() { return mWorldTransform; }
+                WATERNION_INLINE const Math::Vector3& GetPosition() const { return mPosition; }
+                WATERNION_INLINE const Math::Vector3& GetScale() const { return mScale; }
+                WATERNION_INLINE float GetRotation() const { return mRotation; }
+                WATERNION_INLINE const Math::Matrix4& GetWorldTransform() const { return mWorldTransform; }
                 void UpdateWorldTransform();
             private:
                 Math::Matrix4 mWorldTransform;

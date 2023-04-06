@@ -17,7 +17,9 @@ namespace Waternion {
         class ComponentEntry : public ComponentEntryBase {
             public:
                 WATERNION_INLINE ComponentEntry(EntityID entID, Shared<T> component) 
-                    : mEntityID(entID), mComponent(component) {}
+                    : mEntityID(entID), mComponent(component) {
+                        mComponent->SetOwner(entID);
+                    }
                 WATERNION_INLINE virtual operator EntityID() const override { return mEntityID; }                
                 WATERNION_INLINE virtual EntityID GetEntityID() const override { return mEntityID; }       
                 WATERNION_INLINE virtual UUID GetComponentID() const override { return mComponent->GetID(); }       

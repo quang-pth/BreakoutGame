@@ -1,5 +1,6 @@
 #include"InputSystem.h"
 #include"Core/Application.h"
+#include"ECS/Component/Behavior/ScriptComponent.h"
 
 namespace Waternion {
     namespace ECS {
@@ -23,13 +24,9 @@ namespace Waternion {
         }
 
         void InputSystem::ProcessInput(const InputState& inputState) {
-            if (inputState.Keyboard.GetKeyState(GLFW_KEY_W) == ButtonState::EPressed) {
-            }
-            if (inputState.Keyboard.GetKeyState(GLFW_KEY_W) == ButtonState::EReleased) {
-            }
-            if (inputState.Keyboard.GetKeyState(GLFW_KEY_W) == ButtonState::EHeld) {
-            }
-            if (inputState.Keyboard.GetKeyState(GLFW_KEY_W) == ButtonState::ENone) {
+            for(Shared<Entity> entity : System::GetEntitiesHaveComponent<ScriptComponent>()) {
+                Shared<ScriptComponent> script = entity->GetComponent<ScriptComponent>();
+                script->OnProcessInput(inputState);
             }
         }
     }

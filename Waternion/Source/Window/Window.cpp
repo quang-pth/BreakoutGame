@@ -3,12 +3,12 @@
 #include"ECS/System/InputSystem.h"
 
 namespace Waternion {
-    static ECS::InputState state;
+    static InputState state;
     static Shared<ECS::Scene> scene;
 
     static void PreProcess() {
-        memcpy(state.Keyboard.PreviousState, state.Keyboard.CurrentState, ECS::NUM_KEYS);
-        memset(state.Keyboard.CurrentState, false, ECS::NUM_KEYS);
+        memcpy(state.Keyboard.PreviousState, state.Keyboard.CurrentState, NUM_KEYS);
+        memset(state.Keyboard.CurrentState, false, NUM_KEYS);
     }
 
     static void ResizeCallback(GLFWwindow* window, int width, int height) {

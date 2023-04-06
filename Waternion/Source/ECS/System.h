@@ -4,9 +4,6 @@
 #include"Entity.h"
 #include"Coordinator.h"
 
-#include"Component/Defaults.h"
-#include"Component/SpriteComponent.h"
-
 namespace Waternion {
     namespace ECS {
         class System {
@@ -16,7 +13,7 @@ namespace Waternion {
                 virtual ~System() = default;
                 
                 template<typename T>
-                WATERNION_INLINE std::vector<Shared<Entity>> GetEntitiesHasComponentType() {
+                WATERNION_INLINE std::vector<Shared<Entity>> GetEntitiesHaveComponent() {
                     std::vector<Shared<Entity>> entities;
                     for (EntityID entID : mCoordinator->GetEntitesHasComponentType<T>()) {
                         entities.emplace_back(std::make_shared<Entity>(entID, mCoordinator));
@@ -32,11 +29,9 @@ namespace Waternion {
                 WATERNION_INLINE virtual bool Init() { return true; }
                 WATERNION_INLINE virtual void Shutdown() {}
                 WATERNION_INLINE virtual void Start() {}
-                WATERNION_INLINE virtual void Update(float deltaTime) {
-                    for(Shared<Entity> entity : GetEntitiesHasComponentType<TransformComponent>()) {
-                        entity->GetComponent<TransformComponent>()->UpdateWorldTransform();
-                    }
-                }
+                virtual void PreUpdate(float deltaTime);
+                virtual void Update(float deltaTime);
+                virtual void PostUpdate(float deltaTime);
                 WATERNION_INLINE const std::string& GetName() { return mName; }
             protected:
                 Shared<Coordinator> mCoordinator;

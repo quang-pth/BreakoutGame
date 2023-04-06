@@ -24,15 +24,23 @@ namespace Waternion::ECS {
         int32_t numOfIndices = sizeof(indices) / sizeof(int32_t);
 
         mVAO = MakeShared<VertexArray>(vertices, numOfVertices, indices, numOfIndices);
-        mOwner = Component::GetEntity<SpriteComponent>();
     }
 
-    void SpriteComponent::Draw(Shared<Shader> shader) {
-        Shared<TransformComponent> transform = mOwner->GetComponent<TransformComponent>();
-        const Math::Matrix4& scaleMatrix = Math::Matrix4::CreateFromScale(mTexture->Width, mTexture->Height, 1.0f);
+    void SpriteComponent::Draw(Shared<Shader> shader, float deltaTime) {
+        Shared<TransformComponent> transform = GetOwner()->GetComponent<TransformComponent>();
+        Math::Matrix4 scaleMatrix = Math::Matrix4::CreateFromScale(mTexture->Width, mTexture->Height, 1.0f);
+        Math::Matrix4 model;
         
+        float width = mTexture->Width * transform->GetScale().x;
+        float height = mTexture->Height * transform->GetScale().y;
+        model = Math::Matrix4::CreateFromScale(width, height, 1.0f);
+        model *= Math::Matrix4::CreateFromTranslation(0.5f * width, -0.5f * height, 0.0f);
+        model *= Math::Matrix4::CreateFromRotationZ(transform->GetRotation());
+        model *= Math::Matrix4::CreateFromTranslation(-0.5f * width, 0.5f * height, 0.0f);
+        model *= Math::Matrix4::CreateFromTranslation(transform->GetPosition());
+
         shader->Use();
-        shader->SetMatrix4("Transform", const_cast<Math::Matrix4&>(scaleMatrix) * const_cast<Math::Matrix4&>(transform->GetWorldTransform()));
+        shader->SetMatrix4("Transform", model);
         mVAO->Bind();
         mTexture->Bind();
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);

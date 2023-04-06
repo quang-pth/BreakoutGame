@@ -10,7 +10,7 @@ namespace Waternion
             public:
                 WATERNION_INLINE Renderer() : System() {}
                 virtual ~Renderer() = default;
-                virtual void Draw(Shared<Shader> shader) = 0;
+                WATERNION_INLINE virtual void Draw(Shared<Shader> shader, float deltaTime = 0.0f) {};
         };
 
         class SpriteRenderer : public Renderer {
@@ -18,7 +18,7 @@ namespace Waternion
                 WATERNION_INLINE SpriteRenderer() : Renderer() {} 
                 WATERNION_INLINE SpriteRenderer(const SpriteRenderer&) = default; 
                 virtual bool Init() override;
-                virtual void Draw(Shared<Shader> shader) override;
+                virtual void Draw(Shared<Shader> shader, float deltaTime = 0.0f) override;
         };
     }
 } // namespace Waternion

@@ -132,6 +132,7 @@ namespace Waternion {
             texture->ImageFormat = GL_RGBA;
         }
         int width, height, nrChannels;
+        stbi_set_flip_vertically_on_load(true);
         unsigned char* data = stbi_load(file, &width, &height, &nrChannels, 0);
         if (data) {
             GLenum format = GL_RGB;
@@ -156,6 +157,7 @@ namespace Waternion {
         }
 
         stbi_image_free(data);
+        stbi_set_flip_vertically_on_load(false);
         return texture;
     }
 }
