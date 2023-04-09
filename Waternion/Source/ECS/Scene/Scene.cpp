@@ -9,11 +9,11 @@
 #include"ECS/System/ScriptingSystem.h"
 
 // Components
-#include"ECS/Component/Defaults.h"
-#include"ECS/Component/SpriteComponent.h"
 #include"ECS/Component/Behavior/ScriptComponent.h"
-#include"ECS/Component/Behavior/MoveComponent.h"
 #include"Scripts/PlayerController.h"
+#include"Scripts/Background.h"
+#include"Scripts/Ball.h"
+#include"Scripts/GameLevel.h"
 
 namespace Waternion {
     namespace ECS
@@ -28,13 +28,21 @@ namespace Waternion {
         }
 
         bool Scene::Load() {
-            Shared<Entity> entity;
-            entity.reset(new Entity());
-            entity->GetComponent<TransformComponent>()->SetScale(0.05f);
-            entity->AddComponent<MoveComponent>();
-            entity->AddComponent<SpriteComponent>()->Init("assets/textures/awesomeface.png", true, "Awesomeface");
-            entity->AddComponent<ScriptComponent>()->Bind<PlayerController>();
-            
+            Shared<Entity> player = MakeShared<Entity>("Paddle");
+            player->AddComponent<ScriptComponent>()->Bind<PlayerController>();
+
+            Shared<Entity> background = MakeShared<Entity>("Background");
+            background->AddComponent<ScriptComponent>()->Bind<Background>();
+
+            Shared<Entity> ball = MakeShared<Entity>("Ball");
+            ball->AddComponent<ScriptComponent>()->Bind<Ball>();
+
+            float windowWidth = Application::GetInstance()->GetWindowWidth();
+            float windowHeight = Application::GetInstance()->GetWindowHeight();
+            Shared<Entity> levelOne = MakeShared<Entity>("LevelOne");
+            levelOne->AddComponent<ScriptComponent>()->Bind<GameLevel>();
+            levelOne->GetComponent<ScriptComponent>()->GetInstance<GameLevel>()->LoadLevel("assets/levels/one.lvl", windowWidth, windowHeight / 2.0f);
+
             if (!this->InitSystems()) {
                 return false;
             }            
@@ -59,6 +67,9 @@ namespace Waternion {
         }
 
         void Scene::Update(float deltaTime) {
+            for (EntityID id : mCoordinator->GetEntityIDsHaveComponent<TransformComponent>()) {
+                MakeShared<Entity>(id, mCoordinator)->GetComponent<TransformComponent>()->UpdateWorldTransform();
+            }
             for (auto& [_, systems] : mSystemsMap) {
                 for(Shared<System> system : systems) {
                     system->PreUpdate(deltaTime);
@@ -66,16 +77,30 @@ namespace Waternion {
                     system->PostUpdate(deltaTime);
                 }
             }
+            for (EntityID id : mCoordinator->GetEntityIDsHaveComponent<TransformComponent>()) {
+                MakeShared<Entity>(id, mCoordinator)->GetComponent<TransformComponent>()->UpdateWorldTransform();
+            }
+        }
+
+        void Scene::BeginScene(float deltaTime) {
+            for(Shared<System> system : mSystemsMap[GetTypeID<SpriteRenderer>()]) {
+                StaticPtrCast<SpriteRenderer>(system)->BeginScene(deltaTime);
+            }
         }
 
         void Scene::Render(float deltaTime) {
             Shared<Shader> shader = ResourceManager::LoadShader("assets/shaders/sprite_vs.glsl", "assets/shaders/sprite_fs.glsl", "", "SpriteShader");
             shader->Use();
-            const Math::Matrix4& orthoProj = Math::Matrix4::CreateOrtho(Application::GetInstance()->GetWindowWidth(), Application::GetInstance()->GetWindowHeight(), -1.0f, 1000.0f);
+            const Math::Matrix4& orthoProj = Math::Matrix4::CreateOrtho(Application::GetInstance()->GetWindowWidth(), Application::GetInstance()->GetWindowHeight(), -10.0f, 1000.0f);
             shader->SetMatrix4("Projection", orthoProj);
-
             for(Shared<System> system : mSystemsMap[GetTypeID<SpriteRenderer>()]) {
                 StaticPtrCast<SpriteRenderer>(system)->Draw(shader, deltaTime);
+            }
+        }
+
+        void Scene::EndScene(float deltaTime) {
+            for(Shared<System> system : mSystemsMap[GetTypeID<SpriteRenderer>()]) {
+                StaticPtrCast<SpriteRenderer>(system)->EndScene(deltaTime);
             }
         }
 
@@ -89,6 +114,23 @@ namespace Waternion {
             }
 
             return true;
+        }
+
+        Shared<Entity> Scene::GetEntity(const std::string& name) const {
+            for (EntityID id : mEntities) {
+                Shared<Entity> entity = MakeShared<Entity>(id, mCoordinator);
+                Shared<InfoComponent> info = entity->GetComponent<InfoComponent>();
+                if (!info->GetName().compare(name)) {
+                    return entity;
+                }
+            }
+            WATERNION_ASSERT(false && "Get non-existing entity");
+            return MakeShared<Entity>();
+        }
+
+        void Scene::AddEntity(EntityID id) {
+            WATERNION_ASSERT(id != INVALID_ID && "Add invalid entity");
+            mEntities.emplace_back(id);
         }
     } // namespace ECS
 } // namespace Waternion

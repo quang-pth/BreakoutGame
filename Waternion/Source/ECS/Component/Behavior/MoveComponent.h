@@ -6,17 +6,25 @@ namespace Waternion::ECS {
     class MoveComponent : public Component {
         public:
             MoveComponent();
-            void Update(float deltaTime);
-            WATERNION_INLINE const Math::Vector3& GetSpeed() const { return mSpeed; }
-            WATERNION_INLINE void SetSpeed(const Math::Vector3& speed) { 
-                mSpeed = speed; 
+            virtual void Update(float deltaTime);
+            WATERNION_INLINE void SetStrafeSpeed(float speed) {
+                mStrafeSpeed = speed;
             }
-            WATERNION_INLINE void SetSpeed(float x, float y, float z) { 
-                mSpeed.x = x;
-                mSpeed.y = y; 
-                mSpeed.z = z;
+            WATERNION_INLINE float GetStrafeSpeed() const {
+                return mStrafeSpeed;
             }
+            WATERNION_INLINE void SetForwardSpeed(float speed) {
+                mForwardSpeed = speed;
+            }
+            WATERNION_INLINE float GetForwardSpeed() const {
+                return mForwardSpeed;
+            }
+        protected:
+            bool IsInBoundsX(const Math::Vector3& position);
+            bool IsInBoundsY(const Math::Vector3& position);
+            virtual void Bounce();
         private:
-            Math::Vector3 mSpeed;
+            float mStrafeSpeed;
+            float mForwardSpeed;
     };
 }

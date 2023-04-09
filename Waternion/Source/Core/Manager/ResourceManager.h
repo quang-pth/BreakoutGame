@@ -19,7 +19,7 @@ namespace Waternion {
         static Shared<Texture2D> LoadTexture(const char* file, bool alpha, const std::string& name);
         static Shared<Texture2D> GetTexture(const std::string& name);
         // Game Level
-        static const std::vector<std::vector<unsigned int>>& LoadLevel(const char* file);
+        static std::vector<std::vector<uint16_t>> LoadLevel(const char* file);
         static void Clear();
     private:
         // Implement Singleton pattern

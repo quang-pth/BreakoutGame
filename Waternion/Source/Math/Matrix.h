@@ -73,17 +73,17 @@ namespace Waternion
                 }
 
                 static WATERNION_INLINE Matrix4 CreateFromTranslation(float x, float y, float z) {
-                    return Matrix4::CreateFromTranslation(Vector3(x, y, z));
-                }
-
-                static WATERNION_INLINE Matrix4 CreateFromTranslation(const Vector3& translate) {
                     float value[4][4] = {
                         {1.0f, 0.0f, 0.0f, 0.0f},
                         {0.0f, 1.0f, 0.0f, 0.0f},
                         {0.0f, 0.0f, 1.0f, 0.0f},
-                        {translate.x, translate.y, translate.z, 1.0f},
+                        {x, y, z, 1.0f},
                     };
                     return Matrix4(value);
+                }
+
+                static WATERNION_INLINE Matrix4 CreateFromTranslation(const Vector3& translate) {
+                    return Matrix4::CreateFromTranslation(translate.x, translate.y, translate.z);
                 }
 
                 static WATERNION_INLINE Matrix4 CreateOrtho(float width, float height, float near, float far) {

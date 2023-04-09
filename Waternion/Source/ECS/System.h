@@ -15,7 +15,7 @@ namespace Waternion {
                 template<typename T>
                 WATERNION_INLINE std::vector<Shared<Entity>> GetEntitiesHaveComponent() {
                     std::vector<Shared<Entity>> entities;
-                    for (EntityID entID : mCoordinator->GetEntitesHasComponentType<T>()) {
+                    for (EntityID entID : mCoordinator->GetEntityIDsHaveComponent<T>()) {
                         entities.emplace_back(std::make_shared<Entity>(entID, mCoordinator));
                     }
                     return entities;

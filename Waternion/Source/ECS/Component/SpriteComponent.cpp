@@ -6,11 +6,16 @@
 namespace Waternion::ECS {
     void SpriteComponent::Init(const char* filepath, bool alpha, const char* name) {
         mTexture = ResourceManager::LoadTexture(filepath, alpha, name);
+        Shared<TransformComponent> transform = GetOwner()->GetComponent<TransformComponent>();
+        mSize.x = mTexture->Width * transform->GetScale().x;
+        mSize.y = mTexture->Height * transform->GetScale().y;
+        
         float vertices[] = {
             // Position       // Texcoords
             0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
             1.0f, 0.0f, 0.0f, 1.0f, 0.0f,
             0.0f, 0.0f, 0.0f, 0.0f, 0.0f,
+            
             0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
             1.0f, 1.0f, 0.0f, 1.0f, 1.0f,
             1.0f, 0.0f, 0.0f, 1.0f, 0.0f
@@ -28,19 +33,16 @@ namespace Waternion::ECS {
 
     void SpriteComponent::Draw(Shared<Shader> shader, float deltaTime) {
         Shared<TransformComponent> transform = GetOwner()->GetComponent<TransformComponent>();
-        Math::Matrix4 scaleMatrix = Math::Matrix4::CreateFromScale(mTexture->Width, mTexture->Height, 1.0f);
-        Math::Matrix4 model;
         
-        float width = mTexture->Width * transform->GetScale().x;
-        float height = mTexture->Height * transform->GetScale().y;
-        model = Math::Matrix4::CreateFromScale(width, height, 1.0f);
-        model *= Math::Matrix4::CreateFromTranslation(0.5f * width, -0.5f * height, 0.0f);
+        Math::Matrix4 model = Math::Matrix4::CreateFromScale(mSize.x, mSize.y, 1.0f);
+        model *= Math::Matrix4::CreateFromTranslation(-mSize.x / 2, -mSize.y / 2, 0.0f);
         model *= Math::Matrix4::CreateFromRotationZ(transform->GetRotation());
-        model *= Math::Matrix4::CreateFromTranslation(-0.5f * width, 0.5f * height, 0.0f);
+        model *= Math::Matrix4::CreateFromTranslation(mSize.x / 2, mSize.y / 2, 0.0f);
         model *= Math::Matrix4::CreateFromTranslation(transform->GetPosition());
 
         shader->Use();
         shader->SetMatrix4("Transform", model);
+        shader->SetVector3("color", mColor);
         mVAO->Bind();
         mTexture->Bind();
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);

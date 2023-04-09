@@ -36,7 +36,7 @@ namespace Waternion {
                 }
 
                 template<typename T>
-                WATERNION_INLINE EntityIDList GetEntitesHasComponentType() {
+                WATERNION_INLINE EntityIDList GetEntityIDsHaveComponent() {
                     EntityIDList ids;
                     for(const std::pair<EntityID, Signature>& pair : mSignatureMap) {
                         if (pair.second.count(GetTypeID<T>()) > 0) {

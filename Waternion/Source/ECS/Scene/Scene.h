@@ -18,7 +18,9 @@ namespace Waternion
                 void Shutdown();
                 void Start();
                 void Update(float);
+                void BeginScene(float);
                 void Render(float);
+                void EndScene(float);
 
                 template<typename T, typename... Args>
                 WATERNION_INLINE void RegisterSystem(Args&&... args) {
@@ -33,10 +35,15 @@ namespace Waternion
                     WATERNION_STATIC_ASSERT(std::is_base_of<System, T>::value);
                     return mSystemsMap[systemType];
                 }
+
+                Shared<Entity> GetEntity(const std::string& name) const;
+
+                void AddEntity(EntityID id);
             private:
                 bool InitSystems();
                 std::unordered_map<UUID, std::vector<Shared<System>>> mSystemsMap;
-                std::shared_ptr<Coordinator> mCoordinator;
+                std::vector<EntityID> mEntities;
+                Shared<Coordinator> mCoordinator;
         };
     } // namespace ECS
 } // namespace Waternion

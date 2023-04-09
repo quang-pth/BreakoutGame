@@ -5,17 +5,13 @@
 
 namespace Waternion::ECS
 {
-    using ScriptInstantiator = std::function<Shared<NativeScript> (EntityID id)>;
-
     class ScriptComponent : public Component {
         public:
             ScriptComponent();
             ScriptComponent(const ScriptComponent&) = default;
             template<typename T>
             WATERNION_INLINE void Bind() {
-                mInstantiator = [](EntityID id) {
-                    return DyanmicPtrCast<NativeScript>(MakeShared<T>(id));
-                };
+                mInstance = DyanmicPtrCast<NativeScript>(MakeShared<T>(GetOwner()->GetID()));
             }
             void OnStart();
             void OnProcessInput(const struct InputState&);
@@ -24,11 +20,11 @@ namespace Waternion::ECS
             void OnPostUpdate(float deltaTime);
             void OnCollision(Shared<ECS::Entity> collidedEntity);
             void OnDestroy();
-            void Instantiate(EntityID id) {
-                mInstance = mInstantiator(id);
+            template<typename T>
+            WATERNION_INLINE Shared<T> GetInstance() const {
+                return DyanmicPtrCast<T>(mInstance);
             }
         private:
             Shared<NativeScript> mInstance;
-            ScriptInstantiator mInstantiator;
     };
 } // namespace Waternion::ECS

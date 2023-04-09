@@ -10,9 +10,26 @@ namespace Waternion::ECS
         return true;
     }
 
-    void SpriteRenderer::Draw(Shared<Shader> shader, float deltaTime) {
+    void SpriteRenderer::BeginScene(float deltaTime) {
         for (Shared<Entity> entity : System::GetEntitiesHaveComponent<SpriteComponent>()) {
-            entity->GetComponent<SpriteComponent>()->Draw(shader, deltaTime);
+            Shared<TransformComponent> transform = entity->GetComponent<TransformComponent>();
+            Shared<SpriteComponent> sprite = entity->GetComponent<SpriteComponent>();
+            mSprites.emplace_back(sprite);
         }
+        std::sort(mSprites.begin(), mSprites.end(), [](Shared<SpriteComponent> a, Shared<SpriteComponent> b) {
+            Shared<TransformComponent> t1 = a->GetOwner()->GetComponent<TransformComponent>();
+            Shared<TransformComponent> t2 = b->GetOwner()->GetComponent<TransformComponent>();
+            return t1->GetPosition().z < t2->GetPosition().z;
+        });
+    }
+
+    void SpriteRenderer::Draw(Shared<Shader> shader, float deltaTime) {
+        for(Shared<SpriteComponent> sprite : mSprites) {
+            sprite->Draw(shader, deltaTime);
+        }
+    }
+
+    void SpriteRenderer::EndScene(float deltaTime) {
+        mSprites.clear();
     }
 } // namespace Waternion

@@ -12,10 +12,12 @@ namespace Waternion
             
             virtual void OnStart() override;
             virtual void OnProcessInput(const struct InputState&) override;
+            virtual void OnPreUpdate(float deltaTime) override;
             virtual void OnUpdate(float deltaTime) override;
             virtual void OnPostUpdate(float deltaTime) override;
         private:
-            float mMaxSpeed = 400.0f;
+            float mMaxSpeed = 230.0f;
             Shared<ECS::MoveComponent> mMoveComponent;
+            Shared<ECS::TransformComponent> mTransform;
     };
 } // namespace Waternion

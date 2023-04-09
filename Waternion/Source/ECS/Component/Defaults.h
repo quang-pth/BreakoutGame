@@ -44,6 +44,9 @@ namespace Waternion
                 WATERNION_INLINE TransformComponent(const TransformComponent&) = default;
                 WATERNION_INLINE void SetPosition(const Math::Vector3& position) { mPosition = position; mRecomputeTransform = true; }
                 WATERNION_INLINE void SetPosition(float x, float y, float z) { mPosition.x = x; mPosition.y = y; mPosition.z = z; mRecomputeTransform = true; }
+                WATERNION_INLINE void SetPositionX(float x) { mPosition.x = x; mRecomputeTransform = true; }
+                WATERNION_INLINE void SetPositionY(float y) { mPosition.y = y; mRecomputeTransform = true; }
+                WATERNION_INLINE void SetPositionZ(float z) { mPosition.z = z; mRecomputeTransform = true; }
                 WATERNION_INLINE void SetScale(const Math::Vector3& scale) { mScale = scale; mRecomputeTransform = true ;}
                 WATERNION_INLINE void SetScale(float x, float y, float z) { mScale.x = x; mScale.y = y; mScale.z = z; mRecomputeTransform = true; }
                 WATERNION_INLINE void SetScale(float value) { mScale.x = value; mScale.y = value; mScale.z = value; mRecomputeTransform = true; }

@@ -6,7 +6,7 @@ namespace Waternion {
     static InputState state;
     static Shared<ECS::Scene> scene;
 
-    static void PreProcess() {
+    static void BackupInputStates() {
         memcpy(state.Keyboard.PreviousState, state.Keyboard.CurrentState, NUM_KEYS);
         memset(state.Keyboard.CurrentState, false, NUM_KEYS);
     }
@@ -16,16 +16,11 @@ namespace Waternion {
     }
 
     static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode) {
-        PreProcess();
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
             glfwSetWindowShouldClose(window, true);
         }
         if (key >= 0 && key <= 1024) {
-            // Forward input to Input system
             state.Keyboard.CurrentState[key] = true;
-            for (Shared<ECS::System> system : scene->GetSystems<ECS::InputSystem>()) {
-                StaticPtrCast<ECS::InputSystem>(system)->ProcessInput(state);
-            }
         }
     }
 
@@ -37,6 +32,7 @@ namespace Waternion {
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+        glfwWindowHint(GLFW_SAMPLES, 4);
 
         mInstance = glfwCreateWindow(width, height, name.c_str(), NULL, NULL);
         if (mInstance == nullptr) {
@@ -68,16 +64,21 @@ namespace Waternion {
 
     void Window::PollInputEvents() {
         glfwPollEvents();
+        for (Shared<ECS::System> system : scene->GetSystems<ECS::InputSystem>()) {
+            StaticPtrCast<ECS::InputSystem>(system)->ProcessInput(state);
+        }
     }
 
     void Window::ClearColor(float r, float g, float b, float a) {
         glClearColor(r, g, b, a);
         glClear(GL_COLOR_BUFFER_BIT);
         glEnable(GL_BLEND);
-	    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        glEnable(GL_SAMPLES);
+        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
     void Window::SwapBuffers() {
+        BackupInputStates();
         glfwSwapBuffers(mInstance);
     }
 }

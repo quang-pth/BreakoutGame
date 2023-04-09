@@ -6,7 +6,7 @@ namespace Waternion {
     namespace ECS {
         class Entity {
             public:
-                Entity();
+                Entity(const std::string& name = "Entity");
                 Entity(EntityID entID, Shared<Coordinator> coordinator); 
 
                 WATERNION_INLINE operator EntityID() const { return mID; }

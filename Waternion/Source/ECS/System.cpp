@@ -10,9 +10,6 @@ namespace Waternion
         }
 
         void System::PreUpdate(float deltaTime) {
-            for (Shared<Entity> entity : GetEntitiesHaveComponent<TransformComponent>()) {
-                entity->GetComponent<TransformComponent>()->UpdateWorldTransform();
-            }
         }
 
         void System::Update(float deltaTime) {
@@ -20,9 +17,6 @@ namespace Waternion
         }
 
         void System::PostUpdate(float deltaTime) {
-            for (Shared<Entity> entity : GetEntitiesHaveComponent<TransformComponent>()) {
-                entity->GetComponent<TransformComponent>()->UpdateWorldTransform();
-            }
         }
     }
 } // namespace Waternion

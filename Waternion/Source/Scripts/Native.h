@@ -2,7 +2,6 @@
 
 #include"pch.h"
 #include"ECS/Entity.h"
-#include"ECS/Coordinator.h"
 
 namespace Waternion {
     class NativeScript {

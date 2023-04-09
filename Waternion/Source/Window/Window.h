@@ -16,8 +16,16 @@ namespace Waternion {
             }
             WATERNION_API void ClearColor(float r, float g, float b, float a);
             WATERNION_API void SwapBuffers();
-            WATERNION_INLINE float GetWidth() const { return mWidth; }
-            WATERNION_INLINE float GetHeight() const { return mHeight; }
+            WATERNION_INLINE float GetWidth() const { 
+                int32_t width, height;
+                glfwGetWindowSize(mInstance, &width, &height);
+                return width; 
+            }
+            WATERNION_INLINE float GetHeight() const { 
+                int32_t width, height;
+                glfwGetWindowSize(mInstance, &width, &height);
+                return height; 
+            }
         private:
             GLFWwindow* mInstance;
             float mWidth, mHeight;

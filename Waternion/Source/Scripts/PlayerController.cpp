@@ -1,17 +1,26 @@
 #include"PlayerController.h"
 #include"ECS/System/InputSystem.h"
 #include"ECS/Component/Defaults.h"
+#include"ECS/Component/SpriteComponent.h"
+#include"Core/Application.h"
 
 namespace Waternion
 {
     using namespace ECS;
 
     void PlayerController::OnStart() {
-        mMoveComponent = GetComponent<MoveComponent>();
+        float windowWidth = Application::GetInstance()->GetWindowWidth();
+        float windowHeight = Application::GetInstance()->GetWindowHeight();
+        mTransform = GetComponent<TransformComponent>();
+        mTransform->SetScale(0.16f, 0.1f, 1.0f);
+        mTransform->SetPosition(-windowWidth / 8.0f, -windowHeight / 2.0f, 10.0f);
+
+        mMoveComponent = AddComponent<MoveComponent>();
+        AddComponent<MoveComponent>();
+        AddComponent<SpriteComponent>()->Init("assets/textures/paddle.png", true, "Paddle");
     }
 
     void PlayerController::OnProcessInput(const InputState& inputState) {
-
         float strafeSpeed = 0.0f;
         if (inputState.Keyboard.GetKeyValue(GLFW_KEY_A)) {
             strafeSpeed -= mMaxSpeed;
@@ -20,15 +29,10 @@ namespace Waternion
             strafeSpeed += mMaxSpeed;
         }
 
-        float verticalSpeed = 0.0f;
-        if (inputState.Keyboard.GetKeyValue(GLFW_KEY_W)) {
-            verticalSpeed += mMaxSpeed;
-        }
-        if (inputState.Keyboard.GetKeyValue(GLFW_KEY_S)) {
-            verticalSpeed -= mMaxSpeed;
-        }
+        mMoveComponent->SetStrafeSpeed(strafeSpeed);
+    }
 
-        mMoveComponent->SetSpeed(strafeSpeed, verticalSpeed, 0.0f);
+    void PlayerController::OnPreUpdate(float deltaTime) {
     }
 
     void PlayerController::OnUpdate(float deltaTime) {
@@ -36,6 +40,6 @@ namespace Waternion
     }
 
     void PlayerController::OnPostUpdate(float deltaTime) {
-        mMoveComponent->SetSpeed(0.0f, 0.0f, 0.0f);
+
     }
 } // namespace Waternion

@@ -115,6 +115,7 @@ namespace Waternion
             static Vector3 UnitZ;
 
             Vector3() : x(0.0f), y(0.0f), z(0.0f) {}
+            Vector3(float value) : x(value), y(value), z(value) {}
             Vector3(float x, float y, float z) : x(x), y(y), z(z) {}
             Vector3(const Vector2& vec2) : x(vec2.x), y(vec2.y), z(0.0f) {}
             Vector3(const Vector3&) = default;

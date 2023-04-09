@@ -36,13 +36,13 @@ namespace Waternion {
         return Texture2DsMap[name];
     }
 
-    const std::vector<std::vector<unsigned int>>& ResourceManager::LoadLevel(const char* file)
+    std::vector<std::vector<uint16_t>> ResourceManager::LoadLevel(const char* file)
     {
         std::string line;
         std::ifstream fstream(file);
         
-        unsigned int tileCode;
-        std::vector<std::vector<unsigned int>> tileData = std::vector<std::vector<unsigned int>>();
+        uint16_t tileCode;
+        std::vector<std::vector<uint16_t>> tileData = std::vector<std::vector<uint16_t>>();
         
         if (!fstream.is_open())
         {
@@ -51,7 +51,7 @@ namespace Waternion {
 
         while (std::getline(fstream, line, '\n')) {
             std::istringstream sstream(line);
-            std::vector<unsigned int> row;
+            std::vector<uint16_t> row;
             while (sstream >> tileCode) {
                 row.push_back(tileCode);
             }
