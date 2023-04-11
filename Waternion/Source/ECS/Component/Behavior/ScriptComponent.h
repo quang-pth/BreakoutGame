@@ -13,6 +13,7 @@ namespace Waternion::ECS
             WATERNION_INLINE void Bind() {
                 mInstance = DyanmicPtrCast<NativeScript>(MakeShared<T>(GetOwner()->GetID()));
             }
+            void OnAwake();
             void OnStart();
             void OnProcessInput(const struct InputState&);
             void OnPreUpdate(float deltaTime);

@@ -8,7 +8,7 @@ namespace Waternion
 {
     using namespace ECS;
 
-    void PlayerController::OnStart() {
+    void PlayerController::OnAwake() {
         float windowWidth = Application::GetInstance()->GetWindowWidth();
         float windowHeight = Application::GetInstance()->GetWindowHeight();
         mTransform = GetComponent<TransformComponent>();
@@ -16,10 +16,10 @@ namespace Waternion
         mTransform->SetPosition(-windowWidth / 8.0f, -windowHeight / 2.0f, 10.0f);
 
         mMoveComponent = AddComponent<MoveComponent>();
+        AddComponent<SpriteComponent>()->Init("assets/textures/paddle.png", true, "Paddle");;
         AddComponent<MoveComponent>();
-        AddComponent<SpriteComponent>()->Init("assets/textures/paddle.png", true, "Paddle");
     }
-
+    
     void PlayerController::OnProcessInput(const InputState& inputState) {
         float strafeSpeed = 0.0f;
         if (inputState.Keyboard.GetKeyValue(GLFW_KEY_A)) {

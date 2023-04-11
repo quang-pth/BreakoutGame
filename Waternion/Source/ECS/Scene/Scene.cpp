@@ -7,6 +7,7 @@
 #include"ECS/System/Renderer.h"
 #include"ECS/System/InputSystem.h"
 #include"ECS/System/ScriptingSystem.h"
+#include"ECS/System/PhysicWorld.h"
 
 // Components
 #include"ECS/Component/Behavior/ScriptComponent.h"
@@ -25,6 +26,7 @@ namespace Waternion {
             this->RegisterSystem<InputSystem>();
             this->RegisterSystem<SpriteRenderer>();
             this->RegisterSystem<ScriptingSystem>();
+            // this->RegisterSystem<PhysicWorld>();
         }
 
         bool Scene::Load() {
@@ -54,6 +56,14 @@ namespace Waternion {
             for (auto& [_, systems] : mSystemsMap) {
                 for(Shared<System> system : systems) {
                     system->Shutdown();
+                }
+            }
+        }
+
+        void Scene::Awake() {
+            for (auto& [_, systems] : mSystemsMap) {
+                for(Shared<System> system : systems) {
+                    system->Awake();
                 }
             }
         }

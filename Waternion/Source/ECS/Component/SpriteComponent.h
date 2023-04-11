@@ -5,11 +5,13 @@
 #include"Render/VertexArray.h"
 #include"Render/Shader.h"
 
+#include"Collisions/Primitive.h"
+
 namespace Waternion {
     namespace ECS {
         class SpriteComponent : public Component {
             public:
-                SpriteComponent() : Component(), mColor(Math::Vector3(1.0f)) {}
+                SpriteComponent() : Component(), mColor(Math::Vector3(1.0f)), mIsVisible(true) {}
                 SpriteComponent(const SpriteComponent&) = default;
                 void Init(const char* filepath, bool alpha, const char* name);
                 void Draw(Shared<Shader> shader, float deltaTime = 0.0f);
@@ -30,12 +32,20 @@ namespace Waternion {
                     mColor.y = g;
                     mColor.z = b;
                 }
+                WATERNION_INLINE void SetIsVisible(bool visible) {
+                    mIsVisible = visible;
+                }
+                WATERNION_INLINE bool GetIsVisible() const {
+                    return mIsVisible;
+                }
+                AABB2D GetBox() const;
             private:
                 void CheckError();
                 Shared<Texture2D> mTexture;
                 Shared<VertexArray> mVAO;
                 Math::Vector3 mColor;
                 Math::Vector2 mSize;
+                bool mIsVisible;
         };
     }
 }

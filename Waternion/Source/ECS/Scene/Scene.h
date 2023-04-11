@@ -16,6 +16,7 @@ namespace Waternion
 
                 bool Load();
                 void Shutdown();
+                void Awake();
                 void Start();
                 void Update(float);
                 void BeginScene(float);

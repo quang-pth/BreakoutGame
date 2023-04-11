@@ -13,10 +13,12 @@ namespace Waternion
             Ball();
             Ball(ECS::EntityID id);
             WATERNION_INLINE Ball(const Ball&) = default;
+            virtual void OnAwake() override;
             virtual void OnStart() override;
             virtual void OnProcessInput(const InputState&) override;
             virtual void OnUpdate(float deltaTime) override;
             virtual void OnPostUpdate(float deltaTime) override;
+            virtual void OnCollision(Shared<ECS::Entity> collidedEntity) override;
         private:
             bool mIsMoving;
             bool mIsStick;

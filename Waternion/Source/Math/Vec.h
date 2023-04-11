@@ -31,6 +31,10 @@ namespace Waternion
                 return Vector2(a.x - b.x, a.y - b.y);
             }
 
+            friend WATERNION_INLINE Vector2 operator-(const Vector2& a) {
+                return Vector2(-a.x, -a.y);
+            }
+
             friend WATERNION_INLINE Vector2 operator-=(Vector2& a, const Vector2& b) {
                 a = a - b;
                 return a;
@@ -103,6 +107,13 @@ namespace Waternion
 
             static Vector2 Reflect(const Vector2& v, const Vector2& n) {
                 return v - 2.0f * Vector2::Dot(v, n) * n;
+            }
+
+            static Vector2 Clamp(const Vector2& value, const Vector2& lower, const Vector2& upper) {
+                Vector2 returnValue = value;
+                returnValue.x = Math::Clamp(returnValue.x, lower.x, upper.x);
+                returnValue.y = Math::Clamp(returnValue.y, lower.y, upper.y);
+                return returnValue;
             }
         };
 

@@ -8,6 +8,7 @@ namespace Waternion
         public:
             WATERNION_INLINE Background() : NativeScript() {}
             WATERNION_INLINE Background(ECS::EntityID id) : NativeScript(id) {}
+            virtual void OnAwake() override;
             virtual void OnStart() override;
     };
 } // namespace Waternion

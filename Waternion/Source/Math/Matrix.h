@@ -22,7 +22,7 @@ namespace Waternion
                 }
 
                 friend Matrix4 operator*(Matrix4& a, Matrix4& b);
-                friend Matrix4 operator*=(Matrix4& a, Matrix4& b);
+                friend Matrix4 operator*=(Matrix4 a, Matrix4 b);
 
                 const float* GetAsFloatPtr() const {
                     return ReintepretCast<const float*>(&mValue[0][0]);

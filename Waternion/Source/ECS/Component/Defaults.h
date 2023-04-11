@@ -15,9 +15,16 @@ namespace Waternion
                 WATERNION_INLINE Shared<Entity> GetOwner() const { 
                     return MakeShared<Entity>(mOwnerID, mCoordinator); 
                 }
-                WATERNION_INLINE void SetOwner(EntityID id) { mOwnerID = id; }
+                WATERNION_INLINE void SetOwner(EntityID id) { 
+                    mOwnerID = id;
+                }
                 WATERNION_INLINE UUID GetID() const { return mID; }
                 WATERNION_INLINE void SetID(UUID id) { mID = id; }
+                virtual void OnStart() {}
+                virtual void OnPreUpdate(float deltaTime) {}
+                virtual void OnUpdate(float deltaTime) {}
+                virtual void OnPostUpdate(float deltaTime) {}
+                virtual void OnUpdateWorldTransform() {}
             protected:
                 UUID mID = INVALID_ID;
                 EntityID mOwnerID;

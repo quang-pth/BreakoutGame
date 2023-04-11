@@ -1,4 +1,5 @@
 #include"ScriptComponent.h"
+#include"ECS/System/InputSystem.h"
 
 namespace Waternion::ECS
 {
@@ -6,11 +7,15 @@ namespace Waternion::ECS
         mInstance.reset();
     }
 
+    void ScriptComponent::OnAwake() {
+        mInstance->OnAwake();
+    }
+
     void ScriptComponent::OnStart() {
         mInstance->OnStart();
     }
 
-    void ScriptComponent::OnProcessInput(const struct InputState& inputState) {
+    void ScriptComponent::OnProcessInput(const InputState& inputState) {
         mInstance->OnProcessInput(inputState);
     }
 

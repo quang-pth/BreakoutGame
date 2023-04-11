@@ -9,6 +9,13 @@ namespace Waternion::ECS
 
     }
 
+    void ScriptingSystem::Awake() {
+        for (Shared<Entity> entity : System::GetEntitiesHaveComponent<ScriptComponent>()) {
+            Shared<ScriptComponent> script = entity->GetComponent<ScriptComponent>();
+            script->OnAwake();
+        }
+    }
+
     void ScriptingSystem::Start() {
         for (Shared<Entity> entity : System::GetEntitiesHaveComponent<ScriptComponent>()) {
             Shared<ScriptComponent> script = entity->GetComponent<ScriptComponent>();

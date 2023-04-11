@@ -13,6 +13,10 @@ namespace Waternion
         WATERNION_ASSERT(mCoordinator != nullptr && "Reference Coordinator as nullptr");
     }
     
+    void NativeScript::OnAwake() {
+
+    }
+
     void NativeScript::OnStart() {
 
     }

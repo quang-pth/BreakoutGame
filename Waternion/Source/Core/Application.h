@@ -25,7 +25,7 @@ namespace Waternion {
             WATERNION_INLINE float GetWindowHeight() { return mWindow->GetHeight(); }
         private:
             Application();
-            void LoadData();
+            bool LoadScene();
             void ProcessInput();
             void Update(float deltaTime);
             void Render(float deltaTime);

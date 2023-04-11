@@ -28,6 +28,7 @@ namespace Waternion {
 
                 WATERNION_INLINE virtual bool Init() { return true; }
                 WATERNION_INLINE virtual void Shutdown() {}
+                WATERNION_INLINE virtual void Awake() {}
                 WATERNION_INLINE virtual void Start() {}
                 virtual void PreUpdate(float deltaTime);
                 virtual void Update(float deltaTime);

@@ -2,6 +2,7 @@
 #include"Core/Manager/ResourceManager.h"
 #include"ECS/Component/SpriteComponent.h"
 #include"ECS/Component/Behavior/ScriptComponent.h"
+#include"ECS/Component/Physics/Box2DComponent.h"
 #include"Scripts/Brick.h"
 
 namespace Waternion
@@ -48,6 +49,9 @@ namespace Waternion
                     sprite->Init("assets/textures/block_solid.png", true, "SolidBlock");
                     sprite->SetColor(color);
                     sprite->SetSize(size);
+                    // Box2D
+                    Shared<Box2DComponent> box = solidBrick->AddComponent<Box2DComponent>();
+                    box->SetLocalBox(sprite->GetBox());
                     // Transform
                     solidBrick->GetComponent<TransformComponent>()->SetPosition(position);
                     // Script
@@ -80,6 +84,9 @@ namespace Waternion
                     sprite->Init("assets/textures/block.png", true, "SolidBlock");
                     sprite->SetColor(color);
                     sprite->SetSize(size);
+                    // Box2D
+                    Shared<Box2DComponent> box = normalBlock->AddComponent<Box2DComponent>();
+                    box->SetLocalBox(sprite->GetBox());
                     // Transform
                     normalBlock->GetComponent<TransformComponent>()->SetPosition(position);
                     // Script

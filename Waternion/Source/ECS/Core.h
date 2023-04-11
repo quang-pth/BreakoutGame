@@ -42,7 +42,7 @@ namespace Waternion {
 
                 WATERNION_INLINE Shared<T> Add(EntityID entID, Shared<T> component) {
                     if (this->IsEntityExisted(entID) == mComponentEntries.end()) {
-                        mComponentEntries.emplace_back(std::make_shared<ComponentEntry<T>>(entID, component));
+                        mComponentEntries.emplace_back(MakeShared<ComponentEntry<T>>(entID, component));
                     }
                     return component;      
                 }

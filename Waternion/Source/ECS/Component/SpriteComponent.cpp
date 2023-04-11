@@ -43,9 +43,18 @@ namespace Waternion::ECS {
         shader->Use();
         shader->SetMatrix4("Transform", model);
         shader->SetVector3("color", mColor);
+        shader->SetInt("image", 0);
         mVAO->Bind();
         mTexture->Bind();
+        glActiveTexture(GL_TEXTURE0);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
+    }
+
+    AABB2D SpriteComponent::GetBox() const {
+        AABB2D box;
+        box.UpdateMinMax(Math::Vector2(0.0f, 0.0f));
+        box.UpdateMinMax(Math::Vector2(1.0f, 1.0f));
+        return box;
     }
 
     void SpriteComponent::CheckError() {

@@ -33,14 +33,20 @@ namespace Waternion {
             return false; 
         }
 
-        this->LoadData();
+        if (!this->LoadScene()) {
+            return false;
+        }
 
         return true;
     }
 
-    void Application::LoadData() {
-        mScene->Load();
-        mScene->Start();
+    bool Application::LoadScene() {
+        if (mScene->Load()) {
+            mScene->Awake();
+            mScene->Start();
+            return true;
+        }
+        return false;
     }
 
     void Application::Run() {

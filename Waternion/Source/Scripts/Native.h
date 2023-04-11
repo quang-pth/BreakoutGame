@@ -9,6 +9,7 @@ namespace Waternion {
             NativeScript();
             NativeScript(ECS::EntityID id);
             NativeScript(const NativeScript&) = default;
+            virtual void OnAwake();
             virtual void OnStart();
             virtual void OnProcessInput(const struct InputState&);
             virtual void OnPreUpdate(float deltaTime);
