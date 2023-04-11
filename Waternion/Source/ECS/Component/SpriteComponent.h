@@ -11,16 +11,12 @@ namespace Waternion {
     namespace ECS {
         class SpriteComponent : public Component {
             public:
-                SpriteComponent() : Component(), mColor(Math::Vector3(1.0f)), mIsVisible(true) {}
+                SpriteComponent() : Component(), mColor(Math::Vector3(1.0f)), mIsVisible(true), mBox() {}
                 SpriteComponent(const SpriteComponent&) = default;
                 void Init(const char* filepath, bool alpha, const char* name);
                 void Draw(Shared<Shader> shader, float deltaTime = 0.0f);
-                WATERNION_INLINE float GetScaledWidth() const { 
-                    return mSize.x; 
-                }
-                WATERNION_INLINE float GetScaledHeight() const { 
-                    return mSize.y; 
-                }
+                float GetWidth() const; 
+                float GetHeight() const;
                 WATERNION_INLINE void SetSize(const Math::Vector2& size) {
                     mSize = size;
                 }
@@ -38,7 +34,9 @@ namespace Waternion {
                 WATERNION_INLINE bool GetIsVisible() const {
                     return mIsVisible;
                 }
-                AABB2D GetBox() const;
+                WATERNION_INLINE const AABB2D& GetBox() const {
+                    return mBox;
+                }
             private:
                 void CheckError();
                 Shared<Texture2D> mTexture;
@@ -46,6 +44,7 @@ namespace Waternion {
                 Math::Vector3 mColor;
                 Math::Vector2 mSize;
                 bool mIsVisible;
+                AABB2D mBox;
         };
     }
 }

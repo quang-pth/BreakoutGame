@@ -23,12 +23,12 @@ namespace Waternion::ECS
             mWorldTransform *= Math::Matrix4::CreateFromRotationZ(mRotation);
             mWorldTransform *= Math::Matrix4::CreateFromTranslation(mPosition);
 
-            // if (GetOwner()->HasComponent<CircleComponent>()) {
-            //     GetOwner()->GetComponent<CircleComponent>()->OnUpdateWorldTransform();
-            // }
-            // if (GetOwner()->HasComponent<Box2DComponent>()) {
-            //     GetOwner()->GetComponent<Box2DComponent>()->OnUpdateWorldTransform();
-            // }
+            if (GetOwner()->HasComponent<CircleComponent>()) {
+                GetOwner()->GetComponent<CircleComponent>()->OnUpdateWorldTransform();
+            }
+            if (GetOwner()->HasComponent<Box2DComponent>()) {
+                GetOwner()->GetComponent<Box2DComponent>()->OnUpdateWorldTransform();
+            }
         }
     }
 } // namespace Waternion::ECS

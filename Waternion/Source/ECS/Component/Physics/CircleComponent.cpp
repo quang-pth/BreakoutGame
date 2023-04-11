@@ -13,12 +13,13 @@ namespace Waternion::ECS
     }
 
     void CircleComponent::OnUpdate(float deltaTime) {
+        WATERNION_LOG_INFO("Center (x: %f, y: %f)", mCircle.Center.x, mCircle.Center.y);
     }
 
     void CircleComponent::OnUpdateWorldTransform() {
-        // mCircle.Center.x = mOwnerTransform->GetPosition().x;
-        // mCircle.Center.y = mOwnerTransform->GetPosition().y;
-        // mCircle.Center.x += mOwnerSprite->GetScaledWidth() / 2.0f;
-        // mCircle.Center.y += mOwnerSprite->GetScaledHeight() / 2.0f;
+        mCircle.Center.x = mOwnerTransform->GetPosition().x;
+        mCircle.Center.y = mOwnerTransform->GetPosition().y;
+        mCircle.Center.x += mOwnerSprite->GetWidth() / 2.0f;
+        mCircle.Center.y += mOwnerSprite->GetHeight() / 2.0f;
     }
 } // namespace Waternion::ECS

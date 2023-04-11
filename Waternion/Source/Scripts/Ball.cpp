@@ -27,11 +27,11 @@ namespace Waternion
         mMove = AddComponent<MoveComponent>();
 
         Shared<CircleComponent> circle = AddComponent<CircleComponent>();
-        circle->SetRadius(mSprite->GetScaledWidth() / 2.0f);
+        circle->SetRadius(mSprite->GetWidth() / 2.0f);
     }
 
     void Ball::OnStart() {
-        mTransform->SetPositionY(mPaddle->GetComponent<TransformComponent>()->GetPosition().y + mSprite->GetScaledHeight() / 2.0f);
+        mTransform->SetPositionY(mPaddle->GetComponent<TransformComponent>()->GetPosition().y + mSprite->GetHeight() / 2.0f);
     }
 
     void Ball::OnProcessInput(const InputState& inputState) {
@@ -49,7 +49,7 @@ namespace Waternion
 
         const Math::Vector3& paddlePosition = mPaddle->GetComponent<TransformComponent>()->GetPosition();
         Shared<SpriteComponent> paddleSprite = mPaddle->GetComponent<SpriteComponent>();
-        mTransform->SetPositionX(paddlePosition.x + paddleSprite->GetScaledWidth() / 2.0f - mSprite->GetScaledWidth() / 2.0f);
+        mTransform->SetPositionX(paddlePosition.x + paddleSprite->GetWidth() / 2.0f - mSprite->GetHeight() / 2.0f);
     }
 
     void Ball::OnPostUpdate(float deltaTime) {
@@ -59,6 +59,6 @@ namespace Waternion
     }
 
     void Ball::OnCollision(Shared<ECS::Entity> collidedEntity) {
-        WATERNION_LOG_INFO("Ball collided with %d", collidedEntity->GetID());
+        mMove->SetForwardSpeed(0.0f);
     }
 } // namespace Waternion

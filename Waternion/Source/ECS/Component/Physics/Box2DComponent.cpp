@@ -1,5 +1,6 @@
 #include"Box2DComponent.h"
 #include"ECS/Component/Defaults.h"
+#include"ECS/Component/SpriteComponent.h"
 
 namespace Waternion::ECS
 {
@@ -11,6 +12,7 @@ namespace Waternion::ECS
         mWorldBox = mLocalBox;
 
         Shared<TransformComponent> transform = GetOwner()->GetComponent<TransformComponent>();
+        Shared<SpriteComponent> sprite = GetOwner()->GetComponent<SpriteComponent>();
         // Scale
         mWorldBox.Min.x *= transform->GetScale().x;
         mWorldBox.Min.y *= transform->GetScale().y;
@@ -19,7 +21,7 @@ namespace Waternion::ECS
         // Translate
         mWorldBox.Min.x += transform->GetPosition().x;
         mWorldBox.Min.y += transform->GetPosition().y;
-        mWorldBox.Max.x += transform->GetPosition().x;
-        mWorldBox.Max.y += transform->GetPosition().y;
+        mWorldBox.Max.x += mWorldBox.Min.x + sprite->GetWidth();
+        mWorldBox.Max.y += mWorldBox.Min.y + sprite->GetHeight();
     }
 }

@@ -48,12 +48,13 @@ namespace Waternion
                     Shared<SpriteComponent> sprite = solidBrick->AddComponent<SpriteComponent>();
                     sprite->Init("assets/textures/block_solid.png", true, "SolidBlock");
                     sprite->SetColor(color);
-                    sprite->SetSize(size);
                     // Box2D
                     Shared<Box2DComponent> box = solidBrick->AddComponent<Box2DComponent>();
                     box->SetLocalBox(sprite->GetBox());
                     // Transform
-                    solidBrick->GetComponent<TransformComponent>()->SetPosition(position);
+                    Shared<TransformComponent> transform = solidBrick->GetComponent<TransformComponent>();
+                    transform->SetPosition(position);
+                    transform->SetScale(unitWidth / sprite->GetWidth(), unitHeight / sprite->GetHeight(), 1.0f);
                     // Script
                     Shared<ScriptComponent> script = solidBrick->AddComponent<ScriptComponent>();
                     script->Bind<Brick>();
@@ -83,12 +84,13 @@ namespace Waternion
                     Shared<SpriteComponent> sprite = normalBlock->AddComponent<SpriteComponent>();
                     sprite->Init("assets/textures/block.png", true, "SolidBlock");
                     sprite->SetColor(color);
-                    sprite->SetSize(size);
                     // Box2D
                     Shared<Box2DComponent> box = normalBlock->AddComponent<Box2DComponent>();
                     box->SetLocalBox(sprite->GetBox());
                     // Transform
-                    normalBlock->GetComponent<TransformComponent>()->SetPosition(position);
+                    Shared<TransformComponent> transform = normalBlock->GetComponent<TransformComponent>();
+                    transform->SetPosition(position);
+                    transform->SetScale(unitWidth / sprite->GetWidth(), unitHeight / sprite->GetHeight(), 1.0f);
                     // Script
                     Shared<ScriptComponent> script = normalBlock->AddComponent<ScriptComponent>();
                     script->Bind<Brick>();

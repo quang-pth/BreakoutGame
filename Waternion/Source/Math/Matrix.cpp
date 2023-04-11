@@ -37,7 +37,7 @@ namespace Waternion
             return resultMat;
         }
 
-        Matrix4 operator*=(Matrix4 a, Matrix4 b) {
+        Matrix4 operator*=(Matrix4& a, Matrix4& b) {
             a = a * b;
             return a;
         }

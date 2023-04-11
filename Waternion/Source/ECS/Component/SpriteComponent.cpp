@@ -29,11 +29,16 @@ namespace Waternion::ECS {
         int32_t numOfIndices = sizeof(indices) / sizeof(int32_t);
 
         mVAO = MakeShared<VertexArray>(vertices, numOfVertices, indices, numOfIndices);
+
+        mBox.UpdateMinMax(Math::Vector2(0.0f, 0.0f));
+        mBox.UpdateMinMax(Math::Vector2(1.0f, 1.0f));
     }
 
     void SpriteComponent::Draw(Shared<Shader> shader, float deltaTime) {
         Shared<TransformComponent> transform = GetOwner()->GetComponent<TransformComponent>();
         
+        mSize.x = mTexture->Width * transform->GetScale().x;
+        mSize.y = mTexture->Height * transform->GetScale().y;
         Math::Matrix4 model = Math::Matrix4::CreateFromScale(mSize.x, mSize.y, 1.0f);
         model *= Math::Matrix4::CreateFromTranslation(-mSize.x / 2, -mSize.y / 2, 0.0f);
         model *= Math::Matrix4::CreateFromRotationZ(transform->GetRotation());
@@ -50,11 +55,12 @@ namespace Waternion::ECS {
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
     }
 
-    AABB2D SpriteComponent::GetBox() const {
-        AABB2D box;
-        box.UpdateMinMax(Math::Vector2(0.0f, 0.0f));
-        box.UpdateMinMax(Math::Vector2(1.0f, 1.0f));
-        return box;
+    float SpriteComponent::GetWidth() const {
+        return mTexture->Width * GetOwner()->GetComponent<TransformComponent>()->GetScale().x;
+    }
+
+    float SpriteComponent::GetHeight() const {
+        return mTexture->Height * GetOwner()->GetComponent<TransformComponent>()->GetScale().y;
     }
 
     void SpriteComponent::CheckError() {

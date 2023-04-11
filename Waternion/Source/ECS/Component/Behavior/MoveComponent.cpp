@@ -26,13 +26,13 @@ namespace Waternion::ECS {
     bool MoveComponent::IsInBoundsX(const Math::Vector3& position) {
         Shared<SpriteComponent> sprite = GetOwner()->GetComponent<SpriteComponent>();
         float windowWidth = Application::GetInstance()->GetWindowWidth();
-        return position.x >= -windowWidth / 2.0f - sprite->GetScaledWidth() / 2.0f && position.x <= windowWidth / 2.0f - sprite->GetScaledWidth() / 2.0f;
+        return position.x >= -windowWidth / 2.0f - sprite->GetWidth() / 2.0f && position.x <= windowWidth / 2.0f - sprite->GetWidth() / 2.0f;
     }
     
     bool MoveComponent::IsInBoundsY(const Math::Vector3& position) {
         Shared<SpriteComponent> sprite = GetOwner()->GetComponent<SpriteComponent>();
         float windowHeight = Application::GetInstance()->GetWindowHeight();
-        return position.y >= -windowHeight / 2.0f && position.y <= windowHeight / 2.0f - sprite->GetScaledHeight();
+        return position.y >= -windowHeight / 2.0f && position.y <= windowHeight / 2.0f - sprite->GetHeight();
     }
 
     void MoveComponent::Bounce() {

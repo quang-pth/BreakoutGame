@@ -26,7 +26,7 @@ namespace Waternion {
             this->RegisterSystem<InputSystem>();
             this->RegisterSystem<SpriteRenderer>();
             this->RegisterSystem<ScriptingSystem>();
-            // this->RegisterSystem<PhysicWorld>();
+            this->RegisterSystem<PhysicWorld>();
         }
 
         bool Scene::Load() {
