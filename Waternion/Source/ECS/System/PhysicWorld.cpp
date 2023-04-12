@@ -48,12 +48,49 @@ namespace Waternion::ECS
             for (Shared<Box2DComponent> box : mBoxes) {
                 Shared<Entity> boxOwner = box->GetOwner();
 
-                if (circleOwner == boxOwner) continue;
+                if (circleOwner->GetID() == boxOwner->GetID()) {
+                    continue;
+                }
+                
+                const CircleCollider& collider = Collisions::IsIntersect(circle->GetCircle(), box->GetBox()); 
+                if (collider.Intersected) {
+                    CollisionDetails details;
+                    details.Collider = boxOwner;
+                    details.Penetration = collider.Penetration;
+                    details.ContactedPoint = collider.ContactedPoint;
+                    details.Different = circle->GetCenter() - collider.ContactedPoint;
+                    details.ClosestDirection = this->CalcClosestDirection(details.Different);
+                    
+                    circleOwner->GetComponent<ScriptComponent>()->OnCollision(details);
 
-                if (Collisions::IsIntersect(circle->GetCircle(), box->GetWorldBox())) {
-                    circleOwner->GetComponent<ScriptComponent>()->OnCollision(boxOwner);
+                    details.Collider = circleOwner;
+                    boxOwner->GetComponent<ScriptComponent>()->OnCollision(details);
                 }
             }           
         }
     }
+
+    Math::Vector2 PhysicWorld::CalcClosestDirection(Math::Vector2 vector) {
+        vector.SafeNormalized();
+        
+        Math::Vector2 basis[] = {
+            Math::Vector2::UnitX,                
+            -Math::Vector2::UnitX,                
+            Math::Vector2::UnitY,                
+            -Math::Vector2::UnitY,                
+        };
+
+        uint16_t idx = -1;
+        float maxDiff = Math::MIN_NUMERICS;
+        for (uint16_t i = 0; i < sizeof(basis) / sizeof(Math::Vector2); i++) {
+            float dot = Math::Vector2::Dot(vector, basis[i]);
+            if (dot > maxDiff) {
+                maxDiff = dot;
+                idx = i;
+            }
+        }
+
+        return basis[idx];
+    }
+    
 }

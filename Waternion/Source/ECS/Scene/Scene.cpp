@@ -43,7 +43,7 @@ namespace Waternion {
             float windowHeight = Application::GetInstance()->GetWindowHeight();
             Shared<Entity> levelOne = MakeShared<Entity>("LevelOne");
             levelOne->AddComponent<ScriptComponent>()->Bind<GameLevel>();
-            levelOne->GetComponent<ScriptComponent>()->GetInstance<GameLevel>()->LoadLevel("assets/levels/one.lvl", windowWidth, windowHeight / 2.0f);
+            levelOne->GetComponent<ScriptComponent>()->GetInstance<GameLevel>()->LoadLevel("assets/levels/three.lvl", windowWidth, windowHeight / 2.0f);
 
             if (!this->InitSystems()) {
                 return false;

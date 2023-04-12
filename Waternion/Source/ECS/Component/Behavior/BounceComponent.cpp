@@ -6,7 +6,11 @@ namespace Waternion::ECS
 
     }
 
-    void BounceComponent::Bounce() {
-        
+    void BounceComponent::BounceVertical() {
+        SetForwardSpeed(GetForwardSpeed() * -1.0f);
+    }
+
+    void BounceComponent::BounceHorizontal() {
+        SetStrafeSpeed(GetStrafeSpeed() * -1.0f);
     }
 } // namespace Waternion::ECS

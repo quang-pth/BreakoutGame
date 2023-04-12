@@ -9,10 +9,10 @@ namespace Waternion::ECS
         public:
             Box2DComponent();
             virtual void OnUpdateWorldTransform() override;
-            void SetLocalBox(const AABB2D& box) {
+            void SetBox(const AABB2D& box) {
                 mLocalBox = box;
             }
-            WATERNION_INLINE const AABB2D& GetWorldBox() const {
+            WATERNION_INLINE const AABB2D& GetBox() const {
                 return mWorldBox;
             }
             WATERNION_INLINE void SetDisabled(bool disabled) {

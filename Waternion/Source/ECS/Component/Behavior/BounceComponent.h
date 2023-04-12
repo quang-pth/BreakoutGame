@@ -8,7 +8,8 @@ namespace Waternion::ECS
         public:
             BounceComponent();
         protected:
-            virtual void Bounce() override;
+            virtual void BounceVertical() override;
+            virtual void BounceHorizontal() override;
         private:
             Math::Vector3 mDirection;
     };

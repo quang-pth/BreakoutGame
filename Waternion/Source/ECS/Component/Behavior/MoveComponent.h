@@ -22,7 +22,8 @@ namespace Waternion::ECS {
         protected:
             bool IsInBoundsX(const Math::Vector3& position);
             bool IsInBoundsY(const Math::Vector3& position);
-            virtual void Bounce();
+            virtual void BounceVertical();
+            virtual void BounceHorizontal();
         private:
             float mStrafeSpeed;
             float mForwardSpeed;

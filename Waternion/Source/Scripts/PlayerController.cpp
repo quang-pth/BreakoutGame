@@ -2,6 +2,7 @@
 #include"ECS/System/InputSystem.h"
 #include"ECS/Component/Defaults.h"
 #include"ECS/Component/SpriteComponent.h"
+#include"ECS/Component/Physics/Box2DComponent.h"
 #include"Core/Application.h"
 
 namespace Waternion
@@ -16,8 +17,11 @@ namespace Waternion
         mTransform->SetPosition(-windowWidth / 8.0f, -windowHeight / 2.0f, 10.0f);
 
         mMoveComponent = AddComponent<MoveComponent>();
-        AddComponent<SpriteComponent>()->Init("assets/textures/paddle.png", true, "Paddle");;
-        AddComponent<MoveComponent>();
+        Shared<SpriteComponent> sprite = AddComponent<SpriteComponent>();
+        sprite->Init("assets/textures/paddle.png", true, "Paddle");;
+
+        Shared<Box2DComponent> box = AddComponent<Box2DComponent>();
+        box->SetBox(sprite->GetBox());
     }
     
     void PlayerController::OnProcessInput(const InputState& inputState) {

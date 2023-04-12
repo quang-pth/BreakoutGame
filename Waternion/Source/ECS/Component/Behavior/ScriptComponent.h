@@ -2,6 +2,7 @@
 
 #include"ECS/Component/Defaults.h"
 #include"Scripts/Native.h"
+#include"ECS/System/PhysicWorld.h"
 
 namespace Waternion::ECS
 {
@@ -19,7 +20,7 @@ namespace Waternion::ECS
             void OnPreUpdate(float deltaTime);
             void OnUpdate(float deltaTime);
             void OnPostUpdate(float deltaTime);
-            void OnCollision(Shared<ECS::Entity> collidedEntity);
+            void OnCollision(const CollisionDetails& details);
             void OnDestroy();
             template<typename T>
             WATERNION_INLINE Shared<T> GetInstance() const {

@@ -37,7 +37,7 @@ namespace Waternion
 
     }
 
-    void NativeScript::OnCollision(Shared<ECS::Entity> collidedEntity) {
+    void NativeScript::OnCollision(const ECS::CollisionDetails& details) {
 
     }
 

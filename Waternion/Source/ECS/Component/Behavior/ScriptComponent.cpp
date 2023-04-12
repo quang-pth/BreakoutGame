@@ -31,8 +31,8 @@ namespace Waternion::ECS
         mInstance->OnPostUpdate(deltaTime);
     }
 
-    void ScriptComponent::OnCollision(Shared<ECS::Entity> collidedEntity) {
-        mInstance->OnCollision(collidedEntity);
+    void ScriptComponent::OnCollision(const CollisionDetails& details) {
+        mInstance->OnCollision(details);
     }
 
     void ScriptComponent::OnDestroy() {

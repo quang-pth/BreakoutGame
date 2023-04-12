@@ -76,11 +76,11 @@ namespace Waternion
                 return !(a == b);
             }
 
-            WATERNION_INLINE float MagnitudeSquared() {
+            WATERNION_INLINE float MagnitudeSquared() const {
                 return x * x + y * y;
             }    
         
-            WATERNION_INLINE float Magnitude() {
+            WATERNION_INLINE float Magnitude() const {
                 return Sqrtf(this->MagnitudeSquared());
             }    
 

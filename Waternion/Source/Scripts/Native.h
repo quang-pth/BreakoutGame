@@ -2,6 +2,7 @@
 
 #include"pch.h"
 #include"ECS/Entity.h"
+#include"ECS/System/PhysicWorld.h"
 
 namespace Waternion {
     class NativeScript {
@@ -15,7 +16,7 @@ namespace Waternion {
             virtual void OnPreUpdate(float deltaTime);
             virtual void OnUpdate(float deltaTime);
             virtual void OnPostUpdate(float deltaTime);
-            virtual void OnCollision(Shared<ECS::Entity> collidedEntity);
+            virtual void OnCollision(const ECS::CollisionDetails& details);
             virtual void OnDestroy();
         protected:
             template<typename T, typename... Args>

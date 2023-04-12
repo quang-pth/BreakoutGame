@@ -14,12 +14,15 @@ namespace Waternion::ECS {
         Math::Vector3 position = transform->GetPosition();
         position += mForwardSpeed * Math::Vector3::UnitY * deltaTime;
         position += mStrafeSpeed * Math::Vector3::UnitX * deltaTime;
-        
-        if (this->IsInBoundsX(position) && this->IsInBoundsY(position)) {
-            transform->SetPosition(position);
+
+        if (!this->IsInBoundsX(position)) {
+            BounceHorizontal();
+        }
+        else if (!this->IsInBoundsY(position)) {
+            BounceVertical();
         }
         else {
-            Bounce();
+            transform->SetPosition(position);
         }
     }
 
@@ -35,7 +38,11 @@ namespace Waternion::ECS {
         return position.y >= -windowHeight / 2.0f && position.y <= windowHeight / 2.0f - sprite->GetHeight();
     }
 
-    void MoveComponent::Bounce() {
+    void MoveComponent::BounceVertical() {
+
+    }
+
+    void MoveComponent::BounceHorizontal() {
 
     }
 }

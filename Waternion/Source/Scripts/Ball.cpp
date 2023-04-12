@@ -2,16 +2,22 @@
 #include"ECS/System/InputSystem.h"
 #include"Core/Application.h"
 #include"ECS/Component/Physics/CircleComponent.h"
+#include"ECS/Component/Physics/Box2DComponent.h"
 
 namespace Waternion
 {
     using namespace ECS;
 
-    Ball::Ball() : NativeScript(), mIsMoving(false), mIsStick(true), mForwardSpeed(200.0f) {
+    const static float MAX_INTERVAL = 0.5f;
+
+    Ball::Ball() : 
+        NativeScript(), mIsMoving(false), 
+        mIsStick(true), mSpeed(200.0f), mDisabledDuration(0.0f)
+    {
 
     }
 
-    Ball::Ball(EntityID id) : NativeScript(id), mIsMoving(false), mIsStick(true), mForwardSpeed(200.0f) {
+    Ball::Ball(EntityID id) : NativeScript(id), mIsMoving(false), mIsStick(true), mSpeed(200.0f) {
 
     }
 
@@ -24,7 +30,7 @@ namespace Waternion
         mSprite = AddComponent<SpriteComponent>();
         mSprite->Init("assets/textures/awesomeface.png", true, "Ball");
         
-        mMove = AddComponent<MoveComponent>();
+        mBounce = AddComponent<BounceComponent>();
 
         Shared<CircleComponent> circle = AddComponent<CircleComponent>();
         circle->SetRadius(mSprite->GetWidth() / 2.0f);
@@ -40,12 +46,21 @@ namespace Waternion
         if (inputState.Keyboard.GetKeyState(GLFW_KEY_SPACE) == ButtonState::EPressed) {
             mIsMoving = true;
             mIsStick = false;
-            mMove->SetForwardSpeed(mForwardSpeed);
+            mDisabledDuration = MAX_INTERVAL;
+            mPaddle->GetComponent<Box2DComponent>()->SetDisabled(true);
+            mBounce->SetForwardSpeed(mSpeed);
         }
     }
 
     void Ball::OnUpdate(float deltaTime) {
-        if (mIsMoving) return;
+        if (mIsMoving) {
+            mDisabledDuration -= deltaTime;
+            if (mDisabledDuration < 0.0f) {
+                mPaddle->GetComponent<Box2DComponent>()->SetDisabled(false);
+                mDisabledDuration = MAX_INTERVAL;
+            }
+            return;
+        }
 
         const Math::Vector3& paddlePosition = mPaddle->GetComponent<TransformComponent>()->GetPosition();
         Shared<SpriteComponent> paddleSprite = mPaddle->GetComponent<SpriteComponent>();
@@ -54,11 +69,30 @@ namespace Waternion
 
     void Ball::OnPostUpdate(float deltaTime) {
         if (mIsMoving) {
-            mMove->Update(deltaTime);
+            mBounce->Update(deltaTime);
         }
     }
 
-    void Ball::OnCollision(Shared<ECS::Entity> collidedEntity) {
-        mMove->SetForwardSpeed(0.0f);
+    void Ball::OnCollision(const ECS::CollisionDetails& details) {
+        Shared<Entity> collider = details.Collider;
+        if (mIsMoving) {
+            const Math::Vector2& bounceDirection = details.ClosestDirection;
+            if (bounceDirection == Math::Vector2::UnitX) {
+                mBounce->SetStrafeSpeed(mSpeed);
+                mTransform->SetPositionX(mTransform->GetPosition().x + details.Penetration);
+            }
+            else if (bounceDirection == -Math::Vector2::UnitX) {
+                mBounce->SetStrafeSpeed(-mSpeed);
+                mTransform->SetPositionX(mTransform->GetPosition().x - details.Penetration);
+            }
+            else if (bounceDirection == Math::Vector2::UnitY) {
+                mBounce->SetForwardSpeed(mSpeed);
+                mTransform->SetPositionY(mTransform->GetPosition().y + details.Penetration);
+            }
+            else if (bounceDirection == -Math::Vector2::UnitY) {
+                mBounce->SetForwardSpeed(-mSpeed);
+                mTransform->SetPositionY(mTransform->GetPosition().y - details.Penetration);
+            }
+        }
     }
 } // namespace Waternion

@@ -50,7 +50,7 @@ namespace Waternion
                     sprite->SetColor(color);
                     // Box2D
                     Shared<Box2DComponent> box = solidBrick->AddComponent<Box2DComponent>();
-                    box->SetLocalBox(sprite->GetBox());
+                    box->SetBox(sprite->GetBox());
                     // Transform
                     Shared<TransformComponent> transform = solidBrick->GetComponent<TransformComponent>();
                     transform->SetPosition(position);
@@ -86,7 +86,7 @@ namespace Waternion
                     sprite->SetColor(color);
                     // Box2D
                     Shared<Box2DComponent> box = normalBlock->AddComponent<Box2DComponent>();
-                    box->SetLocalBox(sprite->GetBox());
+                    box->SetBox(sprite->GetBox());
                     // Transform
                     Shared<TransformComponent> transform = normalBlock->GetComponent<TransformComponent>();
                     transform->SetPosition(position);
