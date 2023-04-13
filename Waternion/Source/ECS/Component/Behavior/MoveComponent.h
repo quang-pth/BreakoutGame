@@ -19,11 +19,9 @@ namespace Waternion::ECS {
             WATERNION_INLINE float GetForwardSpeed() const {
                 return mForwardSpeed;
             }
-        protected:
-            bool IsInBoundsX(const Math::Vector3& position);
-            bool IsInBoundsY(const Math::Vector3& position);
-            virtual void BounceVertical();
-            virtual void BounceHorizontal();
+            Math::Vector2 GetVelocity() const;
+            void IsInBoundsX(bool& inLeftBound, bool& inRightBound);
+            void IsInBoundsY(bool& inLowerBound, bool& inUpperBound);
         private:
             float mStrafeSpeed;
             float mForwardSpeed;

@@ -3,7 +3,7 @@
 #include"Native.h"
 
 #include"ECS/Component/Defaults.h"
-#include"ECS/Component/Behavior/BounceComponent.h"
+#include"ECS/Component/Behavior/MoveComponent.h"
 #include"ECS/Component/SpriteComponent.h"
 
 namespace Waternion
@@ -20,13 +20,16 @@ namespace Waternion
             virtual void OnPostUpdate(float deltaTime) override;
             virtual void OnCollision(const ECS::CollisionDetails& details) override;
         private:
+            void Reset();
+            void ConstraintsInBoundsX();
+            void ConstraintsInBoundsY();
             bool mIsMoving;
             bool mIsStick;
             float mSpeed;
             float mDisabledDuration;
             Shared<ECS::Entity> mPaddle;
             Shared<ECS::TransformComponent> mTransform;
-            Shared<ECS::BounceComponent> mBounce;
+            Shared<ECS::MoveComponent> mMove;
             Shared<ECS::SpriteComponent> mSprite;
     };
 } // namespace Waternion

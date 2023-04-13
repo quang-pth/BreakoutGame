@@ -12,7 +12,7 @@ namespace Waternion
 
     Ball::Ball() : 
         NativeScript(), mIsMoving(false), 
-        mIsStick(true), mSpeed(200.0f), mDisabledDuration(0.0f)
+        mIsStick(true), mSpeed(400.0f), mDisabledDuration(0.0f)
     {
 
     }
@@ -30,14 +30,14 @@ namespace Waternion
         mSprite = AddComponent<SpriteComponent>();
         mSprite->Init("assets/textures/awesomeface.png", true, "Ball");
         
-        mBounce = AddComponent<BounceComponent>();
+        mMove = AddComponent<MoveComponent>();
 
         Shared<CircleComponent> circle = AddComponent<CircleComponent>();
         circle->SetRadius(mSprite->GetWidth() / 2.0f);
     }
 
     void Ball::OnStart() {
-        mTransform->SetPositionY(mPaddle->GetComponent<TransformComponent>()->GetPosition().y + mSprite->GetHeight() / 2.0f);
+        this->Reset();
     }
 
     void Ball::OnProcessInput(const InputState& inputState) {
@@ -48,7 +48,7 @@ namespace Waternion
             mIsStick = false;
             mDisabledDuration = MAX_INTERVAL;
             mPaddle->GetComponent<Box2DComponent>()->SetDisabled(true);
-            mBounce->SetForwardSpeed(mSpeed);
+            mMove->SetForwardSpeed(mSpeed);
         }
     }
 
@@ -69,30 +69,90 @@ namespace Waternion
 
     void Ball::OnPostUpdate(float deltaTime) {
         if (mIsMoving) {
-            mBounce->Update(deltaTime);
+            mMove->Update(deltaTime);
+            this->ConstraintsInBoundsX();
+            this->ConstraintsInBoundsY();
         }
     }
 
     void Ball::OnCollision(const ECS::CollisionDetails& details) {
         Shared<Entity> collider = details.Collider;
         if (mIsMoving) {
+            // The ball collides with player's paddle
+            if (collider->GetID() == mPaddle->GetID()) {
+                Shared<TransformComponent> paddleTransform = mPaddle->GetComponent<TransformComponent>(); 
+                Shared<SpriteComponent> paddleSprite = mPaddle->GetComponent<SpriteComponent>();
+                float paddleCenterX = paddleTransform->GetPosition().x + paddleSprite->GetWidth() / 2.0f;
+                float distanceToCenter = GetComponent<CircleComponent>()->GetCenter().x - paddleCenterX;
+               
+                float percentage = distanceToCenter / (paddleSprite->GetWidth() / 2.0f);
+                float strength = 3.0f;
+
+                const Math::Vector2& oldVelocity = mMove->GetVelocity();
+                Math::Vector2 newVelocity(mSpeed * strength * percentage, Math::Abs(oldVelocity.y) * 1.0f);
+                newVelocity.SafeNormalized();
+
+                mMove->SetStrafeSpeed(newVelocity.x * oldVelocity.Magnitude());
+                mMove->SetForwardSpeed(newVelocity.y * oldVelocity.Magnitude());
+                return;
+            }
+            // The ball collides with other bricks
             const Math::Vector2& bounceDirection = details.ClosestDirection;
             if (bounceDirection == Math::Vector2::UnitX) {
-                mBounce->SetStrafeSpeed(mSpeed);
+                mMove->SetStrafeSpeed(mSpeed);
                 mTransform->SetPositionX(mTransform->GetPosition().x + details.Penetration);
             }
             else if (bounceDirection == -Math::Vector2::UnitX) {
-                mBounce->SetStrafeSpeed(-mSpeed);
+                mMove->SetStrafeSpeed(-mSpeed);
                 mTransform->SetPositionX(mTransform->GetPosition().x - details.Penetration);
             }
             else if (bounceDirection == Math::Vector2::UnitY) {
-                mBounce->SetForwardSpeed(mSpeed);
+                mMove->SetForwardSpeed(mSpeed);
                 mTransform->SetPositionY(mTransform->GetPosition().y + details.Penetration);
             }
             else if (bounceDirection == -Math::Vector2::UnitY) {
-                mBounce->SetForwardSpeed(-mSpeed);
+                mMove->SetForwardSpeed(-mSpeed);
                 mTransform->SetPositionY(mTransform->GetPosition().y - details.Penetration);
             }
+        }
+    }
+
+    void Ball::Reset() {
+        mTransform->SetPositionY(mPaddle->GetComponent<TransformComponent>()->GetPosition().y + mSprite->GetHeight() / 2.0f);
+        mIsMoving = false;
+        mIsStick = true;
+        mMove->SetStrafeSpeed(0.0f);
+        mMove->SetForwardSpeed(0.0f);
+    }
+
+    void Ball::ConstraintsInBoundsX() {
+        bool inLeftBound, inRightBound;
+        mMove->IsInBoundsX(inLeftBound, inRightBound);
+        
+        if (!inLeftBound) {
+            mTransform->SetPositionX(Application::GetInstance()->GetWindowWidth() / -2.0f);
+        }
+
+        if (!inRightBound) {
+            mTransform->SetPositionX(Application::GetInstance()->GetWindowWidth() / 2.0f - mSprite->GetWidth() / 2.0f);
+        }
+
+        if (!inLeftBound || !inRightBound) {
+            mMove->SetStrafeSpeed(mMove->GetStrafeSpeed() * -1.0f);
+        }
+
+    }
+    
+    void Ball::ConstraintsInBoundsY() {
+        bool inLowerBound, inUpperBound;
+        mMove->IsInBoundsY(inLowerBound, inUpperBound);
+        
+        if (!inLowerBound) {
+            this->Reset();
+        }
+        else if (!inUpperBound) {
+            mTransform->SetPositionY(Application::GetInstance()->GetWindowHeight() / 2.0f - mSprite->GetHeight() / 2.0f);
+            mMove->SetForwardSpeed(mMove->GetForwardSpeed() * -1.0f);
         }
     }
 } // namespace Waternion

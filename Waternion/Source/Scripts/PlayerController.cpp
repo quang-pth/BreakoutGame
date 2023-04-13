@@ -9,6 +9,14 @@ namespace Waternion
 {
     using namespace ECS;
 
+    PlayerController::PlayerController() : NativeScript(), mMaxSpeed(400.0f) {
+
+    }
+
+    PlayerController::PlayerController(EntityID id) : NativeScript(id), mMaxSpeed(400.0f) {
+
+    }
+
     void PlayerController::OnAwake() {
         float windowWidth = Application::GetInstance()->GetWindowWidth();
         float windowHeight = Application::GetInstance()->GetWindowHeight();
@@ -17,11 +25,11 @@ namespace Waternion
         mTransform->SetPosition(-windowWidth / 8.0f, -windowHeight / 2.0f, 10.0f);
 
         mMoveComponent = AddComponent<MoveComponent>();
-        Shared<SpriteComponent> sprite = AddComponent<SpriteComponent>();
-        sprite->Init("assets/textures/paddle.png", true, "Paddle");;
+        mSprite = AddComponent<SpriteComponent>();
+        mSprite->Init("assets/textures/paddle.png", true, "Paddle");;
 
         Shared<Box2DComponent> box = AddComponent<Box2DComponent>();
-        box->SetBox(sprite->GetBox());
+        box->SetBox(mSprite->GetBox());
     }
     
     void PlayerController::OnProcessInput(const InputState& inputState) {
@@ -41,9 +49,23 @@ namespace Waternion
 
     void PlayerController::OnUpdate(float deltaTime) {
         mMoveComponent->Update(deltaTime);
+        this->ConstraintsInBounds();
     }
 
     void PlayerController::OnPostUpdate(float deltaTime) {
 
+    }
+
+    void PlayerController::ConstraintsInBounds() {
+        bool inLeftBounds, inRightBounds;
+        mMoveComponent->IsInBoundsX(inLeftBounds, inRightBounds);
+
+        float windowWidth = Application::GetInstance()->GetWindowWidth();
+        if (!inLeftBounds) {
+            mTransform->SetPositionX(-windowWidth / 2.0f - mSprite->GetWidth() / 2.0f);
+        }
+        if (!inRightBounds) {
+            mTransform->SetPositionX(windowWidth / 2.0f - mSprite->GetWidth() / 2.0f);
+        }
     }
 } // namespace Waternion

@@ -15,34 +15,28 @@ namespace Waternion::ECS {
         position += mForwardSpeed * Math::Vector3::UnitY * deltaTime;
         position += mStrafeSpeed * Math::Vector3::UnitX * deltaTime;
 
-        if (!this->IsInBoundsX(position)) {
-            BounceHorizontal();
-        }
-        else if (!this->IsInBoundsY(position)) {
-            BounceVertical();
-        }
-        else {
-            transform->SetPosition(position);
-        }
+        transform->SetPosition(position);
     }
 
-    bool MoveComponent::IsInBoundsX(const Math::Vector3& position) {
+    Math::Vector2 MoveComponent::GetVelocity() const {
+        return mForwardSpeed * Math::Vector2::UnitY + mStrafeSpeed * Math::Vector2::UnitX;
+    }
+
+    void MoveComponent::IsInBoundsX(bool& inLeftBound, bool& inRightBound) {
         Shared<SpriteComponent> sprite = GetOwner()->GetComponent<SpriteComponent>();
+        Shared<TransformComponent> transform = GetOwner()->GetComponent<TransformComponent>();
         float windowWidth = Application::GetInstance()->GetWindowWidth();
-        return position.x >= -windowWidth / 2.0f - sprite->GetWidth() / 2.0f && position.x <= windowWidth / 2.0f - sprite->GetWidth() / 2.0f;
+        
+        inLeftBound = transform->GetPosition().x >= -windowWidth / 2.0f - sprite->GetWidth();
+        inRightBound = transform->GetPosition().x <= windowWidth / 2.0f;
     }
     
-    bool MoveComponent::IsInBoundsY(const Math::Vector3& position) {
+    void MoveComponent::IsInBoundsY(bool& inLowerBound, bool& inUpperBound) {
         Shared<SpriteComponent> sprite = GetOwner()->GetComponent<SpriteComponent>();
+        Shared<TransformComponent> transform = GetOwner()->GetComponent<TransformComponent>();
         float windowHeight = Application::GetInstance()->GetWindowHeight();
-        return position.y >= -windowHeight / 2.0f && position.y <= windowHeight / 2.0f - sprite->GetHeight();
-    }
-
-    void MoveComponent::BounceVertical() {
-
-    }
-
-    void MoveComponent::BounceHorizontal() {
-
+        
+        inLowerBound = transform->GetPosition().y >= -windowHeight / 2.0f;
+        inUpperBound = transform->GetPosition().y <= windowHeight / 2.0f;
     }
 }
