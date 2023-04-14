@@ -2,7 +2,7 @@
 
 namespace Waternion::ECS
 {
-    CircleComponent::CircleComponent() : Component(), mCircle(), mDisabled(false) {
+    CircleComponent::CircleComponent() : Component(), mCircle() {
 
     }
 

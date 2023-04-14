@@ -27,17 +27,10 @@ namespace Waternion::ECS
             WATERNION_INLINE void SetRadius(float radius) {
                 mCircle.Radius = radius;
             }
-            WATERNION_INLINE void SetDisabled(bool disabled) {
-                mDisabled = disabled;
-            }
-            WATERNION_INLINE bool GetDisabled() const {
-                return mDisabled;
-            }
             virtual void OnUpdateWorldTransform() override;
         private:
             Shared<TransformComponent> mOwnerTransform;
             Shared<SpriteComponent> mOwnerSprite;
             Circle mCircle;
-            bool mDisabled;
     };
 } // namespace Waternion::ECS

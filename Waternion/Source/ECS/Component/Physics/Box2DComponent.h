@@ -15,15 +15,8 @@ namespace Waternion::ECS
             WATERNION_INLINE const AABB2D& GetBox() const {
                 return mWorldBox;
             }
-            WATERNION_INLINE void SetDisabled(bool disabled) {
-                mDisabled = disabled;
-            }
-            WATERNION_INLINE bool GetDisabled() const {
-                return mDisabled;
-            }
         private:
             AABB2D mLocalBox;
             AABB2D mWorldBox;
-            bool mDisabled;
     };
 } // namespace Waternion::ECS

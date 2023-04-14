@@ -26,17 +26,15 @@ namespace Waternion::ECS {
         Shared<SpriteComponent> sprite = GetOwner()->GetComponent<SpriteComponent>();
         Shared<TransformComponent> transform = GetOwner()->GetComponent<TransformComponent>();
         float windowWidth = Application::GetInstance()->GetWindowWidth();
-        
-        inLeftBound = transform->GetPosition().x >= -windowWidth / 2.0f - sprite->GetWidth();
-        inRightBound = transform->GetPosition().x <= windowWidth / 2.0f;
+        inLeftBound = transform->GetPosition().x > -windowWidth / 2.0f - sprite->GetWidth() / 2.0f;
+        inRightBound = transform->GetPosition().x < windowWidth / 2.0f - sprite->GetWidth() / 2.0f;
     }
     
     void MoveComponent::IsInBoundsY(bool& inLowerBound, bool& inUpperBound) {
         Shared<SpriteComponent> sprite = GetOwner()->GetComponent<SpriteComponent>();
         Shared<TransformComponent> transform = GetOwner()->GetComponent<TransformComponent>();
         float windowHeight = Application::GetInstance()->GetWindowHeight();
-        
-        inLowerBound = transform->GetPosition().y >= -windowHeight / 2.0f;
-        inUpperBound = transform->GetPosition().y <= windowHeight / 2.0f;
+        inLowerBound = transform->GetPosition().y > -windowHeight / 2.0f - 20.0f;
+        inUpperBound = transform->GetPosition().y < windowHeight / 2.0f - sprite->GetHeight() / 2.0f;
     }
 }

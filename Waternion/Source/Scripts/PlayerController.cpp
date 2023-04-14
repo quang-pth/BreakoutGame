@@ -40,7 +40,6 @@ namespace Waternion
         if (inputState.Keyboard.GetKeyValue(GLFW_KEY_D)) {
             strafeSpeed += mMaxSpeed;
         }
-
         mMoveComponent->SetStrafeSpeed(strafeSpeed);
     }
 
@@ -48,7 +47,6 @@ namespace Waternion
     }
 
     void PlayerController::OnUpdate(float deltaTime) {
-        mMoveComponent->Update(deltaTime);
         this->ConstraintsInBounds();
     }
 

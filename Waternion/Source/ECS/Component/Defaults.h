@@ -25,9 +25,16 @@ namespace Waternion
                 virtual void OnUpdate(float deltaTime) {}
                 virtual void OnPostUpdate(float deltaTime) {}
                 virtual void OnUpdateWorldTransform() {}
+                WATERNION_INLINE void SetDisabled(bool disabled) {
+                    mDisabled = disabled;
+                }
+                WATERNION_INLINE bool GetDisabled() const {
+                    return mDisabled;
+                }
             protected:
                 UUID mID = INVALID_ID;
                 EntityID mOwnerID;
+                bool mDisabled;
             private:
                 Shared<class Coordinator> mCoordinator;
         };

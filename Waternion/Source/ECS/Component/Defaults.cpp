@@ -6,7 +6,7 @@
 
 namespace Waternion::ECS
 {
-    Component::Component() : mID(GenerateUUID()) {
+    Component::Component() : mID(GenerateUUID()), mDisabled(false) {
         mCoordinator = Application::GetInstance()->GetCoordinator();
     }
 

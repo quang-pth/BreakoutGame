@@ -2,6 +2,7 @@
 #include"ECS/Component/Physics/Box2DComponent.h"
 #include"ECS/Component/Physics/CircleComponent.h"
 #include"ECS/Component/Behavior/ScriptComponent.h"
+#include"ECS/Component/Behavior/MoveComponent.h"
 
 #include"Collisions/Collision.h"
 
@@ -23,9 +24,21 @@ namespace Waternion::ECS
     void PhysicWorld::PreUpdate(float deltaTime) {
         mCircles.clear();
         mBoxes.clear();
+        mMoves.clear();
+        // Get moves entities
+        for(Shared<Entity> entity : System::GetEntitiesHaveComponent<MoveComponent>()) {
+            Shared<MoveComponent> move = entity->GetComponent<MoveComponent>();
+            if (!move->GetDisabled()) {
+                mMoves.emplace_back(move);
+            }
+        }
     }
 
     void PhysicWorld::Update(float deltaTime) {
+        for(Shared<MoveComponent> move : mMoves) {
+            move->Update(deltaTime);
+        }
+        // Get collider components
         for(Shared<Entity> entity : System::GetEntitiesHaveComponent<CircleComponent>()) {
             Shared<CircleComponent> circle = entity->GetComponent<CircleComponent>();
             if (!circle->GetDisabled()) {

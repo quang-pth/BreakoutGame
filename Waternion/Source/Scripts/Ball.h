@@ -16,6 +16,7 @@ namespace Waternion
             virtual void OnAwake() override;
             virtual void OnStart() override;
             virtual void OnProcessInput(const InputState&) override;
+            virtual void OnPreUpdate(float deltaTime) override;
             virtual void OnUpdate(float deltaTime) override;
             virtual void OnPostUpdate(float deltaTime) override;
             virtual void OnCollision(const ECS::CollisionDetails& details) override;

@@ -22,6 +22,7 @@ namespace Waternion::ECS
             virtual void PostUpdate(float deltaTime) override;
         private:
             Math::Vector2 CalcClosestDirection(Math::Vector2 vector);
+            std::vector<Shared<class MoveComponent>> mMoves;
             std::vector<Shared<class CircleComponent>> mCircles;
             std::vector<Shared<class Box2DComponent>> mBoxes;
     };

@@ -52,6 +52,13 @@ namespace Waternion
         }
     }
 
+    void Ball::OnPreUpdate(float deltaTime) {
+        if (mIsStick) {
+            mMove->SetForwardSpeed(0.0f);
+            mMove->SetStrafeSpeed(0.0f);
+        }
+    }
+
     void Ball::OnUpdate(float deltaTime) {
         if (mIsMoving) {
             mDisabledDuration -= deltaTime;
@@ -68,11 +75,8 @@ namespace Waternion
     }
 
     void Ball::OnPostUpdate(float deltaTime) {
-        if (mIsMoving) {
-            mMove->Update(deltaTime);
-            this->ConstraintsInBoundsX();
-            this->ConstraintsInBoundsY();
-        }
+        this->ConstraintsInBoundsX();
+        this->ConstraintsInBoundsY();
     }
 
     void Ball::OnCollision(const ECS::CollisionDetails& details) {
@@ -86,14 +90,14 @@ namespace Waternion
                 float distanceToCenter = GetComponent<CircleComponent>()->GetCenter().x - paddleCenterX;
                
                 float percentage = distanceToCenter / (paddleSprite->GetWidth() / 2.0f);
-                float strength = 3.0f;
+                float strength = 4.5f;
 
                 const Math::Vector2& oldVelocity = mMove->GetVelocity();
                 Math::Vector2 newVelocity(mSpeed * strength * percentage, Math::Abs(oldVelocity.y) * 1.0f);
                 newVelocity.SafeNormalized();
 
                 mMove->SetStrafeSpeed(newVelocity.x * oldVelocity.Magnitude());
-                mMove->SetForwardSpeed(newVelocity.y * oldVelocity.Magnitude());
+                mMove->SetForwardSpeed(Math::Clamp(newVelocity.y * oldVelocity.Magnitude(), 100.0f, 400.0f));
                 return;
             }
             // The ball collides with other bricks
@@ -130,7 +134,7 @@ namespace Waternion
         mMove->IsInBoundsX(inLeftBound, inRightBound);
         
         if (!inLeftBound) {
-            mTransform->SetPositionX(Application::GetInstance()->GetWindowWidth() / -2.0f);
+            mTransform->SetPositionX(Application::GetInstance()->GetWindowWidth() / -2.0f - mSprite->GetWidth() / 2.0f);
         }
 
         if (!inRightBound) {
@@ -140,7 +144,6 @@ namespace Waternion
         if (!inLeftBound || !inRightBound) {
             mMove->SetStrafeSpeed(mMove->GetStrafeSpeed() * -1.0f);
         }
-
     }
     
     void Ball::ConstraintsInBoundsY() {

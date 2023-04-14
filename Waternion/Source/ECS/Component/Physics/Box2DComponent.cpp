@@ -4,7 +4,7 @@
 
 namespace Waternion::ECS
 {
-    Box2DComponent::Box2DComponent() : Component(), mLocalBox(), mWorldBox(), mDisabled(false) {
+    Box2DComponent::Box2DComponent() : Component(), mLocalBox(), mWorldBox() {
 
     }
 
