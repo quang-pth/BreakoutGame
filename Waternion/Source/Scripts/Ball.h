@@ -9,6 +9,9 @@
 namespace Waternion
 {
     class Ball : public NativeScript {
+            friend class BallState;
+            friend class MovingState;
+            friend class StickState;
         public:
             Ball();
             Ball(ECS::EntityID id);
@@ -21,16 +24,12 @@ namespace Waternion
             virtual void OnPostUpdate(float deltaTime) override;
             virtual void OnCollision(const ECS::CollisionDetails& details) override;
         private:
-            void Reset();
             void ConstraintsInBoundsX();
             void ConstraintsInBoundsY();
-            bool mIsMoving;
-            bool mIsStick;
-            float mSpeed;
-            float mDisabledDuration;
             Shared<ECS::Entity> mPaddle;
             Shared<ECS::TransformComponent> mTransform;
             Shared<ECS::MoveComponent> mMove;
             Shared<ECS::SpriteComponent> mSprite;
+            Shared<class BallState> mState;
     };
 } // namespace Waternion
