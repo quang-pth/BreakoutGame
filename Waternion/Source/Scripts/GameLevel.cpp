@@ -1,6 +1,6 @@
 #include"GameLevel.h"
 #include"Core/Manager/ResourceManager.h"
-#include"ECS/Component/SpriteComponent.h"
+#include"ECS/Component/Graphics/SpriteComponent.h"
 #include"ECS/Component/Behavior/ScriptComponent.h"
 #include"ECS/Component/Physics/Box2DComponent.h"
 #include"Scripts/Brick.h"

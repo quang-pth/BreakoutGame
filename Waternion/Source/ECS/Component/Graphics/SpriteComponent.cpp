@@ -3,7 +3,15 @@
 #include"Math/Matrix.h"
 #include"Core/Application.h"
 
+#include"Utils/Settings.h"
+
 namespace Waternion::ECS {
+    SpriteComponent::SpriteComponent() : 
+        Component(), mColor(Math::Vector3(1.0f)), mIsVisible(true), mBox()  
+    {
+
+    }
+
     void SpriteComponent::Init(const char* filepath, bool alpha, const char* name) {
         mTexture = ResourceManager::LoadTexture(filepath, alpha, name);
         Shared<TransformComponent> transform = GetOwner()->GetComponent<TransformComponent>();
@@ -30,13 +38,15 @@ namespace Waternion::ECS {
 
         mVAO = MakeShared<VertexArray>(vertices, numOfVertices, indices, numOfIndices);
 
+        mShader = ResourceManager::LoadShader(Settings::DefaultVertexSource, Settings::DefaultFragmentSource, "", Settings::DefaultShaderName);
+
         mBox.UpdateMinMax(Math::Vector2(0.0f, 0.0f));
         mBox.UpdateMinMax(Math::Vector2(1.0f, 1.0f));
     }
 
-    void SpriteComponent::Draw(Shared<Shader> shader, float deltaTime) {
+    void SpriteComponent::Draw(float deltaTime) {
         Shared<TransformComponent> transform = GetOwner()->GetComponent<TransformComponent>();
-        
+
         mSize.x = mTexture->Width * transform->GetScale().x;
         mSize.y = mTexture->Height * transform->GetScale().y;
         Math::Matrix4 model = Math::Matrix4::CreateFromScale(mSize.x, mSize.y, 1.0f);
@@ -44,11 +54,13 @@ namespace Waternion::ECS {
         model *= Math::Matrix4::CreateFromRotationZ(transform->GetRotation());
         model *= Math::Matrix4::CreateFromTranslation(mSize.x / 2, mSize.y / 2, 0.0f);
         model *= Math::Matrix4::CreateFromTranslation(transform->GetPosition());
+        const Math::Matrix4& orthoProj = Math::Matrix4::CreateOrtho(Application::GetInstance()->GetWindowWidth(), Application::GetInstance()->GetWindowHeight(), -10.0f, 1000.0f);
 
-        shader->Use();
-        shader->SetMatrix4("Transform", model);
-        shader->SetVector3("color", mColor);
-        shader->SetInt("image", 0);
+        mShader->Use();
+        mShader->SetMatrix4("Projection", orthoProj);
+        mShader->SetMatrix4("Transform", model);
+        mShader->SetVector3("color", mColor);
+        mShader->SetInt("image", 0);
         mVAO->Bind();
         mTexture->Bind();
         glActiveTexture(GL_TEXTURE0);
@@ -61,6 +73,14 @@ namespace Waternion::ECS {
 
     float SpriteComponent::GetHeight() const {
         return mTexture->Height * GetOwner()->GetComponent<TransformComponent>()->GetScale().y;
+    }
+
+    void SpriteComponent::SetShader(Shared<Shader> shader) {
+        mShader = shader;
+    }
+
+    void SpriteComponent::SetShader(const char* shaderName) {
+        mShader = ResourceManager::GetShader(shaderName);
     }
 
     void SpriteComponent::CheckError() {

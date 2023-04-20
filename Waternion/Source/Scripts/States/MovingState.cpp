@@ -63,8 +63,8 @@ namespace Waternion
             Math::Vector2 newVelocity(mSpeed * strength * percentage, Math::Abs(oldVelocity.y) * 1.0f);
             newVelocity.SafeNormalized();
 
-            mOwner->mMove->SetStrafeSpeed(newVelocity.x * oldVelocity.Magnitude());
-            mOwner->mMove->SetForwardSpeed(Math::Clamp(newVelocity.y * oldVelocity.Magnitude(), 100.0f, 400.0f));
+            mOwner->mMove->SetStrafeSpeed(newVelocity.x * mSpeed);
+            mOwner->mMove->SetForwardSpeed(Math::Clamp(newVelocity.y * mSpeed, 100.0f, 300.0f));
             return;
         }
         // The ball collides with other bricks

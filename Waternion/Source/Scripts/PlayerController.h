@@ -2,7 +2,7 @@
 
 #include"Native.h"
 #include"ECS/Component/Behavior/MoveComponent.h"
-#include"ECS/Component/SpriteComponent.h"
+#include"ECS/Component/Graphics/SpriteComponent.h"
 
 namespace Waternion
 {

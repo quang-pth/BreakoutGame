@@ -11,7 +11,7 @@ namespace Waternion
                 WATERNION_INLINE Renderer() : System() {}
                 virtual ~Renderer() = default;
                 WATERNION_INLINE virtual void BeginScene(float deltaTime = 0.0f) {};
-                WATERNION_INLINE virtual void Draw(Shared<Shader> shader, float deltaTime = 0.0f) {};
+                WATERNION_INLINE virtual void Draw(float deltaTime = 0.0f) {};
                 WATERNION_INLINE virtual void EndScene(float deltaTime = 0.0f) {};
         };
 
@@ -21,10 +21,10 @@ namespace Waternion
                 WATERNION_INLINE SpriteRenderer(const SpriteRenderer&) = default; 
                 virtual bool Init() override;
                 virtual void BeginScene(float deltaTime = 0.0f) override;
-                virtual void Draw(Shared<Shader> shader, float deltaTime = 0.0f) override;
+                virtual void Draw(float deltaTime = 0.0f) override;
                 virtual void EndScene(float deltaTime = 0.0f) override;
             private:
-                std::vector<Shared<class SpriteComponent>> mSprites;
+                std::unordered_map<uint32_t, std::vector<Shared<class SpriteComponent>>> mSpritesMap;
         };
     }
 } // namespace Waternion

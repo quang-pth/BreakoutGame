@@ -29,17 +29,21 @@ namespace Waternion
                 }
                 
                 static WATERNION_INLINE Matrix4 CreateFromScale(float scaleX, float scaleY, float scaleZ) {
-                    return Matrix4::CreateFromScale(Vector3(scaleX, scaleY, scaleZ));
-                }
-                
-                static WATERNION_INLINE Matrix4 CreateFromScale(const Vector3& scale) {
                     float value[4][4] = {
-                        {scale.x, 0.0f, 0.0f, 0.0f},
-                        {0.0f, scale.y, 0.0f, 0.0f},
-                        {0.0f, 0.0f, scale.z, 0.0f},
+                        {scaleX, 0.0f, 0.0f, 0.0f},
+                        {0.0f, scaleY, 0.0f, 0.0f},
+                        {0.0f, 0.0f, scaleZ, 0.0f},
                         {0.0f, 0.0f, 0.0f, 1.0f},
                     };
                     return Matrix4(value);
+                }
+                
+                static WATERNION_INLINE Matrix4 CreateFromScale(float scale) {
+                    return Matrix4::CreateFromScale(scale, scale, scale);
+                }
+                
+                static WATERNION_INLINE Matrix4 CreateFromScale(const Vector3& scale) {
+                    return Matrix4::CreateFromScale(scale.x, scale.y, scale.z);
                 }
 
                 static WATERNION_INLINE Matrix4 CreateFromRotationX(float theta) {

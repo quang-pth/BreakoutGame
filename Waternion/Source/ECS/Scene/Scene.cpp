@@ -5,6 +5,7 @@
 
 // Systems
 #include"ECS/System/Renderer.h"
+#include"ECS/System/ParticleSystem.h"
 #include"ECS/System/InputSystem.h"
 #include"ECS/System/ScriptingSystem.h"
 #include"ECS/System/PhysicWorld.h"
@@ -27,6 +28,7 @@ namespace Waternion {
             this->RegisterSystem<SpriteRenderer>();
             this->RegisterSystem<ScriptingSystem>();
             this->RegisterSystem<PhysicWorld>();
+            this->RegisterSystem<ParticleSystem>();
         }
 
         bool Scene::Load() {
@@ -44,6 +46,7 @@ namespace Waternion {
             Shared<Entity> levelOne = MakeShared<Entity>("LevelOne");
             levelOne->AddComponent<ScriptComponent>()->Bind<GameLevel>();
             levelOne->GetComponent<ScriptComponent>()->GetInstance<GameLevel>()->LoadLevel("assets/levels/three.lvl", windowWidth, windowHeight / 2.0f);
+
 
             if (!this->InitSystems()) {
                 return false;
@@ -99,12 +102,8 @@ namespace Waternion {
         }
 
         void Scene::Render(float deltaTime) {
-            Shared<Shader> shader = ResourceManager::LoadShader("assets/shaders/sprite_vs.glsl", "assets/shaders/sprite_fs.glsl", "", "SpriteShader");
-            shader->Use();
-            const Math::Matrix4& orthoProj = Math::Matrix4::CreateOrtho(Application::GetInstance()->GetWindowWidth(), Application::GetInstance()->GetWindowHeight(), -10.0f, 1000.0f);
-            shader->SetMatrix4("Projection", orthoProj);
             for(Shared<System> system : mSystemsMap[GetTypeID<SpriteRenderer>()]) {
-                StaticPtrCast<SpriteRenderer>(system)->Draw(shader, deltaTime);
+                StaticPtrCast<SpriteRenderer>(system)->Draw(deltaTime);
             }
         }
 

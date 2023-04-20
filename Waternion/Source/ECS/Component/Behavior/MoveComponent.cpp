@@ -1,6 +1,6 @@
 #include"MoveComponent.h"
 #include"Core/Application.h"
-#include"ECS/Component/SpriteComponent.h"
+#include"ECS/Component/Graphics/SpriteComponent.h"
 
 namespace Waternion::ECS {
     MoveComponent::MoveComponent() : 

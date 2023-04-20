@@ -1,6 +1,6 @@
 #include"Background.h"
 #include"ECS/Component/Defaults.h"
-#include"ECS/Component/SpriteComponent.h"
+#include"ECS/Component/Graphics/SpriteComponent.h"
 #include"Core/Application.h"
 
 namespace Waternion {

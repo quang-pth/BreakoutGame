@@ -3,10 +3,13 @@
 #include"Core/Application.h"
 #include"ECS/Component/Physics/CircleComponent.h"
 #include"ECS/Component/Physics/Box2DComponent.h"
+#include"ECS/Component/Graphics/Particle2DComponent.h"
 
 // States
 #include"Scripts/States/MovingState.h"
 #include"Scripts/States/StickState.h"
+
+#include"Utils/Settings.h"
 
 namespace Waternion
 {
@@ -38,6 +41,9 @@ namespace Waternion
 
         Shared<CircleComponent> circle = AddComponent<CircleComponent>();
         circle->SetRadius(mSprite->GetWidth() / 2.0f);
+
+        Shared<Particle2DComponent> particle = AddComponent<Particle2DComponent>();
+        particle->Init("assets/textures/particle.png", true, "Particle");
 
         mState = BallState::ChangeState<StickState>();
         mState->OnEnter();

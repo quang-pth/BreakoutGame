@@ -18,7 +18,7 @@ namespace Waternion {
 
     Shared<Shader> ResourceManager::GetShader(const std::string& name)
     {
-        WATERNION_ASSERT(ShadersMap.count(name) && "Shader was not existed");
+        WATERNION_ASSERT(ShadersMap.count(name) && "Shader is not existed");
         return ShadersMap[name];
     }
 

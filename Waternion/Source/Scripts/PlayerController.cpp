@@ -1,7 +1,7 @@
 #include"PlayerController.h"
 #include"ECS/System/InputSystem.h"
 #include"ECS/Component/Defaults.h"
-#include"ECS/Component/SpriteComponent.h"
+#include"ECS/Component/Graphics/SpriteComponent.h"
 #include"ECS/Component/Physics/Box2DComponent.h"
 #include"Core/Application.h"
 

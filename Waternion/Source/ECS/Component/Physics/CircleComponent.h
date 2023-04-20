@@ -2,7 +2,7 @@
 
 #include"Collisions/Primitive.h"
 #include"ECS/Component/Defaults.h"
-#include"ECS/Component/SpriteComponent.h"
+#include"ECS/Component/Graphics/SpriteComponent.h"
 
 namespace Waternion::ECS
 {
