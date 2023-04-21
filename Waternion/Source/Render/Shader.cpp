@@ -51,8 +51,20 @@ namespace Waternion
         glUniform1i(glGetUniformLocation(this->ID, name.c_str()), value);
     }
 
+    void Shader::SetInts(const std::string& name, int32_t* value, uint32_t count) {
+        glUniform1iv(glGetUniformLocation(this->ID, name.c_str()), count, value);
+    }
+
     void Shader::SetFloat(const std::string& name, float value) {
         glUniform1f(glGetUniformLocation(this->ID, name.c_str()), value);
+    }
+
+    void Shader::SetFloats(const std::string& name, float* value, uint32_t count) {
+        glUniform1fv(glGetUniformLocation(this->ID, name.c_str()), count, value);
+    }
+
+    void Shader::SetFloats2(const std::string& name, float* value, uint32_t count) {
+        glUniform2fv(glGetUniformLocation(this->ID, name.c_str()), count, value);
     }
 
     void Shader::SetVector2(const std::string& name, float x, float y) {

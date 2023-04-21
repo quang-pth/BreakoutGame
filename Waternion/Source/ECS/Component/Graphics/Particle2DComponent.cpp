@@ -9,9 +9,6 @@ namespace Waternion::ECS
     Particle2DComponent::Particle2DComponent() : 
         SpriteComponent(), mParticlesPerFrame(2), mMaxParticles(100), mLastUsedIdx(0) 
     {
-        mModels.resize(mMaxParticles);
-        mColors.resize(mMaxParticles);
-        mAlphas.resize(mMaxParticles);
     }
 
     void Particle2DComponent::Init(const char* filepath, bool alpha, const char* name) {
@@ -119,45 +116,5 @@ namespace Waternion::ECS
         }
         mLastUsedIdx = 0;
         return 0;
-    }
-
-    void Particle2DComponent::SetInstancingAttributes() {
-        GetVertexArray()->Bind();
-        uint32_t transformInstancedArray;
-        glGenBuffers(1, &transformInstancedArray);
-        glBindBuffer(GL_ARRAY_BUFFER, transformInstancedArray);
-        glBufferData(GL_ARRAY_BUFFER, mMaxParticles * sizeof(Math::Matrix4), mModels.data(), GL_DYNAMIC_DRAW);
-        // Set matrix4 as a vertex attribute
-        size_t vec4Size = 4 * sizeof(float);
-        glEnableVertexAttribArray(2);
-        glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, nullptr);
-        glEnableVertexAttribArray(3);
-        glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, ReintepretCast<void*>(1 * vec4Size));
-        glEnableVertexAttribArray(4);
-        glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, ReintepretCast<void*>(2 * vec4Size));
-        glEnableVertexAttribArray(5);
-        glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, 4 * vec4Size, ReintepretCast<void*>(3 * vec4Size));
-        // Update vertex attribute for each instance
-        glVertexAttribDivisor(2, 1);
-        glVertexAttribDivisor(3, 1);
-        glVertexAttribDivisor(4, 1);
-        glVertexAttribDivisor(5, 1);
-        // Color attributes
-        uint32_t colorBuffer;
-        glGenBuffers(1, &colorBuffer);
-        glBindBuffer(GL_ARRAY_BUFFER, colorBuffer);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(Math::Vector3) * mMaxParticles, mColors.data(), GL_DYNAMIC_DRAW);
-        glEnableVertexAttribArray(6);
-        glVertexAttribPointer(6, 3, GL_FLOAT, GL_FALSE, sizeof(Math::Vector3), nullptr);
-        glVertexAttribDivisor(6, 1);
-        // Alpha attributes
-        uint32_t alphaBuffer;
-        glGenBuffers(1, &alphaBuffer);
-        glBindBuffer(GL_ARRAY_BUFFER, alphaBuffer);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(float) * mMaxParticles, mAlphas.data(), GL_DYNAMIC_DRAW);
-        glEnableVertexAttribArray(7);
-        glVertexAttribPointer(7, 1, GL_FLOAT, GL_FALSE, sizeof(float), nullptr);
-        glVertexAttribDivisor(7, 1);
-        GetVertexArray()->Unbind();
     }
 } // namespace Waternion::ECS

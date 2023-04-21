@@ -2,6 +2,8 @@
 #include"Core/Application.h"
 #include"Render/Shader.h"
 #include"Core/Manager/ResourceManager.h"
+#include"Render/PostProcessor.h"
+#include"Utils/Settings.h"
 
 // Systems
 #include"ECS/System/Renderer.h"
@@ -47,10 +49,15 @@ namespace Waternion {
             levelOne->AddComponent<ScriptComponent>()->Bind<GameLevel>();
             levelOne->GetComponent<ScriptComponent>()->GetInstance<GameLevel>()->LoadLevel("assets/levels/three.lvl", windowWidth, windowHeight / 2.0f);
 
-
             if (!this->InitSystems()) {
                 return false;
             }            
+
+            Shared<Shader> postProcessingShader = ResourceManager::LoadShader(Settings::PostProcessingVertexSource, Settings::PostProcessingFragmentSource, "", Settings::PostProcessingShaderName);
+            mPostProcessor = MakeShared<PostProcessor>();
+            if (!mPostProcessor->Init(postProcessingShader, Application::GetInstance()->GetWindowWidth(), Application::GetInstance()->GetWindowHeight())) {
+                return false;
+            }
 
             return true;
         }
@@ -80,6 +87,7 @@ namespace Waternion {
         }
 
         void Scene::Update(float deltaTime) {
+            mPostProcessor->Update(deltaTime);
             for (EntityID id : mCoordinator->GetEntityIDsHaveComponent<TransformComponent>()) {
                 MakeShared<Entity>(id, mCoordinator)->GetComponent<TransformComponent>()->UpdateWorldTransform();
             }
@@ -102,15 +110,22 @@ namespace Waternion {
         }
 
         void Scene::Render(float deltaTime) {
+            mPostProcessor->BeginRender();
             for(Shared<System> system : mSystemsMap[GetTypeID<SpriteRenderer>()]) {
                 StaticPtrCast<SpriteRenderer>(system)->Draw(deltaTime);
             }
+            mPostProcessor->EndRender();
+            mPostProcessor->Render(deltaTime);
         }
 
         void Scene::EndScene(float deltaTime) {
             for(Shared<System> system : mSystemsMap[GetTypeID<SpriteRenderer>()]) {
                 StaticPtrCast<SpriteRenderer>(system)->EndScene(deltaTime);
             }
+        }
+
+        void Scene::SetShake(float value) {
+            mPostProcessor->SetShake(value);
         }
 
         bool Scene::InitSystems() {

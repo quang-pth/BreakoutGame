@@ -20,6 +20,9 @@ namespace Waternion
             if (!mIsSolid) {
                 GetOwner()->Destroy();
             }
+            else {
+                Application::GetInstance()->GetScene()->SetShake(true);
+            }
         }
     }
 } // namespace Waternion

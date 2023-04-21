@@ -7,6 +7,8 @@
 
 namespace Waternion
 {
+    class PostProcessor;
+
     namespace ECS
     {
         class Scene {
@@ -22,6 +24,7 @@ namespace Waternion
                 void BeginScene(float);
                 void Render(float);
                 void EndScene(float);
+                void SetShake(float value);
 
                 template<typename T, typename... Args>
                 WATERNION_INLINE void RegisterSystem(Args&&... args) {
@@ -45,6 +48,8 @@ namespace Waternion
                 std::unordered_map<UUID, std::vector<Shared<System>>> mSystemsMap;
                 std::vector<EntityID> mEntities;
                 Shared<Coordinator> mCoordinator;
+                Shared<PostProcessor> mPostProcessor;
+                float mShakeTime;
         };
     } // namespace ECS
 } // namespace Waternion

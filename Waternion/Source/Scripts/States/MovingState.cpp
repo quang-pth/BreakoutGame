@@ -5,6 +5,8 @@
 #include"ECS/Component/Physics/Box2DComponent.h"
 #include"ECS/Component/Physics/CircleComponent.h"
 
+#include"Core/Application.h"
+
 namespace Waternion
 {
     const static float MAX_INTERVAL = 0.5f;

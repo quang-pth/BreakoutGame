@@ -49,7 +49,6 @@ namespace Waternion {
                     return mVAO;
                 }
             private:
-                void CheckError();
                 Shared<class Texture2D> mTexture;
                 Shared<class VertexArray> mVAO;
                 Shared<class Shader> mShader;

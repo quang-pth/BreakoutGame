@@ -10,6 +10,9 @@ namespace Waternion
             static const char* ParticleVertexSource;
             static const char* ParticleFragmentSource;
             static const char* ParticleShaderName;
+            static const char* PostProcessingVertexSource;
+            static const char* PostProcessingFragmentSource;
+            static const char* PostProcessingShaderName;
         private:
             Settings() = default;
     };

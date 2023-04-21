@@ -26,7 +26,6 @@ namespace Waternion
                 void UpdateParticles(float deltaTime);
                 void RespawnParticles(const Math::Vector2& offset);
                 void SpawnParticles(Particle& particle, const Math::Vector2& offset);
-                void SetInstancingAttributes();
                 uint32_t GetUnusedParticleIdx();
                 uint32_t mParticlesPerFrame;
                 uint32_t mMaxParticles;

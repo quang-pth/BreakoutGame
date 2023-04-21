@@ -1,6 +1,11 @@
 #include"Texture.h"
 
 namespace Waternion {
+    Texture2D::Texture2D() : Width(0), Height(0), InternalFormat(GL_RGB), ImageFormat(GL_RGB), 
+        WrapS(GL_REPEAT), WrapT(GL_REPEAT), FilterMin(GL_LINEAR), FilterMax(GL_LINEAR) 
+    {
+    }
+
     void Texture2D::Init(uint32_t width, uint32_t height, const unsigned char* data) {
         this->Width = width;
         this->Height = height;

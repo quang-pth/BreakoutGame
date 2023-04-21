@@ -82,32 +82,4 @@ namespace Waternion::ECS {
     void SpriteComponent::SetShader(const char* shaderName) {
         mShader = ResourceManager::GetShader(shaderName);
     }
-
-    void SpriteComponent::CheckError() {
-        GLenum error = glGetError();
-        switch (error)
-        {
-        case GL_NO_ERROR:
-            WATERNION_LOG_INFO("Render sprite with NO ERROR!");
-            break;
-        case GL_INVALID_ENUM:
-            WATERNION_LOG_ERROR("Render sprite with INVALID ENUM!");
-            break;
-        case GL_INVALID_VALUE:
-            WATERNION_LOG_ERROR("Render sprite with INVALID VALUE!");
-            break;
-        case GL_INVALID_OPERATION:
-            WATERNION_LOG_ERROR("Render sprite with INVALID OPERATION!");
-            break;
-        case GL_INVALID_FRAMEBUFFER_OPERATION:
-            WATERNION_LOG_ERROR("Render sprite with FRAMEBUFFER OPERATION!");
-            break;
-        case GL_OUT_OF_MEMORY:
-            WATERNION_LOG_ERROR("Render sprite with OUT OF MEMORY!");
-            break;
-        default:
-            WATERNION_LOG_ERROR("Render sprite with UNDETECED ERROR");
-            break;
-        }
-    }
 }

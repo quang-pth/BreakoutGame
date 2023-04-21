@@ -83,7 +83,6 @@ namespace Waternion {
     }
 
     void Application::Render(float deltaTime) {
-        mWindow->ClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         mScene->BeginScene(deltaTime);
         mScene->Render(deltaTime);
         mScene->EndScene(deltaTime);

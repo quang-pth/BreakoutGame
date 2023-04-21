@@ -13,7 +13,7 @@ namespace Waternion
             int32_t WrapS, WrapT;
             int32_t FilterMin, FilterMax;
 
-            Texture2D() = default;
+            Texture2D();
             Texture2D(const Texture2D&) = default;
             void Init(uint32_t width, uint32_t height, const unsigned char* data);
             void Bind();

@@ -69,14 +69,6 @@ namespace Waternion {
         }
     }
 
-    void Window::ClearColor(float r, float g, float b, float a) {
-        glClearColor(r, g, b, a);
-        glClear(GL_COLOR_BUFFER_BIT);
-        glEnable(GL_BLEND);
-        glEnable(GL_SAMPLES);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    }
-
     void Window::SwapBuffers() {
         BackupInputStates();
         glfwSwapBuffers(mInstance);
