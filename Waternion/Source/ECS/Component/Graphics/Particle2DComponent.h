@@ -26,6 +26,7 @@ namespace Waternion
                 void UpdateParticles(float deltaTime);
                 void RespawnParticles(const Math::Vector2& offset);
                 void SpawnParticles(Particle& particle, const Math::Vector2& offset);
+                void SetInstancingAttributes();
                 uint32_t GetUnusedParticleIdx();
                 uint32_t mParticlesPerFrame;
                 uint32_t mMaxParticles;
@@ -33,6 +34,9 @@ namespace Waternion
                 std::vector<Particle> mParticles;
                 Shared<SpriteComponent> mOwnerSprite;
                 Shared<TransformComponent> mOwnerTransform;
+                std::vector<Math::Matrix4> mModels;
+                std::vector<Math::Vector3> mColors;
+                std::vector<float> mAlphas;
         };
     }
 } // namespace Waternion
