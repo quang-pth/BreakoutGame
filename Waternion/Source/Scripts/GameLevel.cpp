@@ -1,8 +1,12 @@
 #include"GameLevel.h"
 #include"Core/Manager/ResourceManager.h"
+
+// Components
 #include"ECS/Component/Graphics/SpriteComponent.h"
 #include"ECS/Component/Behavior/ScriptComponent.h"
 #include"ECS/Component/Physics/Box2DComponent.h"
+#include"ECS/Component/Audio/SoundComponent.h"
+
 #include"Scripts/Brick.h"
 
 namespace Waternion
@@ -55,6 +59,8 @@ namespace Waternion
                     Shared<TransformComponent> transform = solidBrick->GetComponent<TransformComponent>();
                     transform->SetPosition(position);
                     transform->SetScale(unitWidth / sprite->GetWidth(), unitHeight / sprite->GetHeight(), 1.0f);
+                    // Sound
+                    solidBrick->AddComponent<SoundComponent>("assets/audio/solid.wav", false);
                     // Script
                     Shared<ScriptComponent> script = solidBrick->AddComponent<ScriptComponent>();
                     script->Bind<Brick>();
@@ -91,6 +97,8 @@ namespace Waternion
                     Shared<TransformComponent> transform = normalBlock->GetComponent<TransformComponent>();
                     transform->SetPosition(position);
                     transform->SetScale(unitWidth / sprite->GetWidth(), unitHeight / sprite->GetHeight(), 1.0f);
+                    // Sound
+                    normalBlock->AddComponent<SoundComponent>("assets/audio/bleep.mp3", false);
                     // Script
                     Shared<ScriptComponent> script = normalBlock->AddComponent<ScriptComponent>();
                     script->Bind<Brick>();

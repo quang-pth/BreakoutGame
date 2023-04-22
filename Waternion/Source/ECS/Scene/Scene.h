@@ -33,14 +33,14 @@ namespace Waternion
                 WATERNION_INLINE void RegisterSystem(Args&&... args) {
                     UUID systemType = GetTypeID<T>();
                     WATERNION_STATIC_ASSERT(std::is_base_of<System, T>::value);
-                    mSystemsMap[systemType].emplace_back(std::make_shared<T>(std::forward<Args>(args)...));
+                    mSystemsMap[systemType] = MakeShared<T>(std::forward<Args>(args)...);
                 }
 
                 template<typename T>
-                WATERNION_INLINE std::vector<Shared<System>> GetSystems() {
+                WATERNION_INLINE Shared<T> GetSystem() {
                     UUID systemType = GetTypeID<T>();
                     WATERNION_STATIC_ASSERT(std::is_base_of<System, T>::value);
-                    return mSystemsMap[systemType];
+                    return DyanmicPtrCast<T>(mSystemsMap.at(systemType));
                 }
 
                 Shared<Entity> FindEntity(const std::string& name) const;
@@ -48,7 +48,7 @@ namespace Waternion
                 void AddEntity(EntityID id);
             private:
                 bool InitSystems();
-                std::unordered_map<UUID, std::vector<Shared<System>>> mSystemsMap;
+                std::unordered_map<UUID, Shared<System>> mSystemsMap;
                 std::vector<EntityID> mEntities;
                 Shared<Coordinator> mCoordinator;
                 Shared<PostProcessor> mPostProcessor;

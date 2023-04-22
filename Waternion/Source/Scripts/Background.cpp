@@ -1,6 +1,10 @@
 #include"Background.h"
+
+// Components
 #include"ECS/Component/Defaults.h"
 #include"ECS/Component/Graphics/SpriteComponent.h"
+#include"ECS/Component/Audio/SoundComponent.h"
+
 #include"Core/Application.h"
 
 namespace Waternion {
@@ -9,6 +13,9 @@ namespace Waternion {
     void Background::OnAwake() {
         Shared<SpriteComponent> sprite = AddComponent<SpriteComponent>();
         sprite->Init("assets/textures/background.jpg", false, "Background");
+
+        Shared<SoundComponent> sound = AddComponent<SoundComponent>("assets/audio/breakout.mp3", true);
+        sound->Play();
     }
 
     void Background::OnStart() {

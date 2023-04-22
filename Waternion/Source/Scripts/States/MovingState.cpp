@@ -1,7 +1,10 @@
 #include"MovingState.h"
 #include"Scripts/Ball.h"
 #include"StickState.h"
+
+// Components
 #include"ECS/Component/Behavior/MoveComponent.h"
+#include"ECS/Component/Audio/SoundComponent.h"
 #include"ECS/Component/Physics/Box2DComponent.h"
 #include"ECS/Component/Physics/CircleComponent.h"
 
@@ -67,6 +70,7 @@ namespace Waternion
 
             mOwner->mMove->SetStrafeSpeed(newVelocity.x * mSpeed);
             mOwner->mMove->SetForwardSpeed(Math::Clamp(newVelocity.y * mSpeed, 100.0f, 300.0f));
+            mOwner->mPaddle->GetComponent<ECS::SoundComponent>()->Play();
             return;
         }
         // The ball collides with powerups

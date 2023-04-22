@@ -5,6 +5,10 @@
 
 namespace Waternion
 {
+    namespace ECS {
+        class SoundComponent;
+    };
+
     class Brick : public NativeScript {
         public:
             Brick();

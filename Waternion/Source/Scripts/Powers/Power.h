@@ -58,8 +58,11 @@ namespace Waternion
         virtual void SetEffect(bool value) override;
     };
 
-    class ECS::MoveComponent;
-    class ECS::Box2DComponent;
+    namespace ECS {
+        class MoveComponent;
+        class Box2DComponent;
+        class SoundComponent;
+    };
 
     class PowerUp : public NativeScript {
         public:
@@ -69,6 +72,7 @@ namespace Waternion
             virtual void OnStart() override;
             virtual void OnUpdate(float deltaTime) override;
             virtual void OnActivate() override;
+            virtual void OnDeactivate() override;
             template<typename T, typename... Args>
             WATERNION_INLINE void SetPower(Args&&... args) {
                 WATERNION_STATIC_ASSERT(std::is_base_of<Power, T>::value);
@@ -82,6 +86,7 @@ namespace Waternion
             Shared<Power> mPower;
             Shared<ECS::MoveComponent> mMove;
             Shared<ECS::Box2DComponent> mBox;
+            Shared<ECS::SoundComponent> mSound;
             Shared<ECS::Entity> mPaddle;
             bool mStart;
     };

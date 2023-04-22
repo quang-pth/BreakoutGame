@@ -11,6 +11,7 @@
 #include"ECS/System/InputSystem.h"
 #include"ECS/System/ScriptingSystem.h"
 #include"ECS/System/PhysicWorld.h"
+#include"ECS/System/AudioSystem.h"
 
 // Components
 #include"ECS/Component/Behavior/ScriptComponent.h"
@@ -32,6 +33,7 @@ namespace Waternion {
             this->RegisterSystem<ScriptingSystem>();
             this->RegisterSystem<PhysicWorld>();
             this->RegisterSystem<ParticleSystem>();
+            this->RegisterSystem<AudioSystem>();
         }
 
         bool Scene::Load() {
@@ -67,26 +69,20 @@ namespace Waternion {
         }
 
         void Scene::Shutdown() {
-            for (auto& [_, systems] : mSystemsMap) {
-                for(Shared<System> system : systems) {
-                    system->Shutdown();
-                }
+            for (auto& [_, system] : mSystemsMap) {
+                system->Shutdown();
             }
         }
 
         void Scene::Awake() {
-            for (auto& [_, systems] : mSystemsMap) {
-                for(Shared<System> system : systems) {
-                    system->Awake();
-                }
+            for (auto& [_, system] : mSystemsMap) {
+                system->Awake();
             }
         }
 
         void Scene::Start() {
-            for (auto& [_, systems] : mSystemsMap) {
-                for(Shared<System> system : systems) {
-                    system->Start();
-                }
+            for (auto& [_, system] : mSystemsMap) {
+                system->Start();
             }
         }
 
@@ -95,12 +91,10 @@ namespace Waternion {
             for (EntityID id : mCoordinator->GetEntityIDsHaveComponent<TransformComponent>()) {
                 MakeShared<Entity>(id, mCoordinator)->GetComponent<TransformComponent>()->UpdateWorldTransform();
             }
-            for (auto& [_, systems] : mSystemsMap) {
-                for(Shared<System> system : systems) {
-                    system->PreUpdate(deltaTime);
-                    system->Update(deltaTime);
-                    system->PostUpdate(deltaTime);
-                }
+            for (auto& [_, system] : mSystemsMap) {
+                system->PreUpdate(deltaTime);
+                system->Update(deltaTime);
+                system->PostUpdate(deltaTime);
             }
             for (EntityID id : mCoordinator->GetEntityIDsHaveComponent<TransformComponent>()) {
                 MakeShared<Entity>(id, mCoordinator)->GetComponent<TransformComponent>()->UpdateWorldTransform();
@@ -108,33 +102,25 @@ namespace Waternion {
         }
 
         void Scene::BeginScene(float deltaTime) {
-            for(Shared<System> system : mSystemsMap[GetTypeID<SpriteRenderer>()]) {
-                StaticPtrCast<SpriteRenderer>(system)->BeginScene(deltaTime);
-            }
+            GetSystem<SpriteRenderer>()->BeginScene(deltaTime);
         }
 
         void Scene::Render(float deltaTime) {
             mPostProcessor->BeginRender();
-            for(Shared<System> system : mSystemsMap[GetTypeID<SpriteRenderer>()]) {
-                StaticPtrCast<SpriteRenderer>(system)->Draw(deltaTime);
-            }
+            GetSystem<SpriteRenderer>()->Draw(deltaTime);
             mPostProcessor->EndRender();
             mPostProcessor->Render(deltaTime);
         }
 
         void Scene::EndScene(float deltaTime) {
-            for(Shared<System> system : mSystemsMap[GetTypeID<SpriteRenderer>()]) {
-                StaticPtrCast<SpriteRenderer>(system)->EndScene(deltaTime);
-            }
+            GetSystem<SpriteRenderer>()->EndScene(deltaTime);
         }
 
         bool Scene::InitSystems() {
-            for (auto& [_, systems] : mSystemsMap) {
-                for(Shared<System> system : systems) {
-                    if (!system->Init()) {
-                        return false; 
-                    }                    
-                }
+            for (auto& [_, system] : mSystemsMap) {
+                if (!system->Init()) {
+                    return false; 
+                }                    
             }
 
             return true;

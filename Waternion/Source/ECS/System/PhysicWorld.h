@@ -16,6 +16,8 @@ namespace Waternion::ECS
     class PhysicWorld : public System {
         public:
             PhysicWorld();
+            virtual bool Init() override;
+            virtual void Shutdown() override;
             virtual void Start() override;
             virtual void PreUpdate(float deltaTime) override;
             virtual void Update(float deltaTime) override;

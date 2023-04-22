@@ -64,9 +64,7 @@ namespace Waternion {
 
     void Window::PollInputEvents() {
         glfwPollEvents();
-        for (Shared<ECS::System> system : scene->GetSystems<ECS::InputSystem>()) {
-            StaticPtrCast<ECS::InputSystem>(system)->ProcessInput(state);
-        }
+        scene->GetSystem<ECS::InputSystem>()->ProcessInput(state);
     }
 
     void Window::SwapBuffers() {

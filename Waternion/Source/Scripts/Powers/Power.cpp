@@ -2,9 +2,11 @@
 #include"Core/Application.h"
 #include"Render/PostProcessor.h"
 
+// Components
 #include"ECS/Component/Graphics/SpriteComponent.h"
 #include"ECS/Component/Behavior/MoveComponent.h"
 #include"ECS/Component/Physics/Box2DComponent.h"
+#include"ECS/Component/Audio/SoundComponent.h"
 
 #include"Collisions/Collision.h"
 
@@ -63,6 +65,9 @@ namespace Waternion
         mMove->SetForwardSpeed(-140.0f);
 
         mPaddle = Application::GetInstance()->GetScene()->FindEntity("Paddle");
+        
+        mSound = AddComponent<ECS::SoundComponent>("assets/audio/powerup.wav", false);
+        
         GetOwner()->SetActivate(false);
     }
 
@@ -90,9 +95,13 @@ namespace Waternion
         mStart = false;
     }
 
+    void PowerUp::OnDeactivate() {
+    }
+
     void PowerUp::CheckCollisions() {
         Shared<ECS::Box2DComponent> paddleBox = mPaddle->GetComponent<ECS::Box2DComponent>();
         if (Collisions::IsIntersect(paddleBox->GetBox(), mBox->GetBox())) {
+            mSound->Play();
             mPower->SetEffect(true);
             GetOwner()->GetComponent<ECS::SpriteComponent>()->SetIsVisible(false);
             mStart = true;

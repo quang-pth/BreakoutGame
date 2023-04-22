@@ -1,8 +1,12 @@
 #include"PlayerController.h"
 #include"ECS/System/InputSystem.h"
-#include"ECS/Component/Defaults.h"
+
+// Components
+#include"ECS/Component/Behavior/MoveComponent.h"
 #include"ECS/Component/Graphics/SpriteComponent.h"
 #include"ECS/Component/Physics/Box2DComponent.h"
+#include"ECS/Component/Audio/SoundComponent.h"
+
 #include"Core/Application.h"
 
 namespace Waternion
@@ -30,6 +34,8 @@ namespace Waternion
 
         Shared<Box2DComponent> box = AddComponent<Box2DComponent>();
         box->SetBox(mSprite->GetBox());
+
+        AddComponent<SoundComponent>("assets/audio/bleep.wav", false);
     }
     
     void PlayerController::OnProcessInput(const InputState& inputState) {

@@ -8,8 +8,20 @@
 
 namespace Waternion::ECS 
 {
-    PhysicWorld::PhysicWorld() : System(), mCircles(), mBoxes() {
+    PhysicWorld::PhysicWorld() : System(), mMoves(), mCircles(), mBoxes() {
 
+    }
+
+    bool PhysicWorld::Init() {
+        WATERNION_LOG_INFO("PhysicWorld is initialized successfully!");
+        return true;
+    }
+
+    void PhysicWorld::Shutdown() {
+        WATERNION_LOG_INFO("PhysicWorld is closed!");
+        mMoves.clear();
+        mCircles.clear();
+        mBoxes.clear();
     }
 
     void PhysicWorld::Start() {

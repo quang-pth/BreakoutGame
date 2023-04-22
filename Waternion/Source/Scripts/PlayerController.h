@@ -1,11 +1,15 @@
 #pragma once
 
 #include"Native.h"
-#include"ECS/Component/Behavior/MoveComponent.h"
-#include"ECS/Component/Graphics/SpriteComponent.h"
 
 namespace Waternion
 {
+    namespace ECS {
+        class TransformComponent;
+        class MoveComponent;
+        class SpriteComponent;
+    }
+
     class PlayerController : public NativeScript {
         public:
             PlayerController();

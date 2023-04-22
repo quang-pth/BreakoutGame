@@ -7,9 +7,13 @@
 namespace Waternion::ECS
 {
     bool SpriteRenderer::Init() {
-        System::Init();
-        WATERNION_LOG_INFO("SpriteRenderer intialized successfully!");
+        WATERNION_LOG_INFO("SpriteRenderer is intialized successfully!");
         return true;
+    }
+
+    void SpriteRenderer::Shutdown() {
+        mSpritesMap.clear();
+        WATERNION_LOG_INFO("SpriteRenderer is closed!");
     }
 
     void SpriteRenderer::BeginScene(float deltaTime) {
