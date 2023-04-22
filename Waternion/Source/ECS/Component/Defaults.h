@@ -25,8 +25,16 @@ namespace Waternion
                 virtual void OnUpdate(float deltaTime) {}
                 virtual void OnPostUpdate(float deltaTime) {}
                 virtual void OnUpdateWorldTransform() {}
+                virtual void OnActivate() {}
+                virtual void OnDeactivate() {}
                 WATERNION_INLINE void SetDisabled(bool disabled) {
                     mDisabled = disabled;
+                    if (mDisabled) {
+                        this->OnDeactivate();
+                    }
+                    else {
+                        this->OnActivate();
+                    }
                 }
                 WATERNION_INLINE bool GetDisabled() const {
                     return mDisabled;

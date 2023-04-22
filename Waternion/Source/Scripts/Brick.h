@@ -9,6 +9,7 @@ namespace Waternion
         public:
             Brick();
             Brick(ECS::EntityID id);
+            virtual void OnStart() override;
             virtual void OnCollision(const ECS::CollisionDetails& details) override;
             WATERNION_INLINE void SetIsSolid(bool solid) {
                 mIsSolid = solid;
@@ -23,7 +24,9 @@ namespace Waternion
                 return mIsDestroyed;
             }
         private:
+            void SpawnPowerUpWithProbability(float probability = 0.3f);
             bool mIsSolid;
             bool mIsDestroyed;
+            Shared<class PowerManager> mPowerManager;
     }; 
 } // namespace Waternion

@@ -19,13 +19,13 @@ namespace Waternion {
             } 
             WATERNION_INLINE void SetConfuse(bool value) {
                 mConfuse = value;
-            } 
+            }
         private:
             void InitRenderData();
             Shared<class Shader> mShader;
             Shared<class Framebuffer> mFramebuffer;
             Shared<class VertexArray> mVertexArray;
             bool mChaos, mConfuse, mShake;
-            float mChaosTime, mConfuseTime, mShakeTime;
+            float mShakeTime;
     };
 }

@@ -18,6 +18,7 @@
 #include"Scripts/Background.h"
 #include"Scripts/Ball.h"
 #include"Scripts/GameLevel.h"
+#include"Scripts/Powers/PowerManager.h"
 
 namespace Waternion {
     namespace ECS
@@ -48,6 +49,9 @@ namespace Waternion {
             Shared<Entity> levelOne = MakeShared<Entity>("LevelOne");
             levelOne->AddComponent<ScriptComponent>()->Bind<GameLevel>();
             levelOne->GetComponent<ScriptComponent>()->GetInstance<GameLevel>()->LoadLevel("assets/levels/three.lvl", windowWidth, windowHeight / 2.0f);
+
+            Shared<Entity> powerManager = MakeShared<Entity>("PowerManager");
+            powerManager->AddComponent<ScriptComponent>()->Bind<PowerManager>();
 
             if (!this->InitSystems()) {
                 return false;
@@ -124,10 +128,6 @@ namespace Waternion {
             }
         }
 
-        void Scene::SetShake(float value) {
-            mPostProcessor->SetShake(value);
-        }
-
         bool Scene::InitSystems() {
             for (auto& [_, systems] : mSystemsMap) {
                 for(Shared<System> system : systems) {
@@ -140,7 +140,7 @@ namespace Waternion {
             return true;
         }
 
-        Shared<Entity> Scene::GetEntity(const std::string& name) const {
+        Shared<Entity> Scene::FindEntity(const std::string& name) const {
             for (EntityID id : mEntities) {
                 Shared<Entity> entity = MakeShared<Entity>(id, mCoordinator);
                 Shared<InfoComponent> info = entity->GetComponent<InfoComponent>();

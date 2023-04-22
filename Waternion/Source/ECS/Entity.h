@@ -11,7 +11,9 @@ namespace Waternion {
 
                 WATERNION_INLINE operator EntityID() const { return mID; }
                 WATERNION_INLINE EntityID GetID() const { return mID; }
-                
+                WATERNION_INLINE bool GetIsActive() const { return mCoordinator->GetActivate(mID); }
+                void SetActivate(bool value);
+
                 WATERNION_INLINE bool operator==(const Entity& other) {
                     return this->mID == other.GetID();
                 }

@@ -24,7 +24,10 @@ namespace Waternion
                 void BeginScene(float);
                 void Render(float);
                 void EndScene(float);
-                void SetShake(float value);
+
+                WATERNION_INLINE Shared<PostProcessor> GetPostProcessor() const {
+                    return mPostProcessor;
+                }
 
                 template<typename T, typename... Args>
                 WATERNION_INLINE void RegisterSystem(Args&&... args) {
@@ -40,7 +43,7 @@ namespace Waternion
                     return mSystemsMap[systemType];
                 }
 
-                Shared<Entity> GetEntity(const std::string& name) const;
+                Shared<Entity> FindEntity(const std::string& name) const;
 
                 void AddEntity(EntityID id);
             private:

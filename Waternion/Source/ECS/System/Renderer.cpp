@@ -17,13 +17,13 @@ namespace Waternion::ECS
         // Get renderable components
         for (Shared<Entity> entity : System::GetEntitiesHaveComponent<SpriteComponent>()) {
             Shared<SpriteComponent> sprite = entity->GetComponent<SpriteComponent>();
-            if (sprite->GetIsVisible()) {
+            if (!sprite->GetDisabled() || sprite->GetIsVisible()) {
                 sprites.emplace_back(sprite);
             }
         }
         for (Shared<Entity> entity : System::GetEntitiesHaveComponent<Particle2DComponent>()) {
             Shared<Particle2DComponent> particle = entity->GetComponent<Particle2DComponent>();
-            if (particle->GetIsVisible()) {
+            if (!particle->GetDisabled() || particle->GetIsVisible()) {
                 sprites.emplace_back(particle);
             }
         }

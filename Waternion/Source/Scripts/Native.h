@@ -18,6 +18,11 @@ namespace Waternion {
             virtual void OnPostUpdate(float deltaTime);
             virtual void OnCollision(const ECS::CollisionDetails& details);
             virtual void OnDestroy();
+            virtual void OnActivate();
+            virtual void OnDeactivate();
+            WATERNION_INLINE Shared<ECS::Entity> GetOwner() {
+                return MakeShared<ECS::Entity>(mEntityID, mCoordinator);               
+            }
         protected:
             template<typename T, typename... Args>
             WATERNION_INLINE Shared<T> AddComponent(Args&&... args) {
@@ -43,10 +48,6 @@ namespace Waternion {
                 Shared<ECS::Entity> entity;
                 entity.reset(new ECS::Entity());
                 return entity;
-            }
-
-            WATERNION_INLINE Shared<ECS::Entity> GetOwner() {
-                return MakeShared<ECS::Entity>(mEntityID, mCoordinator);               
             }
         private:
             Shared<ECS::Coordinator> mCoordinator;

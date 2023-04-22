@@ -18,6 +18,7 @@ namespace Waternion {
                 WATERNION_INLINE EntityID AddEntity() {
                     EntityID newEntID = ++mNextEntID;
                     mSignatureMap[newEntID] = Signature();
+                    mActiveEntities[newEntID] = true;
                     return newEntID;                   
                 }
 
@@ -28,6 +29,7 @@ namespace Waternion {
                         }
                     }
                     mSignatureMap.erase(entID);
+                    mActiveEntities.erase(entID);
                     return true;
                 }
                 
@@ -58,7 +60,7 @@ namespace Waternion {
                     WATERNION_ASSERT(mSignatureMap.count(entID) && "Failed to Add Component to non-existing entity");
                     ComponentID componentID = GetTypeID<T>();
                     mSignatureMap.at(entID).insert(componentID);
-                    Shared<T> component = std::make_shared<T>(std::forward<Args>(args)...);
+                    Shared<T> component = MakeShared<T>(std::forward<Args>(args)...);
                     this->GetComponentArray<T>()->Add(entID, component);
                     return component;
                 }
@@ -92,6 +94,14 @@ namespace Waternion {
                     }
                     return StaticPtrCast<ComponentArray<T>>(mComponentArrayMap.at(GetTypeID<T>()))->GetEntityID(componentID);                       
                 }
+
+                WATERNION_INLINE bool GetActivate(EntityID id) const {
+                    WATERNION_ASSERT(mSignatureMap.count(id) && "Failed to Get Activate of non-existing entity");
+                    return mActiveEntities.at(id);
+                }
+
+                void SetActivate(EntityID id);               
+                void SetDeactivate(EntityID id);               
             private:
                 template<typename T> 
                 WATERNION_INLINE void AddComponentArray() {
@@ -101,6 +111,7 @@ namespace Waternion {
             private:
                 std::unordered_map<ComponentID, Shared<ComponentArrayBase>> mComponentArrayMap;
                 std::unordered_map<EntityID, Signature> mSignatureMap;
+                std::unordered_map<EntityID, bool> mActiveEntities;
                 EntityID mNextEntID;
         };
     }

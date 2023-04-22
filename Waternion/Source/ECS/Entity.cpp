@@ -4,7 +4,8 @@
 
 namespace Waternion {
     namespace ECS {
-        Entity::Entity(const std::string& name) {
+        Entity::Entity(const std::string& name)
+        {
             mCoordinator = Application::GetInstance()->GetCoordinator();
             WATERNION_ASSERT(mCoordinator != nullptr && "Reference Coordinator as nullptr");
             mID = mCoordinator->AddEntity();
@@ -16,6 +17,15 @@ namespace Waternion {
 
         Entity::Entity(EntityID id, Shared<Coordinator> coordinator) : mID(id), mCoordinator(coordinator) {
 
+        }
+
+        void Entity::SetActivate(bool value) {
+            if (value) {
+                mCoordinator->SetActivate(mID);
+            }
+            else {
+                mCoordinator->SetDeactivate(mID);
+            }
         }
     }
 }

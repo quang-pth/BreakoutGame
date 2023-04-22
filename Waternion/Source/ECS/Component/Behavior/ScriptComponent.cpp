@@ -38,4 +38,12 @@ namespace Waternion::ECS
     void ScriptComponent::OnDestroy() {
         mInstance->OnDestroy();
     }
+    
+    void ScriptComponent::OnActivate() {
+        mInstance->OnActivate();
+    }
+
+    void ScriptComponent::OnDeactivate() {
+        mInstance->OnDeactivate();
+    }
 } // namespace Waternion::ECS

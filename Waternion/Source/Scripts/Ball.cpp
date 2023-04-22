@@ -29,7 +29,7 @@ namespace Waternion
     }
 
     void Ball::OnAwake() {
-        mPaddle = Application::GetInstance()->GetScene()->GetEntity("Paddle");
+        mPaddle = Application::GetInstance()->GetScene()->FindEntity("Paddle");
         mTransform = GetComponent<TransformComponent>();
         mTransform->SetScale(0.045f);
         mTransform->SetPositionZ(1.0f);

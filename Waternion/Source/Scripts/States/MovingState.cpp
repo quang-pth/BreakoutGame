@@ -69,6 +69,10 @@ namespace Waternion
             mOwner->mMove->SetForwardSpeed(Math::Clamp(newVelocity.y * mSpeed, 100.0f, 300.0f));
             return;
         }
+        // The ball collides with powerups
+        if (!collider->GetComponent<ECS::InfoComponent>()->GetTag().compare("Ignore")) {
+            return;
+        }
         // The ball collides with other bricks
         const Math::Vector2& bounceDirection = details.ClosestDirection;
         if (bounceDirection == Math::Vector2::UnitX) {

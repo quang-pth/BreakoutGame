@@ -65,7 +65,7 @@ namespace Waternion::ECS
                     continue;
                 }
                 
-                const CircleCollider& collider = Collisions::IsIntersect(circle->GetCircle(), box->GetBox()); 
+                const ColliderInfo& collider = Collisions::IsIntersect(circle->GetCircle(), box->GetBox()); 
                 if (collider.Intersected) {
                     CollisionDetails details;
                     details.Collider = boxOwner;
@@ -75,11 +75,10 @@ namespace Waternion::ECS
                     details.ClosestDirection = this->CalcClosestDirection(details.Different);
                     
                     circleOwner->GetComponent<ScriptComponent>()->OnCollision(details);
-
                     details.Collider = circleOwner;
                     boxOwner->GetComponent<ScriptComponent>()->OnCollision(details);
                 }
-            }           
+            }  
         }
     }
 

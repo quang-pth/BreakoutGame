@@ -15,13 +15,15 @@ namespace Waternion::ECS
                 mInstance = DyanmicPtrCast<NativeScript>(MakeShared<T>(GetOwner()->GetID()));
             }
             void OnAwake();
-            void OnStart();
+            virtual void OnStart() override;
             void OnProcessInput(const struct InputState&);
-            void OnPreUpdate(float deltaTime);
-            void OnUpdate(float deltaTime);
-            void OnPostUpdate(float deltaTime);
+            virtual void OnPreUpdate(float deltaTime) override;
+            virtual void OnUpdate(float deltaTime) override;
+            virtual void OnPostUpdate(float deltaTime) override;
             void OnCollision(const CollisionDetails& details);
             void OnDestroy();
+            virtual void OnActivate() override;
+            virtual void OnDeactivate() override;
             template<typename T>
             WATERNION_INLINE Shared<T> GetInstance() const {
                 return DyanmicPtrCast<T>(mInstance);

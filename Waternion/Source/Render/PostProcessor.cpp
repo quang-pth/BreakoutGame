@@ -10,7 +10,9 @@
 
 namespace Waternion
 {
-    PostProcessor::PostProcessor() : mChaos(false), mConfuse(false), mShake(false) {
+    const static float MAX_SHAKE_TIME = 0.05f;
+
+    PostProcessor::PostProcessor() : mChaos(false), mConfuse(false), mShake(false), mShakeTime(MAX_SHAKE_TIME) {
     }
 
     bool PostProcessor::Init(Shared<Shader> shader, uint32_t width, uint32_t height) {
@@ -28,7 +30,7 @@ namespace Waternion
             mShakeTime -= deltaTime;
             if (mShakeTime <= 0.0f) {
                 mShake = false;
-                mShakeTime = 0.3f;
+                mShakeTime = MAX_SHAKE_TIME;
             }
         }
     }
@@ -72,9 +74,6 @@ namespace Waternion
         // Set shader uniforms
         mShader->Use();
         mShader->SetInt("scene", 0);
-        const Math::Matrix4& orthoProj = Math::Matrix4::CreateOrtho(Application::GetInstance()->GetWindowWidth(), Application::GetInstance()->GetWindowHeight(), -10.0f, 1000.0f);
-        mShader->SetMatrix4("Transform", Math::Matrix4::Identity);
-        mShader->SetMatrix4("Projection", orthoProj);
         float offset = 1.0f / 300.0f;
         float offsets[9][2] = {
             { -offset,  offset  },  // top-left

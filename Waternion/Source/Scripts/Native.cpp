@@ -44,4 +44,12 @@ namespace Waternion
     void NativeScript::OnDestroy() {
 
     }
+
+    void NativeScript::OnActivate() {
+
+    }
+
+    void NativeScript::OnDeactivate() {
+
+    }
 } // namespace Waternion

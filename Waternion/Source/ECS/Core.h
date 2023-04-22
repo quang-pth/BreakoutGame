@@ -33,6 +33,8 @@ namespace Waternion {
             public:
                 WATERNION_INLINE virtual ~ComponentArrayBase() = default;
                 virtual bool Erase(EntityID) = 0;
+                virtual void Activate(EntityID) = 0;
+                virtual void Deactivate(EntityID) = 0;
         };
 
         template<typename T>
@@ -54,6 +56,14 @@ namespace Waternion {
                     }
 
                     return true;
+                }
+
+                WATERNION_INLINE virtual void Activate(EntityID id) override {
+                    GetComponent(id)->SetDisabled(false);
+                }
+
+                WATERNION_INLINE virtual void Deactivate(EntityID id) override {
+                    GetComponent(id)->SetDisabled(true);
                 }
 
                 WATERNION_INLINE Shared<T> GetComponent(EntityID id) {
