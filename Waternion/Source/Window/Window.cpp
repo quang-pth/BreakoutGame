@@ -1,12 +1,13 @@
 #include"Window.h"
 #include"Core/Application.h"
 #include"ECS/System/InputSystem.h"
+#include"ECS/System/TextRenderer.h"
 
 namespace Waternion {
     static InputState state;
-    static Shared<ECS::Scene> scene;
+    static Shared<Application> application;
 
-    static void BackupInputStates() {
+    static void PrepareInputStates() {
         memcpy(state.Keyboard.PreviousState, state.Keyboard.CurrentState, NUM_KEYS);
         memset(state.Keyboard.CurrentState, false, NUM_KEYS);
     }
@@ -19,12 +20,14 @@ namespace Waternion {
         if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
             glfwSetWindowShouldClose(window, true);
         }
-        if (key >= 0 && key <= 1024) {
-            state.Keyboard.CurrentState[key] = true;
+        if (glfwGetKey(window, key) == GLFW_PRESS) {
+            if (key >= 0 && key <= 1024) {
+                state.Keyboard.CurrentState[key] = true;
+            }
         }
     }
 
-    bool Window::Init(int width, int height, const std::string& name) {
+    bool Window::Init(uint32_t width, uint32_t height, const std::string& name) {
         mWidth = width;
         mHeight = height;
 
@@ -53,7 +56,7 @@ namespace Waternion {
             return false;
         }
 
-        scene = Application::GetInstance()->GetScene();
+        application = Application::GetInstance();
         WATERNION_LOG_INFO("Init Window Successfully!");
         return true;
     }
@@ -63,12 +66,12 @@ namespace Waternion {
     }
 
     void Window::PollInputEvents() {
+        PrepareInputStates();
         glfwPollEvents();
-        scene->GetSystem<ECS::InputSystem>()->ProcessInput(state);
+        application->GetScene()->GetSystem<ECS::InputSystem>()->ProcessInput(state);
     }
 
     void Window::SwapBuffers() {
-        BackupInputStates();
         glfwSwapBuffers(mInstance);
     }
 }

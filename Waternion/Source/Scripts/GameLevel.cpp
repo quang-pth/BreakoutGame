@@ -1,11 +1,13 @@
 #include"GameLevel.h"
 #include"Core/Manager/ResourceManager.h"
+#include"Core/Application.h"
 
 // Components
 #include"ECS/Component/Graphics/SpriteComponent.h"
 #include"ECS/Component/Behavior/ScriptComponent.h"
 #include"ECS/Component/Physics/Box2DComponent.h"
 #include"ECS/Component/Audio/SoundComponent.h"
+#include"ECS/Component/UI/TextComponent.h"
 
 #include"Scripts/Brick.h"
 
@@ -17,29 +19,28 @@ namespace Waternion
 
     }
 
-    GameLevel::GameLevel(EntityID id) : NativeScript(id), mBricks(), 
-        mFilepath(), mLevelWidth(0), mLevelHeight(0) 
+    GameLevel::GameLevel(EntityID id) : NativeScript(id),  mLevelWidth(0), mLevelHeight(0), mLevels()
     {
-
+        mLevels.resize(4);
     }
 
     void GameLevel::OnStart() {
     }
 
-    void GameLevel::LoadLevel(const std::string& filepath, uint16_t levelWidth, uint16_t levelHeight) {
-        mBricks.clear();
+    void GameLevel::LoadLevel(uint32_t level, const std::string& filepath, uint16_t levelWidth, uint16_t levelHeight) {
         std::vector<std::vector<uint16_t>> tiles = ResourceManager::LoadLevel(filepath.c_str()); 
         if (tiles.size() > 0) {
-            this->Init(tiles, levelWidth, levelHeight);
+            this->Init(level, tiles, levelWidth, levelHeight);
         }
     }
 
-    void GameLevel::Init(const std::vector<std::vector<uint16_t>>& tiles, uint16_t levelWidth, uint16_t levelHeight) {
+    void GameLevel::Init(uint32_t level, const std::vector<std::vector<uint16_t>>& tiles, uint16_t levelWidth, uint16_t levelHeight) {
         uint16_t rowCount = tiles.size();
         uint16_t colCount = tiles[0].size();
         float unitWidth = StaticCast<float>(levelWidth) / colCount;
         float unitHeight = StaticCast<float>(levelHeight) / rowCount;
 
+        mLevels[level].clear();
         for (uint16_t row = 0; row < rowCount; row++) {
             for (uint16_t col = 0; col < colCount; col++) {
                 // Solid blocks
@@ -65,7 +66,7 @@ namespace Waternion
                     Shared<ScriptComponent> script = solidBrick->AddComponent<ScriptComponent>();
                     script->Bind<Brick>();
                     script->GetInstance<Brick>()->SetIsSolid(true);
-                    this->mBricks.emplace_back(solidBrick);
+                    mLevels[level].emplace_back(solidBrick);
                 }
                 // Normal blocks
                 else if (tiles[row][col] > 1) {
@@ -103,19 +104,37 @@ namespace Waternion
                     Shared<ScriptComponent> script = normalBlock->AddComponent<ScriptComponent>();
                     script->Bind<Brick>();
                     script->GetInstance<Brick>()->SetIsSolid(false);
-                    this->mBricks.emplace_back(normalBlock);
+                    mLevels[level].emplace_back(normalBlock);
                 }
             }
         }
     }
 
     bool GameLevel::IsCompleted() {
-        for (Shared<Entity> brick : mBricks) {
+        for (Shared<Entity> brick : mLevels[mCurrentLevel]) {
             Shared<Brick> brickScript = brick->GetComponent<ScriptComponent>()->GetInstance<Brick>();
-            if (!brickScript->GetIsSolid() && !brickScript->GetIsDestroyed()) {
+            if (!brickScript->GetIsSolid() && brickScript->GetOwner()->GetIsActive()) {
                 return false;
             }
         }
         return true;
+    }
+
+    void GameLevel::Reset() {
+        ChangeLevel(mCurrentLevel);
+    }
+
+    void GameLevel::ChangeLevel(uint32_t level) {
+        mCurrentLevel = Math::Abs(StaticCast<int32_t>(level % mLevels.size()));
+        for(uint32_t i = 0; i < mLevels.size(); i++) {
+            for (Shared<Entity> brick : mLevels[i]) {
+                if (i == mCurrentLevel) {
+                    brick->SetActivate(true);
+                }
+                else {
+                    brick->SetActivate(false);
+                }
+            }
+        }
     }
 } // namespace Waternion

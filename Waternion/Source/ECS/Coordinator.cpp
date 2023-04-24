@@ -5,7 +5,7 @@ namespace Waternion
     namespace ECS {
         void Coordinator::SetActivate(EntityID id) {
             WATERNION_ASSERT(mSignatureMap.count(id) && "Activate non-existing entity");
-            mActiveEntities[id] = true;
+            mEnabledEntities[id] = true;
             Signature signature = mSignatureMap.at(id);
             for (ComponentID componentID : signature) {
                 mComponentArrayMap.at(componentID)->Activate(id);
@@ -14,7 +14,7 @@ namespace Waternion
 
         void Coordinator::SetDeactivate(EntityID id) {
             WATERNION_ASSERT(mSignatureMap.count(id) && "Deactivate non-existing entity");
-            mActiveEntities[id] = false;
+            mEnabledEntities.erase(id);
             Signature signature = mSignatureMap.at(id);
             for (ComponentID componentID : signature) {
                 mComponentArrayMap.at(componentID)->Deactivate(id);

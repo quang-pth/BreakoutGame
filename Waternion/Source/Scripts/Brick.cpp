@@ -20,9 +20,8 @@ namespace Waternion
 
     }
 
-    void Brick::OnStart() {
+    void Brick::OnActivate() {
         Shared<Entity> powerManager = Application::GetInstance()->GetScene()->FindEntity("PowerManager");
-        WATERNION_ASSERT(powerManager != nullptr && "PowerManager does not exist");
         mPowerManager = powerManager->GetComponent<ScriptComponent>()->GetInstance<PowerManager>();
     }
 
@@ -33,7 +32,7 @@ namespace Waternion
             GetOwner()->GetComponent<SoundComponent>()->Play();
             if (!mIsSolid) {
                 this->SpawnPowerUpWithProbability(0.25);
-                GetOwner()->Destroy();
+                GetOwner()->SetActivate(false);
             }
             else {
                 Application::GetInstance()->GetScene()->GetPostProcessor()->SetShake(true);

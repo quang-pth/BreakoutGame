@@ -9,7 +9,7 @@ namespace Waternion {
         return application;
     }
 
-    Application::Application() {
+    Application::Application() : mTimeScale(1.0f) {
         
     }
 
@@ -17,20 +17,9 @@ namespace Waternion {
         mCoordinator.reset(new ECS::Coordinator());
         mScene.reset(new ECS::Scene());
         mWindow.reset(new Window());
-        
+
         if (!mWindow->Init(width, height, title)) {
             WATERNION_LOG_ERROR("Init Window succesfully");
-        }
-
-        FT_Library ft;
-        if (FT_Init_FreeType(&ft)) {
-            std::cout << "Failed to init Freetype\n";
-            return false; 
-        }
-        FT_Face face;
-        if (FT_New_Face(ft, "assets/fonts/arial.ttf", 0, &face)) {
-            std::cout << "Failed to Load font\n";
-            return false; 
         }
 
         if (!this->LoadScene()) {
@@ -64,8 +53,8 @@ namespace Waternion {
             }
             
             this->ProcessInput();
-            this->Update(deltaTime);
-            this->Render(deltaTime);
+            this->Update(deltaTime * mTimeScale);
+            this->Render(deltaTime * mTimeScale);
         }
     }
 

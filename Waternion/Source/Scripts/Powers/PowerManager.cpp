@@ -11,17 +11,19 @@ namespace Waternion {
     }
 
     void PowerManager::OnAwake() {
-        Shared<ECS::Entity> powerup = MakeShared<ECS::Entity>("Chaos");
-        Shared<ECS::ScriptComponent> script = powerup->AddComponent<ECS::ScriptComponent>();
-        script->Bind<PowerUp>();
-        script->GetInstance<PowerUp>()->SetPower<Chaos>("assets/textures/powerup_chaos.png", Math::Vector3(0.9f, 0.25f, 0.25f));
-        mPowerUps.emplace_back(script->GetInstance<PowerUp>());
+        for (uint16_t i = 0; i < 20; i++) {
+            Shared<ECS::Entity> powerup = MakeShared<ECS::Entity>("Chaos");
+            Shared<ECS::ScriptComponent> script = powerup->AddComponent<ECS::ScriptComponent>();
+            script->Bind<PowerUp>();
+            script->GetInstance<PowerUp>()->SetPower<Chaos>("assets/textures/powerup_chaos.png", Math::Vector3(0.9f, 0.25f, 0.25f));
+            mPowerUps.emplace_back(script->GetInstance<PowerUp>());
 
-        powerup = MakeShared<ECS::Entity>("Confuse");
-        script = powerup->AddComponent<ECS::ScriptComponent>();
-        script->Bind<PowerUp>();
-        script->GetInstance<PowerUp>()->SetPower<Confuse>("assets/textures/powerup_confuse.png", Math::Vector3(1.0f, 0.3f, 0.3f));
-        mPowerUps.emplace_back(script->GetInstance<PowerUp>());
+            powerup = MakeShared<ECS::Entity>("Confuse");
+            script = powerup->AddComponent<ECS::ScriptComponent>();
+            script->Bind<PowerUp>();
+            script->GetInstance<PowerUp>()->SetPower<Confuse>("assets/textures/powerup_confuse.png", Math::Vector3(1.0f, 0.3f, 0.3f));
+            mPowerUps.emplace_back(script->GetInstance<PowerUp>());
+        }
 
         // powerup = MakeShared<ECS::Entity>("Increase");
         // script = powerup->AddComponent<ECS::ScriptComponent>();
@@ -64,7 +66,7 @@ namespace Waternion {
         
         uint32_t randomIdx;
         Shared<PowerUp> pickedPower;
-        uint8_t maxAttempt = 10;
+        uint8_t maxAttempt = 3;
         uint8_t count = 0;
         do {
             randomIdx = rand() % mPowerUps.size();

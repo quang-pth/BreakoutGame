@@ -16,10 +16,7 @@ namespace Waternion {
                 WATERNION_INLINE std::vector<Shared<Entity>> GetEntitiesHaveComponent() {
                     std::vector<Shared<Entity>> entities;
                     for (EntityID id : mCoordinator->GetEntityIDsHaveComponent<T>()) {
-                        Shared<Entity> entity = MakeShared<Entity>(id, mCoordinator);
-                        if (entity->GetIsActive()) {
-                            entities.emplace_back(entity);
-                        }
+                        entities.emplace_back(MakeShared<Entity>(id, mCoordinator));
                     }
                     return entities;
                 }

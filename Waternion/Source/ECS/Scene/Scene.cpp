@@ -12,6 +12,7 @@
 #include"ECS/System/ScriptingSystem.h"
 #include"ECS/System/PhysicWorld.h"
 #include"ECS/System/AudioSystem.h"
+#include"ECS/System/TextRenderer.h"
 
 // Components
 #include"ECS/Component/Behavior/ScriptComponent.h"
@@ -20,6 +21,7 @@
 #include"Scripts/Ball.h"
 #include"Scripts/GameLevel.h"
 #include"Scripts/Powers/PowerManager.h"
+#include"Scripts/GameManager.h"
 
 namespace Waternion {
     namespace ECS
@@ -34,6 +36,7 @@ namespace Waternion {
             this->RegisterSystem<PhysicWorld>();
             this->RegisterSystem<ParticleSystem>();
             this->RegisterSystem<AudioSystem>();
+            this->RegisterSystem<TextRenderer>();
         }
 
         bool Scene::Load() {
@@ -46,14 +49,21 @@ namespace Waternion {
             Shared<Entity> ball = MakeShared<Entity>("Ball");
             ball->AddComponent<ScriptComponent>()->Bind<Ball>();
 
-            float windowWidth = Application::GetInstance()->GetWindowWidth();
-            float windowHeight = Application::GetInstance()->GetWindowHeight();
-            Shared<Entity> levelOne = MakeShared<Entity>("LevelOne");
-            levelOne->AddComponent<ScriptComponent>()->Bind<GameLevel>();
-            levelOne->GetComponent<ScriptComponent>()->GetInstance<GameLevel>()->LoadLevel("assets/levels/three.lvl", windowWidth, windowHeight / 2.0f);
-
             Shared<Entity> powerManager = MakeShared<Entity>("PowerManager");
             powerManager->AddComponent<ScriptComponent>()->Bind<PowerManager>();
+
+            Shared<Entity> gameManager = MakeShared<Entity>("GameManager");
+            gameManager->AddComponent<ScriptComponent>()->Bind<GameManager>();
+
+            uint32_t windowWidth = Application::GetInstance()->GetWindowWidth();
+            uint32_t windowHeight = Application::GetInstance()->GetWindowHeight();
+            Shared<Entity> gameLevel = MakeShared<Entity>("GameLevel");
+            gameLevel->AddComponent<ScriptComponent>()->Bind<GameLevel>();
+            gameLevel->GetComponent<ScriptComponent>()->GetInstance<GameLevel>()->LoadLevel(0, "assets/levels/one.lvl", windowWidth, windowHeight / 2.0f);
+            gameLevel->GetComponent<ScriptComponent>()->GetInstance<GameLevel>()->LoadLevel(1, "assets/levels/two.lvl", windowWidth, windowHeight / 2.0f);
+            gameLevel->GetComponent<ScriptComponent>()->GetInstance<GameLevel>()->LoadLevel(2, "assets/levels/three.lvl", windowWidth, windowHeight / 2.0f);
+            gameLevel->GetComponent<ScriptComponent>()->GetInstance<GameLevel>()->LoadLevel(3, "assets/levels/four.lvl", windowWidth, windowHeight / 2.0f);
+            gameLevel->GetComponent<ScriptComponent>()->GetInstance<GameLevel>()->ChangeLevel(0);
 
             if (!this->InitSystems()) {
                 return false;
@@ -108,6 +118,7 @@ namespace Waternion {
         void Scene::Render(float deltaTime) {
             mPostProcessor->BeginRender();
             GetSystem<SpriteRenderer>()->Draw(deltaTime);
+            GetSystem<TextRenderer>()->Draw(deltaTime);
             mPostProcessor->EndRender();
             mPostProcessor->Render(deltaTime);
         }

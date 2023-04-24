@@ -10,12 +10,15 @@ namespace Waternion
         class SpriteComponent;
     }
 
+    class GameManager;
+
     class PlayerController : public NativeScript {
         public:
             PlayerController();
             PlayerController(ECS::EntityID id);
             
             virtual void OnAwake() override;
+            virtual void OnStart() override;
             virtual void OnProcessInput(const struct InputState&) override;
             virtual void OnPreUpdate(float deltaTime) override;
             virtual void OnUpdate(float deltaTime) override;
@@ -29,5 +32,6 @@ namespace Waternion
             Shared<ECS::MoveComponent> mMoveComponent;
             Shared<ECS::TransformComponent> mTransform;
             Shared<ECS::SpriteComponent> mSprite;
+            Shared<GameManager> mGameManager;
     };
 } // namespace Waternion

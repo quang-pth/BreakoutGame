@@ -13,8 +13,8 @@ namespace Waternion
         public:
             Brick();
             Brick(ECS::EntityID id);
-            virtual void OnStart() override;
             virtual void OnCollision(const ECS::CollisionDetails& details) override;
+            virtual void OnActivate() override;
             WATERNION_INLINE void SetIsSolid(bool solid) {
                 mIsSolid = solid;
             }

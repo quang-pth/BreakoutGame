@@ -21,7 +21,7 @@ namespace Waternion
 
         void AudioSystem::Shutdown() {
             mSoundEngine->drop();
-            WATERNION_LOG_ERROR("AudioSystem is closed!");
+            WATERNION_LOG_INFO("AudioSystem is closed!");
         }
 
         void AudioSystem::PlaySound2D(const char* filepath, bool looped) {

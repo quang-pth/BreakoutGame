@@ -1,4 +1,5 @@
 #include"PlayerController.h"
+#include"Core/Application.h"
 #include"ECS/System/InputSystem.h"
 
 // Components
@@ -6,8 +7,9 @@
 #include"ECS/Component/Graphics/SpriteComponent.h"
 #include"ECS/Component/Physics/Box2DComponent.h"
 #include"ECS/Component/Audio/SoundComponent.h"
+#include"ECS/Component/Behavior/ScriptComponent.h"
 
-#include"Core/Application.h"
+#include"Scripts/GameManager.h"
 
 namespace Waternion
 {
@@ -37,8 +39,17 @@ namespace Waternion
 
         AddComponent<SoundComponent>("assets/audio/bleep.wav", false);
     }
-    
+
+    void PlayerController::OnStart() {
+        Shared<Entity> gameManager = Application::GetInstance()->GetScene()->FindEntity("GameManager");
+        mGameManager = gameManager->GetComponent<ScriptComponent>()->GetInstance<GameManager>();
+    }
+
     void PlayerController::OnProcessInput(const InputState& inputState) {
+        if (mGameManager->GetGameState() != EGameState::Playing) {
+            return;
+        }
+
         float strafeSpeed = 0.0f;
         if (inputState.Keyboard.GetKeyValue(GLFW_KEY_A)) {
             strafeSpeed -= mMaxSpeed;
@@ -46,6 +57,7 @@ namespace Waternion
         if (inputState.Keyboard.GetKeyValue(GLFW_KEY_D)) {
             strafeSpeed += mMaxSpeed;
         }
+        
         mMoveComponent->SetStrafeSpeed(strafeSpeed);
     }
 
