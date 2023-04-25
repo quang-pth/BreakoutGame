@@ -32,5 +32,6 @@ namespace Waternion
             bool mIsSolid;
             bool mIsDestroyed;
             Shared<class PowerManager> mPowerManager;
+            Shared<class GameLevel> mGameLevel;
     }; 
 } // namespace Waternion

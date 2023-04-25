@@ -19,6 +19,7 @@ namespace Waternion
     void GameManager::OnAwake() {
         mText = AddComponent<TextComponent>(Application::GetInstance()->GetWindowWidth(), Application::GetInstance()->GetWindowHeight());
         mText->SetFont("assets/fonts/OCRAEXT.TTF", 30);
+        mText->SetColor(Math::Vector3(1.0f, 1.0f, 1.0f));
     }
 
     void GameManager::OnStart() {
@@ -34,11 +35,11 @@ namespace Waternion
                     mGameState = EGameState::Playing;
                 }
                 if (inputState.Keyboard.GetKeyState(GLFW_KEY_1) == ButtonState::EPressed) {
-                    mGameLevel->ChangeLevel(mGameLevel->GetCurrentLevel() + 1);
+                    mGameLevel->Reset(mGameLevel->GetCurrentLevel() + 1);
                 }
                 
                 if (inputState.Keyboard.GetKeyState(GLFW_KEY_2) == ButtonState::EReleased) {
-                    mGameLevel->ChangeLevel(mGameLevel->GetCurrentLevel() - 1);
+                    mGameLevel->Reset(mGameLevel->GetCurrentLevel() - 1);
                 }
                 break;
             }
@@ -51,7 +52,14 @@ namespace Waternion
             }
             case EGameState::Won:
                 if (inputState.Keyboard.GetKeyState(GLFW_KEY_R) == ButtonState::EPressed) {
-                    mGameLevel->Reset();
+                    mGameLevel->Reset(mGameLevel->GetCurrentLevel() + 1);
+                    mGameState = EGameState::Playing;
+                }
+                break;
+            case EGameState::Lose:
+                if (inputState.Keyboard.GetKeyState(GLFW_KEY_R) == ButtonState::EPressed) {
+                    mGameLevel->Reset(mGameLevel->GetCurrentLevel());
+                    mGameState = EGameState::Playing;
                 }
                 break;
         }
@@ -67,7 +75,6 @@ namespace Waternion
                 mText->SetText("Pressed ENTER to play");
                 mText->SetScale(0.8f);
                 mText->SetPosition(Math::Vector2(-150.0f, 0.0f));
-                mText->SetColor(Math::Vector3(0.3f, 0.2f, .9f));
                 Application::GetInstance()->SetTimeScale(0.0f);
                 break;
             case EGameState::Playing:
@@ -76,8 +83,11 @@ namespace Waternion
                 break;
             case EGameState::Won:
                 mText->SetText("You WON! Press R to restart");
-                mText->SetColor(Math::Vector3(1.0f, 1.0f, 0.0f));
-                Application::GetInstance()->SetTimeScale(1.0f);
+                Application::GetInstance()->SetTimeScale(0.0f);
+                break;
+            case EGameState::Lose:
+                mText->SetText("You LOSE! Press R to restart");
+                Application::GetInstance()->SetTimeScale(0.0f);
                 break;
         };
     }

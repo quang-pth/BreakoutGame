@@ -8,6 +8,7 @@ namespace Waternion
         Paused,
         Playing,
         Won,
+        Lose
     };
 
     namespace ECS {

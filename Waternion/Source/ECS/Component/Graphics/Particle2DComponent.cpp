@@ -7,7 +7,7 @@
 namespace Waternion::ECS
 {
     Particle2DComponent::Particle2DComponent() : 
-        SpriteComponent(), mParticlesPerFrame(3), mMaxParticles(500), mLastUsedIdx(0) 
+        SpriteComponent(), mParticlesPerFrame(4), mMaxParticles(500), mLastUsedIdx(0) 
     {
         mParticles.resize(mMaxParticles);
         mModels.resize(mMaxParticles);
@@ -98,6 +98,16 @@ namespace Waternion::ECS
 
         glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, mMaxParticles);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    }
+
+    void Particle2DComponent::SetMaxParticle(uint32_t value) {
+        mMaxParticles = value;
+        mParticles.clear();
+        mModels.clear();
+        mColors.clear();
+        mParticles.resize(mMaxParticles);
+        mModels.resize(mMaxParticles);
+        mColors.resize(mMaxParticles);
     }
 
     void Particle2DComponent::UpdateParticles(float deltaTime) {

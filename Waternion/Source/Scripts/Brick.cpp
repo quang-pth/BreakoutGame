@@ -7,6 +7,7 @@
 #include"ECS/Component/Audio/SoundComponent.h"
 
 #include"Scripts/Powers/PowerManager.h"
+#include"Scripts/GameLevel.h"
 
 namespace Waternion
 {
@@ -23,6 +24,8 @@ namespace Waternion
     void Brick::OnActivate() {
         Shared<Entity> powerManager = Application::GetInstance()->GetScene()->FindEntity("PowerManager");
         mPowerManager = powerManager->GetComponent<ScriptComponent>()->GetInstance<PowerManager>();
+        Shared<Entity> gameLevel = Application::GetInstance()->GetScene()->FindEntity("GameLevel");
+        mGameLevel = gameLevel->GetComponent<ScriptComponent>()->GetInstance<GameLevel>();
     }
 
     void Brick::OnCollision(const ECS::CollisionDetails& details) {
@@ -33,6 +36,7 @@ namespace Waternion
             if (!mIsSolid) {
                 this->SpawnPowerUpWithProbability(0.25);
                 GetOwner()->SetActivate(false);
+                mGameLevel->SetPlayerScore(mGameLevel->GetPlayerScore() + 1);
             }
             else {
                 Application::GetInstance()->GetScene()->GetPostProcessor()->SetShake(true);

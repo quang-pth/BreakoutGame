@@ -3,13 +3,14 @@
 #include"Core/Application.h"
 
 // Components
-#include"ECS/Component/Graphics/SpriteComponent.h"
 #include"ECS/Component/Behavior/ScriptComponent.h"
+#include"ECS/Component/Graphics/SpriteComponent.h"
 #include"ECS/Component/Physics/Box2DComponent.h"
 #include"ECS/Component/Audio/SoundComponent.h"
 #include"ECS/Component/UI/TextComponent.h"
 
 #include"Scripts/Brick.h"
+#include"Scripts/Ball.h"
 
 namespace Waternion
 {
@@ -19,12 +20,26 @@ namespace Waternion
 
     }
 
-    GameLevel::GameLevel(EntityID id) : NativeScript(id),  mLevelWidth(0), mLevelHeight(0), mLevels()
+    GameLevel::GameLevel(EntityID id) : NativeScript(id),  mLevelWidth(0), mLevelHeight(0), mLevels(), mPlayerScore(0)
     {
         mLevels.resize(4);
     }
 
+    void GameLevel::OnAwake() {
+        uint32_t windowWidth = Application::GetInstance()->GetWindowWidth();
+        uint32_t windowHeight = Application::GetInstance()->GetWindowHeight();
+        mText = AddComponent<TextComponent>(windowWidth, windowHeight);
+        mText->SetFont("assets/fonts/OCRAEXT.TTF", 30);
+        mText->SetText("Score: " + std::to_string(mPlayerScore));
+        mText->SetColor(Math::Vector3(1.0f));
+        mText->SetScale(1.2f);
+        mText->SetPosition(Math::Vector2( StaticCast<float>(windowWidth) / -2.0f + 50.0f, StaticCast<float>(windowHeight) / 2.0f) - 30.0f);
+    }
+
     void GameLevel::OnStart() {
+        Shared<Entity> ball = Application::GetInstance()->GetScene()->FindEntity("Ball");
+        mBall = ball->GetComponent<ECS::ScriptComponent>()->GetInstance<Ball>();
+        Reset();
     }
 
     void GameLevel::LoadLevel(uint32_t level, const std::string& filepath, uint16_t levelWidth, uint16_t levelHeight) {
@@ -120,8 +135,10 @@ namespace Waternion
         return true;
     }
 
-    void GameLevel::Reset() {
-        ChangeLevel(mCurrentLevel);
+    void GameLevel::Reset(uint32_t level) {
+        ChangeLevel(level);
+        mBall->Reset();
+        SetPlayerScore(0);
     }
 
     void GameLevel::ChangeLevel(uint32_t level) {
@@ -136,5 +153,10 @@ namespace Waternion
                 }
             }
         }
+    }
+
+    void GameLevel::SetPlayerScore(uint32_t value) {
+        mPlayerScore = value;
+        mText->SetText("Score: " + std::to_string(mPlayerScore));
     }
 } // namespace Waternion

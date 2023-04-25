@@ -7,6 +7,9 @@
 #include"ECS/Component/Audio/SoundComponent.h"
 #include"ECS/Component/Physics/Box2DComponent.h"
 #include"ECS/Component/Physics/CircleComponent.h"
+#include"ECS/Component/UI/TextComponent.h"
+
+#include"Scripts/GameManager.h"
 
 #include"Core/Application.h"
 
@@ -32,7 +35,10 @@ namespace Waternion
     }
 
     void MovingState::OnExit() {
-
+        mOwner->SetLives(mOwner->mLives - 1);
+        if (mOwner->mLives == 0) {
+            mOwner->mGameManager->SetGameState(EGameState::Lose);
+        }
     }
 
     void MovingState::OnUpdate(float deltaTime) {

@@ -18,13 +18,7 @@ namespace Waternion
                 WATERNION_INLINE void SetLifeTime(float value) {
                     mLifeTime = value;
                 }
-                WATERNION_INLINE void SetMaxParticle(uint32_t value) {
-                    mMaxParticles = value;
-                    mModels.clear();
-                    mColors.clear();
-                    mModels.resize(mMaxParticles);
-                    mColors.resize(mMaxParticles);
-                }
+                void SetMaxParticle(uint32_t value);
                 WATERNION_INLINE void SetParticlePerFrame(uint32_t value) {
                     mParticlesPerFrame = value;
                 }

@@ -63,7 +63,6 @@ namespace Waternion {
             gameLevel->GetComponent<ScriptComponent>()->GetInstance<GameLevel>()->LoadLevel(1, "assets/levels/two.lvl", windowWidth, windowHeight / 2.0f);
             gameLevel->GetComponent<ScriptComponent>()->GetInstance<GameLevel>()->LoadLevel(2, "assets/levels/three.lvl", windowWidth, windowHeight / 2.0f);
             gameLevel->GetComponent<ScriptComponent>()->GetInstance<GameLevel>()->LoadLevel(3, "assets/levels/four.lvl", windowWidth, windowHeight / 2.0f);
-            gameLevel->GetComponent<ScriptComponent>()->GetInstance<GameLevel>()->ChangeLevel(0);
 
             if (!this->InitSystems()) {
                 return false;

@@ -1,13 +1,21 @@
 #include"Ball.h"
 #include"ECS/System/InputSystem.h"
 #include"Core/Application.h"
+
+// Components
+#include"ECS/Component/Defaults.h"
+#include"ECS/Component/Behavior/MoveComponent.h"
+#include"ECS/Component/Graphics/SpriteComponent.h"
 #include"ECS/Component/Physics/CircleComponent.h"
 #include"ECS/Component/Physics/Box2DComponent.h"
 #include"ECS/Component/Graphics/Particle2DComponent.h"
+#include"ECS/Component/UI/TextComponent.h"
+#include"ECS/Component/Behavior/ScriptComponent.h"
 
 // States
 #include"Scripts/States/MovingState.h"
 #include"Scripts/States/StickState.h"
+#include"Scripts/GameManager.h"
 
 #include"Utils/Settings.h"
 
@@ -22,7 +30,7 @@ namespace Waternion
     {
     }
 
-    Ball::Ball(EntityID id) : NativeScript(id), mState()
+    Ball::Ball(EntityID id) : NativeScript(id), mState(), mLives(3)
     {
         BallState::RegisterState<MovingState>(this);
         BallState::RegisterState<StickState>(this);
@@ -43,16 +51,27 @@ namespace Waternion
         circle->SetRadius(mSprite->GetWidth() / 2.0f);
 
         Shared<Particle2DComponent> particle = AddComponent<Particle2DComponent>();
+        particle->SetLifeTime(1.2f);
+        particle->SetMaxParticle(1000);
+        particle->SetParticlePerFrame(5);
         particle->Init("assets/textures/particle.png", true, "Particle");
-        particle->SetLifeTime(0.4f);
-        particle->SetMaxParticle(300);
-        particle->SetParticlePerFrame(2);
+
+        uint32_t windowWidth = Application::GetInstance()->GetWindowWidth();
+        uint32_t windowHeight = Application::GetInstance()->GetWindowHeight();
+        mText = AddComponent<TextComponent>(windowWidth, windowHeight);
+        mText->SetFont("assets/fonts/OCRAEXT.TTF", 30);
+        mText->SetText("Lives: " + std::to_string(mLives));
+        mText->SetColor(Math::Vector3(1.0f));
+        mText->SetScale(0.7f);
+        mText->SetPosition(Math::Vector2(StaticCast<float>(windowWidth) / -2.0f + 120.0f, StaticCast<float>(windowHeight) / 2.0f) - 70.0f);
 
         mState = BallState::ChangeState<StickState>();
         mState->OnEnter();
     }
 
     void Ball::OnStart() {
+        Shared<Entity> gameManager = Application::GetInstance()->GetScene()->FindEntity("GameManager");
+        mGameManager = gameManager->GetComponent<ScriptComponent>()->GetInstance<GameManager>();
         mState->OnStart();
     }
 
@@ -101,5 +120,17 @@ namespace Waternion
             mTransform->SetPositionY(Application::GetInstance()->GetWindowHeight() / 2.0f - mSprite->GetHeight() / 2.0f);
             mMove->SetForwardSpeed(mMove->GetForwardSpeed() * -1.0f);
         }
+    }
+
+    void Ball::SetLives(uint32_t value) {
+        mLives = value;
+        mText->SetText("Lives: " + std::to_string(mLives));
+    }
+
+    void Ball::Reset() {
+        mState->OnExit();
+        mState = BallState::ChangeState<StickState>();
+        mState->OnEnter();
+        SetLives(3);
     }
 } // namespace Waternion

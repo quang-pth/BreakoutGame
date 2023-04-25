@@ -2,12 +2,17 @@
 
 #include"Native.h"
 
-#include"ECS/Component/Defaults.h"
-#include"ECS/Component/Behavior/MoveComponent.h"
-#include"ECS/Component/Graphics/SpriteComponent.h"
-
 namespace Waternion
 {
+    namespace ECS {
+        class TransformComponent;
+        class TextComponent;
+        class MoveComponent;
+        class SpriteComponent;
+    };
+    
+    class GameManager;
+
     class Ball : public NativeScript {
             friend class BallState;
             friend class MovingState;
@@ -23,6 +28,11 @@ namespace Waternion
             virtual void OnUpdate(float deltaTime) override;
             virtual void OnPostUpdate(float deltaTime) override;
             virtual void OnCollision(const ECS::CollisionDetails& details) override;
+            void SetLives(uint32_t value);
+            WATERNION_INLINE uint32_t GetLives() const {
+                return mLives;
+            }
+            void Reset();
         private:
             void ConstraintsInBoundsX();
             void ConstraintsInBoundsY();
@@ -30,6 +40,9 @@ namespace Waternion
             Shared<ECS::TransformComponent> mTransform;
             Shared<ECS::MoveComponent> mMove;
             Shared<ECS::SpriteComponent> mSprite;
+            Shared<ECS::TextComponent> mText;
             Shared<class BallState> mState;
+            Shared<GameManager> mGameManager;
+            uint32_t mLives;
     };
 } // namespace Waternion
