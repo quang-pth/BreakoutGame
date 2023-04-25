@@ -30,6 +30,8 @@ namespace Waternion
             void SetVector2(const std::string& name, const Math::Vector2& value);
             void SetVector3(const std::string& name, float x, float y, float z);
             void SetVector3(const std::string& name, const Math::Vector3& value);
+            void SetVector4(const std::string& name, float x, float y, float z, float w);
+            void SetVector4(const std::string& name, const Math::Vector4& value);
             void SetMatrix4(const std::string& name, const Math::Matrix4& value);
         private:
             bool IsValidShader(uint32_t shader, EShaderType type);

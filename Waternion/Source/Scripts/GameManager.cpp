@@ -12,12 +12,13 @@ namespace Waternion
 {
     using namespace ECS;
 
-    GameManager::GameManager(EntityID id) : NativeScript(id), mGameState(EGameState::Playing) {
+    GameManager::GameManager(EntityID id) : NativeScript(id), mGameState(EGameState::Paused) {
         
     }
 
     void GameManager::OnAwake() {
         mText = AddComponent<TextComponent>(Application::GetInstance()->GetWindowWidth(), Application::GetInstance()->GetWindowHeight());
+        mText->SetFont("assets/fonts/OCRAEXT.TTF", 30);
     }
 
     void GameManager::OnStart() {
@@ -26,36 +27,34 @@ namespace Waternion
     }
 
     void GameManager::OnProcessInput(const InputState& inputState) {
-        if (inputState.Keyboard.GetKeyState(GLFW_KEY_1) == ButtonState::EPressed) {
-            mGameLevel->ChangeLevel(mGameLevel->GetCurrentLevel() + 1);
+        switch(mGameState) {
+            case EGameState::Paused:
+            {
+                if (inputState.Keyboard.GetKeyState(GLFW_KEY_ENTER) == ButtonState::EPressed) {
+                    mGameState = EGameState::Playing;
+                }
+                if (inputState.Keyboard.GetKeyState(GLFW_KEY_1) == ButtonState::EPressed) {
+                    mGameLevel->ChangeLevel(mGameLevel->GetCurrentLevel() + 1);
+                }
+                
+                if (inputState.Keyboard.GetKeyState(GLFW_KEY_2) == ButtonState::EReleased) {
+                    mGameLevel->ChangeLevel(mGameLevel->GetCurrentLevel() - 1);
+                }
+                break;
+            }
+            case EGameState::Playing:
+            {
+                if (inputState.Keyboard.GetKeyState(GLFW_KEY_ENTER) == ButtonState::EPressed) {
+                    mGameState = EGameState::Paused;
+                }
+                break;
+            }
+            case EGameState::Won:
+                if (inputState.Keyboard.GetKeyState(GLFW_KEY_R) == ButtonState::EPressed) {
+                    mGameLevel->Reset();
+                }
+                break;
         }
-        
-        if (inputState.Keyboard.GetKeyState(GLFW_KEY_2) == ButtonState::EReleased) {
-            mGameLevel->ChangeLevel(mGameLevel->GetCurrentLevel() - 1);
-        }
-        
-        // switch(mGameState) {
-        //     case EGameState::Paused:
-        //     {
-        //         if (inputState.Keyboard.GetKeyState(GLFW_KEY_ENTER) == ButtonState::EPressed) {
-        //             mGameState = EGameState::Playing;
-        //             WATERNION_LOG_INFO("Enter pressed");
-        //         }
-        //         break;
-        //     }
-        //     case EGameState::Playing:
-        //     {
-        //         if (inputState.Keyboard.GetKeyState(GLFW_KEY_P) == ButtonState::EPressed) {
-        //             mGameState = EGameState::Paused;
-        //         }
-        //         break;
-        //     }
-        //     case EGameState::Won:
-        //         if (inputState.Keyboard.GetKeyState(GLFW_KEY_R) == ButtonState::EPressed) {
-        //             mGameLevel->Reset();
-        //         }
-        //         break;
-        // }
     }
 
     void GameManager::OnUpdate(float deltaTime) {
@@ -66,9 +65,9 @@ namespace Waternion
         switch(mGameState) {
             case EGameState::Paused:
                 mText->SetText("Pressed ENTER to play");
-                mText->SetScale(1.5f);
-                mText->SetPosition(Math::Vector2(-100.0f, 0.0f));
-                mText->SetColor(Math::Vector3(0.3f, 0.5f, 0.8f));
+                mText->SetScale(0.8f);
+                mText->SetPosition(Math::Vector2(-150.0f, 0.0f));
+                mText->SetColor(Math::Vector3(0.3f, 0.2f, .9f));
                 Application::GetInstance()->SetTimeScale(0.0f);
                 break;
             case EGameState::Playing:

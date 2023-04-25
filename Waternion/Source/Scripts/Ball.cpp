@@ -44,6 +44,9 @@ namespace Waternion
 
         Shared<Particle2DComponent> particle = AddComponent<Particle2DComponent>();
         particle->Init("assets/textures/particle.png", true, "Particle");
+        particle->SetLifeTime(0.4f);
+        particle->SetMaxParticle(300);
+        particle->SetParticlePerFrame(2);
 
         mState = BallState::ChangeState<StickState>();
         mState->OnEnter();

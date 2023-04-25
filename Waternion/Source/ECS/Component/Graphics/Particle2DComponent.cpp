@@ -7,24 +7,55 @@
 namespace Waternion::ECS
 {
     Particle2DComponent::Particle2DComponent() : 
-        SpriteComponent(), mParticlesPerFrame(2), mMaxParticles(100), mLastUsedIdx(0) 
+        SpriteComponent(), mParticlesPerFrame(3), mMaxParticles(500), mLastUsedIdx(0) 
     {
+        mParticles.resize(mMaxParticles);
+        mModels.resize(mMaxParticles);
+        mColors.resize(mMaxParticles);
     }
 
     void Particle2DComponent::Init(const char* filepath, bool alpha, const char* name) {
         SpriteComponent::Init(filepath, alpha, name);
-        // Set particle defeault shader
-        Shared<Shader> shader = ResourceManager::LoadShader(Settings::ParticleVertexSource, Settings::ParticleFragmentSource, "", Settings::ParticleShaderName);
-        SpriteComponent::SetShader(shader);
-        // Init particles
-        for (uint32_t i = 0; i < mMaxParticles; i++) {
-            mParticles.emplace_back(Particle());
-        }
+        // Add transform instanced VBO
+        glGenBuffers(1, &mTransformInstancedVBO);
+        glBindBuffer(GL_ARRAY_BUFFER, mTransformInstancedVBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(Math::Matrix4) * mMaxParticles, mModels.data(), GL_DYNAMIC_DRAW);
+        GetVertexArray()->Bind();
+        glEnableVertexAttribArray(2);
+        glVertexAttribPointer(2, 4, GL_FLOAT, GL_FALSE, sizeof(Math::Matrix4), nullptr);
+        glEnableVertexAttribArray(3);
+        glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(Math::Matrix4), ReintepretCast<void*>(sizeof(float) * 4));
+        glEnableVertexAttribArray(4);
+        glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(Math::Matrix4), ReintepretCast<void*>(sizeof(float) * 8));
+        glEnableVertexAttribArray(5);
+        glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(Math::Matrix4), ReintepretCast<void*>(sizeof(float) * 12));
+        glVertexAttribDivisor(2, 1);
+        glVertexAttribDivisor(3, 1);
+        glVertexAttribDivisor(4, 1);
+        glVertexAttribDivisor(5, 1);
+        // Add color instanced VBO
+        glGenBuffers(1, &mColorInstancedVBO);
+        glBindBuffer(GL_ARRAY_BUFFER, mColorInstancedVBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(Math::Vector4) * mMaxParticles, mColors.data(), GL_DYNAMIC_DRAW);
+        glEnableVertexAttribArray(6);
+        glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(Math::Vector4), nullptr);
+        glVertexAttribDivisor(6, 1);
+        GetVertexArray()->Unbind();
     }
     
     void Particle2DComponent::OnStart() {
         mOwnerTransform = GetOwner()->GetComponent<TransformComponent>();
         mOwnerSprite = GetOwner()->GetComponent<SpriteComponent>();
+        float spriteWidth = mOwnerSprite->GetWidth();
+        float spriteHeight = mOwnerSprite->GetHeight();
+        const Math::Matrix4& orthoProj = Math::Matrix4::CreateOrtho(Application::GetInstance()->GetWindowWidth(), Application::GetInstance()->GetWindowHeight(), -10.0f, 1000.0f);
+        // Set particle defeault shader
+        Shared<Shader> shader = ResourceManager::LoadShader(Settings::ParticleVertexSource, Settings::ParticleFragmentSource, "", Settings::ParticleShaderName);
+        shader->Use();
+        shader->SetMatrix4("Projection", orthoProj);
+        shader->SetVector2("offset", -spriteWidth / 16.0f);
+        shader->SetInt("image", 0);
+        SpriteComponent::SetShader(shader);
     }
 
     void Particle2DComponent::OnUpdate(float deltaTime) {
@@ -35,19 +66,16 @@ namespace Waternion::ECS
     void Particle2DComponent::Draw(float deltaTime) {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE);
         
+        GetShader()->Use();
+        GetVertexArray()->Bind();
+        GetTexture()->Bind();
+        glActiveTexture(GL_TEXTURE0);
+
         float spriteWidth = mOwnerSprite->GetWidth();
         float spriteHeight = mOwnerSprite->GetHeight();
-        const Math::Matrix4& orthoProj = Math::Matrix4::CreateOrtho(Application::GetInstance()->GetWindowWidth(), Application::GetInstance()->GetWindowHeight(), -10.0f, 1000.0f);
-
-        Shared<Shader> shader = GetShader();
-        shader->Use();
-        shader->SetMatrix4("Projection", orthoProj);
-        shader->SetVector2("offset", -spriteWidth / 16.0f);
-        shader->SetInt("image", 0);
-        
-        for (uint32_t i = 0; i < mMaxParticles; i++) {
+        for (uint32_t i = 0 ; i < mMaxParticles; i++) {
             const Particle& particle = mParticles[i];
-            
+
             if (particle.LifeTime < 0.0f) {
                 continue;
             }
@@ -58,17 +86,17 @@ namespace Waternion::ECS
             model *= Math::Matrix4::CreateFromRotationZ(mOwnerTransform->GetRotation());
             model *= Math::Matrix4::CreateFromTranslation(spriteWidth / 2, spriteHeight / 2, 0.0f);
             model *= Math::Matrix4::CreateFromTranslation(particle.Position);
-
-            shader->SetMatrix4("Transforms[" + std::to_string(i) + "]", model);
-            shader->SetVector3("Colors[" + std::to_string(i) + "]", particle.Color);
-            shader->SetFloat("Alphas[" + std::to_string(i) + "]", particle.Alpha);
+            mModels[i] = model;
+            mColors[i] = particle.Color;
         }
+        
+        glBindBuffer(GL_ARRAY_BUFFER, mTransformInstancedVBO);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(Math::Matrix4) * mMaxParticles, mModels.data());
 
-        GetVertexArray()->Bind();
-        GetTexture()->Bind();
-        glActiveTexture(GL_TEXTURE0);
+        glBindBuffer(GL_ARRAY_BUFFER, mColorInstancedVBO);
+        glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(Math::Vector4) * mMaxParticles, mColors.data());
+
         glDrawElementsInstanced(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0, mMaxParticles);
-
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
 
@@ -78,7 +106,7 @@ namespace Waternion::ECS
             particle.LifeTime -= deltaTime;
             if (particle.LifeTime > 0.0f) {
                 particle.Position -= particle.Velocity * deltaTime;
-                particle.Alpha -= deltaTime;
+                particle.Color.w -= deltaTime * 2.0f;
             }
         }
     }
@@ -95,8 +123,8 @@ namespace Waternion::ECS
         particle.Position.x = mOwnerTransform->GetPosition().x + random + offset.x;
         particle.Position.y = mOwnerTransform->GetPosition().y + random + offset.y;
         particle.Color = color;
-        particle.Alpha = 1.0f;
-        particle.LifeTime = 0.7f;
+        particle.Color.w = 1.0f;
+        particle.LifeTime = mLifeTime;
         particle.Velocity = GetOwner()->GetComponent<MoveComponent>()->GetVelocity() * 0.08f;
         particle.Velocity.y = 30.0f;
     }

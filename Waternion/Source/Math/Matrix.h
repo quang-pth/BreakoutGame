@@ -27,7 +27,7 @@ namespace Waternion
                 const float* GetAsFloatPtr() const {
                     return ReintepretCast<const float*>(&mValue[0][0]);
                 }
-                
+
                 static WATERNION_INLINE Matrix4 CreateFromScale(float scaleX, float scaleY, float scaleZ) {
                     float value[4][4] = {
                         {scaleX, 0.0f, 0.0f, 0.0f},

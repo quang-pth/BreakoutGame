@@ -6,8 +6,6 @@
 
 #include"Core/Application.h"
 
-#include"Utils/ErrorHandler.h"
-
 namespace Waternion
 {
     const static float MAX_SHAKE_TIME = 0.05f;
@@ -39,7 +37,6 @@ namespace Waternion
         mFramebuffer->Bind();
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-        glCheckError();
     }
 
     void PostProcessor::Render(float deltaTime) {
@@ -50,12 +47,10 @@ namespace Waternion
         mShader->SetBool("shake", mShake);
         mVertexArray->Bind();
         glDrawArrays(GL_TRIANGLES, 0, 6);
-        glCheckError();
     }
 
     void PostProcessor::EndRender() {
         mFramebuffer->Unbind();
-        glCheckError();
     }
 
     void PostProcessor::InitRenderData() {

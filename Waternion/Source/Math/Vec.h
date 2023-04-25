@@ -228,5 +228,22 @@ namespace Waternion
                 return v - 2.0f * Vector3::Dot(v, n) * n;
             }
         };
+
+        struct Vector4 {
+            float x, y, z, w;
+            Vector4() : x(0.0f), y(0.0f), z(0.0f), w(0.0f) {
+
+            }
+            Vector4(float value) : x(value), y(value), z(value), w(value) {
+
+            }
+            Vector4(float x, float y, float z, float w) : x(x), y(y), z(z), w(w) {
+
+            }
+
+            WATERNION_INLINE const float* GetAsFloatPtr() const {
+                return ReintepretCast<const float*>(&x);
+            }
+        };
     }
 } // namespace Waternion

@@ -83,6 +83,14 @@ namespace Waternion
         glUniform3fv(glGetUniformLocation(this->ID, name.c_str()), 1, value.GetAsFloatPtr());
     }
 
+    void Shader::SetVector4(const std::string& name, float x, float y, float z, float w) {
+        glUniform4f(glGetUniformLocation(this->ID, name.c_str()), x, y, z, w);
+    }
+
+    void Shader::SetVector4(const std::string& name, const Math::Vector4& value) {
+        glUniform4fv(glGetUniformLocation(this->ID, name.c_str()), 1, value.GetAsFloatPtr());
+    }
+
     void Shader::SetMatrix4(const std::string& name, const Math::Matrix4& value) {
         glUniformMatrix4fv(glGetUniformLocation(this->ID, name.c_str()), 1, GL_TRUE, value.GetAsFloatPtr());
     }
