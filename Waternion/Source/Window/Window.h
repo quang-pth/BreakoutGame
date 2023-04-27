@@ -25,6 +25,12 @@ namespace Waternion {
                 glfwGetWindowSize(mInstance, &width, &height);
                 return height; 
             }
+            WATERNION_INLINE void SetWidth(float width) {
+                mWidth = width;
+            }
+            WATERNION_INLINE void SetHeight(float height) {
+                mHeight = height;
+            }
         private:
             GLFWwindow* mInstance;
             uint32_t mWidth, mHeight;

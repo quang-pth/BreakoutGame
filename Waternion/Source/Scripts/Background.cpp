@@ -18,7 +18,7 @@ namespace Waternion {
         sound->Play();
     }
 
-    void Background::OnStart() {
+    void Background::OnUpdate(float deltaTime) {
         float windowWidth = Application::GetInstance()->GetWindowWidth();
         float windowHeight = Application::GetInstance()->GetWindowHeight();
         Shared<TransformComponent> transform = GetComponent<TransformComponent>();

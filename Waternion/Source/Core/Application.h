@@ -23,6 +23,8 @@ namespace Waternion {
             WATERNION_INLINE Shared<ECS::Scene> GetScene() { return mScene; }
             WATERNION_INLINE uint32_t GetWindowWidth() { return mWindow->GetWidth(); }
             WATERNION_INLINE uint32_t GetWindowHeight() { return mWindow->GetHeight(); }
+            WATERNION_INLINE void SetWindowWidth(float width) { mWindow->SetWidth(width); }
+            WATERNION_INLINE void SetWindowHeight(float height) { mWindow->SetHeight(height); }
             WATERNION_INLINE void SetTimeScale(float scale) {
                 mTimeScale = scale;
             }

@@ -5,17 +5,14 @@ project(Waternion VERSION 0.0.1)
 file(GLOB_RECURSE SRC_FILES Source/*.cpp CMAKE_CONFIGURE_DEPENDS)
 add_library(${PROJECT_NAME} ${SRC_FILES})
 
-# file(GLOB_RECURSE SRC_FILES glad.c CMAKE_CONFIGURE_DEPENDS)
-# add_library(${Projectname} ${SRC_FILES}) 
-
 # define symbols
 add_definitions(-DWATERNION_EXPORT)
 add_definitions(-D_DEBUG)
 
 # windows platform
 if (WIN32)
-  target_link_libraries(${PROJECT_NAME} glfw3 freetype irrKlang)
-  target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/External/include)
+  target_link_libraries(${PROJECT_NAME} glfw3 freetype irrKlang imgui)
+  target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/External/include ${CMAKE_SOURCE_DIR}/imgui/Source)
   target_link_directories(${PROJECT_NAME} PUBLIC ${CMAKE_SOURCE_DIR}/External/libs)
 endif (WIN32)
 
