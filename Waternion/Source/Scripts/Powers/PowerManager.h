@@ -15,8 +15,15 @@ namespace Waternion
             virtual void OnAwake() override;
             virtual void OnStart() override;
             void SpawnRandomPower(Shared<ECS::TransformComponent> transform);
+            WATERNION_INLINE void SetPowerActivating(bool activate) {
+                mPowerActivating = activate;
+            }
+            bool ActivatePower(Shared<class Power> power);
+            void DeactivatePower(Shared<class Power> power);
+            void Reset();
         private:
             Shared<PowerUp> PickRandomPower();
             std::vector<Shared<PowerUp>> mPowerUps;
+            bool mPowerActivating;
     };
 } // namespace Waternion

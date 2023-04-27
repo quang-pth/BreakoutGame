@@ -5,35 +5,86 @@
 // Components
 #include"ECS/Component/Graphics/SpriteComponent.h"
 #include"ECS/Component/Behavior/MoveComponent.h"
+#include"ECS/Component/Behavior/ScriptComponent.h"
 #include"ECS/Component/Physics/Box2DComponent.h"
 #include"ECS/Component/Audio/SoundComponent.h"
+
+// Scripts
+#include"Scripts/Ball.h"
+#include"Scripts/States/PassthroughState.h"
+#include"Scripts/Powers/PowerManager.h"
+#include"Scripts/PlayerController.h"
 
 #include"Collisions/Collision.h"
 
 namespace Waternion
 {
-    void Chaos::SetEffect(bool value) {
-        Application::GetInstance()->GetScene()->GetPostProcessor()->SetChaos(value);
+    void Chaos::SetActive() {
+        Application::GetInstance()->GetScene()->GetPostProcessor()->SetChaos(true);
     }
 
-    void Confuse::SetEffect(bool value) {
-        Application::GetInstance()->GetScene()->GetPostProcessor()->SetConfuse(value);        
+    void Chaos::SetDeactive() {
+        Application::GetInstance()->GetScene()->GetPostProcessor()->SetChaos(false);
     }
 
-    void Increase::SetEffect(bool value) {
-
+    void Confuse::SetActive() {
+        Application::GetInstance()->GetScene()->GetPostProcessor()->SetConfuse(true);        
     }
 
-    void Passthrough::SetEffect(bool value) {
-
+    void Confuse::SetDeactive() {
+        Application::GetInstance()->GetScene()->GetPostProcessor()->SetConfuse(false);        
     }
 
-    void Speedy::SetEffect(bool value) {
-
+    void Increase::SetActive() {
+        Shared<ECS::Entity> paddle = Application::GetInstance()->GetScene()->FindEntity("Paddle");
+        Shared<ECS::TransformComponent> transform = paddle->GetComponent<ECS::TransformComponent>();
+        transform->SetScale(transform->GetScale().x * 3.0f, transform->GetScale().y, transform->GetScale().z);
+        paddle->GetComponent<ECS::SpriteComponent>()->SetColor(Math::Vector4(1.0f, 0.6f, 0.4f));
     }
 
-    void Sticky::SetEffect(bool value) {
+    void Increase::SetDeactive() {
+        Shared<ECS::Entity> paddle = Application::GetInstance()->GetScene()->FindEntity("Paddle");
+        Shared<ECS::TransformComponent> transform = paddle->GetComponent<ECS::TransformComponent>();
+        transform->SetScale(transform->GetScale().x / 3.0f, transform->GetScale().y, transform->GetScale().z);
+        paddle->GetComponent<ECS::SpriteComponent>()->SetColor(Math::Vector4(1.0f));
+    }
 
+    void Passthrough::SetActive() {
+        Shared<ECS::Entity> ball = Application::GetInstance()->GetScene()->FindEntity("Ball");
+        Shared<Ball> script = ball->GetComponent<ECS::ScriptComponent>()->GetInstance<Ball>();
+        script->ChangeState<PassthroughState>();
+    }
+
+    void Passthrough::SetDeactive() {
+        Shared<ECS::Entity> ball = Application::GetInstance()->GetScene()->FindEntity("Ball");
+        Shared<Ball> script = ball->GetComponent<ECS::ScriptComponent>()->GetInstance<Ball>();
+        script->RestoreState();
+    }
+
+    void Speedy::SetActive() {
+        Shared<ECS::Entity> paddle = Application::GetInstance()->GetScene()->FindEntity("Paddle");
+        Shared<PlayerController> playerController = paddle->GetComponent<ECS::ScriptComponent>()->GetInstance<PlayerController>();
+        playerController->SetMaxSpeed(playerController->GetMaxSpeed() * 1.3f);
+        paddle->GetComponent<ECS::SpriteComponent>()->SetColor(Math::Vector4(.5f, 0.5f, 1.0f));
+    }
+
+    void Speedy::SetDeactive() {
+        Shared<ECS::Entity> paddle = Application::GetInstance()->GetScene()->FindEntity("Paddle");
+        Shared<PlayerController> playerController = paddle->GetComponent<ECS::ScriptComponent>()->GetInstance<PlayerController>();
+        playerController->SetMaxSpeed(playerController->GetMaxSpeed() / 1.3f);
+        paddle->GetComponent<ECS::SpriteComponent>()->SetColor(Math::Vector4(1.0f));
+    }
+
+    void Sticky::SetActive() {
+        Shared<ECS::Entity> paddle = Application::GetInstance()->GetScene()->FindEntity("Paddle");
+        paddle->GetComponent<ECS::InfoComponent>()->SetTag("Stickable");
+        paddle->GetComponent<ECS::SpriteComponent>()->SetColor(Math::Vector4(1.0f, 0.5f, 1.0f));
+    }
+
+    void Sticky::SetDeactive() {
+        Shared<ECS::Entity> paddle = Application::GetInstance()->GetScene()->FindEntity("Paddle");
+        paddle->GetComponent<ECS::InfoComponent>()->SetTag("None");
+        paddle->GetComponent<ECS::SpriteComponent>()->SetColor(Math::Vector4(1.0f));
     }
 
     PowerUp::PowerUp() : NativeScript()
@@ -68,6 +119,9 @@ namespace Waternion
         
         mSound = AddComponent<ECS::SoundComponent>("assets/audio/powerup.wav", false);
         
+        Shared<ECS::Entity> powerManager = Application::GetInstance()->GetScene()->FindEntity("PowerManager");
+        mPowerManager = powerManager->GetComponent<ECS::ScriptComponent>()->GetInstance<PowerManager>();
+
         GetOwner()->SetActivate(false);
     }
 
@@ -77,7 +131,6 @@ namespace Waternion
         if (mStart) {
             mPower->Duration -= deltaTime;
             if (mPower->Duration <= 0.0f) {
-                mPower->SetEffect(false);
                 GetOwner()->SetActivate(false);
             }
         }
@@ -96,15 +149,20 @@ namespace Waternion
     }
 
     void PowerUp::OnDeactivate() {
+        if (mStart) {
+            mPowerManager->DeactivatePower(mPower);
+            mStart = false;
+        }
     }
 
     void PowerUp::CheckCollisions() {
         Shared<ECS::Box2DComponent> paddleBox = mPaddle->GetComponent<ECS::Box2DComponent>();
         if (Collisions::IsIntersect(paddleBox->GetBox(), mBox->GetBox())) {
             mSound->Play();
-            mPower->SetEffect(true);
+            if (mPowerManager->ActivatePower(mPower)) {
+                mStart = true;
+            }
             GetOwner()->GetComponent<ECS::SpriteComponent>()->SetIsVisible(false);
-            mStart = true;
         }
     }
 } // namespace Waternion

@@ -104,7 +104,7 @@ namespace Waternion {
                 }
 
                 void SetActivate(EntityID id);               
-                void SetDeactivate(EntityID id);               
+                void SetDeactivate(EntityID id);
             private:
                 template<typename T> 
                 WATERNION_INLINE void AddComponentArray() {

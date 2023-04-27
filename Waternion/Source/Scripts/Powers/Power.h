@@ -6,56 +6,63 @@ namespace Waternion
 {
     struct Power {
         std::string SpritePath;
-        Math::Vector3 Color;
+        Math::Vector4 Color;
         float Duration;
-        Power(const char* spritePath, const Math::Vector3& color, float duration = 5.0f) {
+        Power(const char* spritePath, const Math::Vector4& color, float duration = 5.0f) {
             SpritePath = spritePath;
             Color = color;
             Duration = duration;
         }
         virtual ~Power() = default;
-        WATERNION_INLINE virtual void SetEffect(bool value) {};
+        WATERNION_INLINE virtual void SetActive() {};
+        WATERNION_INLINE virtual void SetDeactive() {};
     };
 
     struct Chaos : public Power {
-        Chaos(const char* spritePath, const Math::Vector3& color) : Power(spritePath, color) {   
+        Chaos(const char* spritePath, const Math::Vector4& color) : Power(spritePath, color) {   
         }
-        virtual void SetEffect(bool value) override;
+        virtual void SetActive() override;
+        virtual void SetDeactive() override;
     };
 
     struct Confuse : public Power {
-        Confuse(const char* spritePath, const Math::Vector3& color) : Power(spritePath, color) {
+        Confuse(const char* spritePath, const Math::Vector4& color) : Power(spritePath, color) {
             
         }
-        virtual void SetEffect(bool value) override;
+        virtual void SetActive() override;
+        virtual void SetDeactive() override;
     };
 
     struct Increase : public Power {
-        Increase(const char* spritePath, const Math::Vector3& color) : Power(spritePath, color) {
+        Increase(const char* spritePath, const Math::Vector4& color) : Power(spritePath, color) {
             
         }
-        virtual void SetEffect(bool value) override;
+        virtual void SetActive() override;
+        virtual void SetDeactive() override;
     };
 
     struct Passthrough : public Power {
-        Passthrough(const char* spritePath, const Math::Vector3& color) : Power(spritePath, color) {
+        Passthrough(const char* spritePath, const Math::Vector4& color) : Power(spritePath, color) {
             
         }
-        virtual void SetEffect(bool value) override;
+        virtual void SetActive() override;
+        virtual void SetDeactive() override;
     };
 
     struct Speedy : public Power {
-        Speedy(const char* spritePath, const Math::Vector3& color) : Power(spritePath, color) {
+        Speedy(const char* spritePath, const Math::Vector4& color) : Power(spritePath, color) {
             
         }
-        virtual void SetEffect(bool value) override;
+        virtual void SetActive() override;
+        virtual void SetDeactive() override;
     };
 
     struct Sticky : public Power {
-        Sticky(const char* spritePath, const Math::Vector3& color) : Power(spritePath, color) {
+        Sticky(const char* spritePath, const Math::Vector4& color) : Power(spritePath, color) {
             
         }
-        virtual void SetEffect(bool value) override;
+        virtual void SetActive() override;
+        virtual void SetDeactive() override;
     };
 
     namespace ECS {
@@ -63,6 +70,8 @@ namespace Waternion
         class Box2DComponent;
         class SoundComponent;
     };
+
+    class PowerManager;
 
     class PowerUp : public NativeScript {
         public:
@@ -88,6 +97,7 @@ namespace Waternion
             Shared<ECS::Box2DComponent> mBox;
             Shared<ECS::SoundComponent> mSound;
             Shared<ECS::Entity> mPaddle;
+            Shared<PowerManager> mPowerManager;
             bool mStart;
     };
 } // namespace Waternion

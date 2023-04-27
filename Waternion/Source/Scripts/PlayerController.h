@@ -26,6 +26,9 @@ namespace Waternion
             WATERNION_INLINE void SetMaxSpeed(float speed) {
                 mMaxSpeed = speed;
             }
+            WATERNION_INLINE float GetMaxSpeed() const {
+                return mMaxSpeed;
+            }
         private:
             void ConstraintsInBounds();
             float mMaxSpeed;

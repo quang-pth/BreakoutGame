@@ -17,6 +17,7 @@
 #include<functional>
 #include<unordered_map>
 #include<map>
+#include<stack>
 
 // Externals
 #include<glad/glad.h>

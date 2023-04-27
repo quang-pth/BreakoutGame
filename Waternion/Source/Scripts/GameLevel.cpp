@@ -11,6 +11,7 @@
 
 #include"Scripts/Brick.h"
 #include"Scripts/Ball.h"
+#include"Scripts/Powers/PowerManager.h"
 
 namespace Waternion
 {
@@ -39,6 +40,10 @@ namespace Waternion
     void GameLevel::OnStart() {
         Shared<Entity> ball = Application::GetInstance()->GetScene()->FindEntity("Ball");
         mBall = ball->GetComponent<ECS::ScriptComponent>()->GetInstance<Ball>();
+
+        Shared<Entity> powerManager = Application::GetInstance()->GetScene()->FindEntity("PowerManager");
+        mPowerManager = powerManager->GetComponent<ECS::ScriptComponent>()->GetInstance<PowerManager>();
+
         Reset();
     }
 
@@ -62,8 +67,9 @@ namespace Waternion
                 if (tiles[row][col] == 1) {
                     Math::Vector3 position(-levelWidth / 2.0f + unitWidth * col, unitHeight * row, 0.0f);
                     Math::Vector2 size(unitWidth, unitHeight);
-                    Math::Vector3 color(0.8f, 0.8f, 0.7f);
+                    Math::Vector4 color(0.8f, 0.8f, 0.7f, 1.0f);
                     Shared<Entity> solidBrick = MakeShared<Entity>();
+                    solidBrick->GetComponent<InfoComponent>()->SetTag("Solid");
                     // Sprite
                     Shared<SpriteComponent> sprite = solidBrick->AddComponent<SpriteComponent>();
                     sprite->Init("assets/textures/block_solid.png", true, "SolidBlock");
@@ -85,18 +91,18 @@ namespace Waternion
                 }
                 // Normal blocks
                 else if (tiles[row][col] > 1) {
-                    Math::Vector3 color(1.0f);
+                    Math::Vector4 color(1.0f);
                     if (tiles[row][col] == 2) {
-                        color = Math::Vector3(0.2f, 0.6f, 1.0f);
+                        color = Math::Vector4(0.2f, 0.6f, 1.0f, 1.0f);
                     }
                     else if (tiles[row][col] == 3) {
-                        color = Math::Vector3(0.0f, 1.0f, 0.0f);
+                        color = Math::Vector4(0.0f, 1.0f, 0.0f, 1.0f);
                     }
                     else if (tiles[row][col] == 4) {
-                        color = Math::Vector3(0.8f, 0.8f, 0.4f);
+                        color = Math::Vector4(0.8f, 0.8f, 0.4f, 1.0f);
                     }
                     else if (tiles[row][col] == 5) {
-                        color = Math::Vector3(1.0f, 0.5f, 0.0f);
+                        color = Math::Vector4(1.0f, 0.5f, 0.0f, 1.0f);
                     }
 
                     Math::Vector3 position(-levelWidth / 2.0f + unitWidth * col, unitHeight * row, 0.0f);
@@ -138,6 +144,7 @@ namespace Waternion
     void GameLevel::Reset(uint32_t level) {
         ChangeLevel(level);
         mBall->Reset();
+        mPowerManager->Reset();
         SetPlayerScore(0);
     }
 

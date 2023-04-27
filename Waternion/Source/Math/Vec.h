@@ -237,12 +237,16 @@ namespace Waternion
             Vector4(float value) : x(value), y(value), z(value), w(value) {
 
             }
-            Vector4(float x, float y, float z, float w) : x(x), y(y), z(z), w(w) {
+            Vector4(float x, float y, float z, float w = 1.0f) : x(x), y(y), z(z), w(w) {
 
             }
 
             WATERNION_INLINE const float* GetAsFloatPtr() const {
                 return ReintepretCast<const float*>(&x);
+            }
+
+            WATERNION_INLINE Vector4 operator*(float scalar) const {
+                return Vector4(x * scalar, y * scalar, z * scalar, w * scalar);
             }
         };
     }

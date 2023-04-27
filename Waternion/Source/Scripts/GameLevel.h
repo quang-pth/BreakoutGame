@@ -33,5 +33,6 @@ namespace Waternion
             uint32_t mPlayerScore;
             Shared<ECS::TextComponent> mText;
             Shared<class Ball> mBall;
+            Shared<class PowerManager> mPowerManager;
     };
 } // namespace Waternion

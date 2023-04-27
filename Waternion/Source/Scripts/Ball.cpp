@@ -11,10 +11,13 @@
 #include"ECS/Component/Graphics/Particle2DComponent.h"
 #include"ECS/Component/UI/TextComponent.h"
 #include"ECS/Component/Behavior/ScriptComponent.h"
+#include"ECS/Component/Audio/SoundComponent.h"
 
 // States
 #include"Scripts/States/MovingState.h"
 #include"Scripts/States/StickState.h"
+#include"Scripts/States/PassthroughState.h"
+
 #include"Scripts/GameManager.h"
 
 #include"Utils/Settings.h"
@@ -34,6 +37,7 @@ namespace Waternion
     {
         BallState::RegisterState<MovingState>(this);
         BallState::RegisterState<StickState>(this);
+        BallState::RegisterState<PassthroughState>(this);
     }
 
     void Ball::OnAwake() {
@@ -65,8 +69,7 @@ namespace Waternion
         mText->SetScale(0.7f);
         mText->SetPosition(Math::Vector2(StaticCast<float>(windowWidth) / -2.0f + 120.0f, StaticCast<float>(windowHeight) / 2.0f) - 70.0f);
 
-        mState = BallState::ChangeState<StickState>();
-        mState->OnEnter();
+        ChangeState<StickState>();
     }
 
     void Ball::OnStart() {
@@ -128,9 +131,51 @@ namespace Waternion
     }
 
     void Ball::Reset() {
-        mState->OnExit();
-        mState = BallState::ChangeState<StickState>();
-        mState->OnEnter();
+        ChangeState<StickState>();
         SetLives(3);
+    }
+
+    void Ball::ResolveCollidesWithPaddle(float speed) {
+            Shared<ECS::TransformComponent> paddleTransform = mPaddle->GetComponent<ECS::TransformComponent>(); 
+            Shared<ECS::SpriteComponent> paddleSprite = mPaddle->GetComponent<ECS::SpriteComponent>();
+            float paddleCenterX = paddleTransform->GetPosition().x + paddleSprite->GetWidth() / 2.0f;
+            float distanceToCenter = GetComponent<ECS::CircleComponent>()->GetCenter().x - paddleCenterX;
+            
+            float percentage = distanceToCenter / (paddleSprite->GetWidth() / 2.0f);
+            float strength = 4.5f;
+
+            const Math::Vector2& oldVelocity = mMove->GetVelocity();
+            Math::Vector2 newVelocity(speed * strength * percentage, Math::Abs(oldVelocity.y) * 1.0f);
+            newVelocity.SafeNormalized();
+
+            mMove->SetStrafeSpeed(newVelocity.x * speed);
+            mMove->SetForwardSpeed(Math::Clamp(newVelocity.y * speed, 100.0f, 300.0f));
+            mPaddle->GetComponent<ECS::SoundComponent>()->Play();
+    }
+
+    void Ball::ResolveCollidesWithBricks(float speed, const ECS::CollisionDetails& details) {
+        const Math::Vector2& bounceDirection = details.ClosestDirection;
+        if (bounceDirection == Math::Vector2::UnitX) {
+            mMove->SetStrafeSpeed(speed);
+            mTransform->SetPositionX(mTransform->GetPosition().x + details.Penetration);
+        }
+        else if (bounceDirection == -Math::Vector2::UnitX) {
+            mMove->SetStrafeSpeed(-speed);
+            mTransform->SetPositionX(mTransform->GetPosition().x - details.Penetration);
+        }
+        else if (bounceDirection == Math::Vector2::UnitY) {
+            mMove->SetForwardSpeed(speed);
+            mTransform->SetPositionY(mTransform->GetPosition().y + details.Penetration);
+        }
+        else if (bounceDirection == -Math::Vector2::UnitY) {
+            mMove->SetForwardSpeed(-speed);
+            mTransform->SetPositionY(mTransform->GetPosition().y - details.Penetration);
+        }
+    }
+
+    void Ball::RestoreState() {
+        mState->OnExit();
+        mState = BallState::RestoreState();
+        mState->OnContinue();
     }
 } // namespace Waternion

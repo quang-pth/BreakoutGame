@@ -20,13 +20,17 @@ namespace Waternion {
                 WATERNION_INLINE void SetSize(const Math::Vector2& size) {
                     mSize = size;
                 }
-                WATERNION_INLINE void SetColor(const Math::Vector3& color) {
-                    this->SetColor(color.x, color.y, color.z);
+                WATERNION_INLINE void SetColor(const Math::Vector4& color) {
+                    SetColor(color.x, color.y, color.z, color.w);
                 }
-                WATERNION_INLINE void SetColor(float r, float g, float b) {
+                WATERNION_INLINE void SetColor(float r, float g, float b, float a) {
                     mColor.x = r;
                     mColor.y = g;
                     mColor.z = b;
+                    mColor.w = a;
+                }
+                WATERNION_INLINE const Math::Vector4& GetColor() const {
+                    return mColor;
                 }
                 WATERNION_INLINE void SetIsVisible(bool visible) {
                     mIsVisible = visible;
@@ -52,7 +56,7 @@ namespace Waternion {
                 Shared<class Texture2D> mTexture;
                 Shared<class VertexArray> mVAO;
                 Shared<class Shader> mShader;
-                Math::Vector3 mColor;
+                Math::Vector4 mColor;
                 Math::Vector2 mSize;
                 bool mIsVisible;
                 AABB2D mBox;

@@ -7,7 +7,7 @@
 
 namespace Waternion::ECS {
     SpriteComponent::SpriteComponent() : 
-        Component(), mColor(Math::Vector3(1.0f)), mIsVisible(true), mBox()  
+        Component(), mColor(Math::Vector4(1.0f)), mIsVisible(true), mBox()  
     {
 
     }
@@ -59,7 +59,7 @@ namespace Waternion::ECS {
         mShader->Use();
         mShader->SetMatrix4("Projection", orthoProj);
         mShader->SetMatrix4("Transform", model);
-        mShader->SetVector3("color", mColor);
+        mShader->SetVector4("color", mColor);
         mShader->SetInt("image", 0);
         mVAO->Bind();
         mTexture->Bind();

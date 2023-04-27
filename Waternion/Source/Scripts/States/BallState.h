@@ -9,6 +9,7 @@ namespace Waternion
     class BallState {
         public:
             WATERNION_API static std::unordered_map<const char*, Shared<BallState>> States;
+            WATERNION_API static std::stack<Shared<BallState>> StateStack;
             BallState() = default;
             BallState(class Ball*);
             virtual ~BallState() = default;
@@ -34,7 +35,10 @@ namespace Waternion
                 }
                 return nullptr;
             }
+            WATERNION_API static Shared<BallState> RestoreState();
+            WATERNION_API static void BackupState(Shared<BallState> state);
             virtual void OnEnter();
+            virtual void OnContinue();
             virtual void OnExit();
             void SetOwner(class Ball*);
         protected:

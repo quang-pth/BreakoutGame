@@ -2,6 +2,9 @@
 
 #include"Native.h"
 
+// States
+#include"Scripts/States/BallState.h"
+
 namespace Waternion
 {
     namespace ECS {
@@ -17,6 +20,7 @@ namespace Waternion
             friend class BallState;
             friend class MovingState;
             friend class StickState;
+            friend class PassthroughState;
         public:
             Ball();
             Ball(ECS::EntityID id);
@@ -32,17 +36,35 @@ namespace Waternion
             WATERNION_INLINE uint32_t GetLives() const {
                 return mLives;
             }
+            template<typename T>
+            void ChangeState() {
+                Shared<BallState> newState = BallState::ChangeState<T>();
+                if (newState == mState) {
+                    return;
+                }
+                if (mState) {
+                    mState->OnExit();
+                }
+                BallState::BackupState(mState);
+                mState = newState;
+                mState->OnEnter();
+            }
+            void RestoreState();
             void Reset();
         private:
             void ConstraintsInBoundsX();
             void ConstraintsInBoundsY();
+            void ResolveCollidesWithPaddle(float speed);
+            void ResolveCollidesWithBricks(float speed, const ECS::CollisionDetails& details);
+        private:
             Shared<ECS::Entity> mPaddle;
             Shared<ECS::TransformComponent> mTransform;
             Shared<ECS::MoveComponent> mMove;
             Shared<ECS::SpriteComponent> mSprite;
             Shared<ECS::TextComponent> mText;
-            Shared<class BallState> mState;
+            Shared<BallState> mState;
             Shared<GameManager> mGameManager;
             uint32_t mLives;
+            float mSpeedScale;
     };
 } // namespace Waternion

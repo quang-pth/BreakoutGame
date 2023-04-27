@@ -26,15 +26,11 @@ namespace Waternion
     }
 
     void StickState::OnExit() {
-
     }
 
     void StickState::OnProcessInput(const InputState& inputState) {
         if (inputState.Keyboard.GetKeyState(GLFW_KEY_SPACE) == ButtonState::EPressed) {
-            Shared<BallState> newState = BallState::ChangeState<MovingState>();
-            this->OnExit();
-            newState->OnEnter();
-            mOwner->mState = newState;
+            mOwner->ChangeState<MovingState>();
         }
     }
 

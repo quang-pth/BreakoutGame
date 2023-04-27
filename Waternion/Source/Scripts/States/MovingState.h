@@ -13,7 +13,7 @@ namespace Waternion
             virtual void OnExit() override;
             virtual void OnUpdate(float) override;
             virtual void OnCollision(const ECS::CollisionDetails&) override;
-        private:
+        protected:
             float mDisabledDuration;
             float mSpeed;
     };

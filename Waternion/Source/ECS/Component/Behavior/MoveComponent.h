@@ -22,6 +22,7 @@ namespace Waternion::ECS {
             Math::Vector2 GetVelocity() const;
             void IsInBoundsX(bool& inLeftBound, bool& inRightBound);
             void IsInBoundsY(bool& inLowerBound, bool& inUpperBound);
+            void SetSpeedScale(float scale);
         private:
             float mStrafeSpeed;
             float mForwardSpeed;

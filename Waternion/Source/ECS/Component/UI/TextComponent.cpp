@@ -42,7 +42,7 @@ namespace Waternion
                 Character ch = mCharacterMap[*c];
 
                 float xpos = x + ch.Bearing.x * mText.Scale;
-                float ypos = y - (mCharacterMap['H'].Bearing.y - ch.Bearing.y) * mText.Scale;
+                float ypos = y - (ch.Size.y - ch.Bearing.y) * mText.Scale;
                 
                 float w = ch.Size.x * mText.Scale;
                 float h = ch.Size.y * mText.Scale;

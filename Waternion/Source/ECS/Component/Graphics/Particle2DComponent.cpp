@@ -132,7 +132,7 @@ namespace Waternion::ECS
         float color = 0.5f + ((rand() % 100) / 100.0f);
         particle.Position.x = mOwnerTransform->GetPosition().x + random + offset.x;
         particle.Position.y = mOwnerTransform->GetPosition().y + random + offset.y;
-        particle.Color = color;
+        particle.Color = GetColor() * color;
         particle.Color.w = 1.0f;
         particle.LifeTime = mLifeTime;
         particle.Velocity = GetOwner()->GetComponent<MoveComponent>()->GetVelocity() * 0.08f;

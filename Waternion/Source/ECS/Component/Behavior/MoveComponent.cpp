@@ -37,4 +37,12 @@ namespace Waternion::ECS {
         inLowerBound = transform->GetPosition().y > -windowHeight / 2.0f - 20.0f;
         inUpperBound = transform->GetPosition().y < windowHeight / 2.0f - sprite->GetHeight() / 2.0f;
     }
+
+    void MoveComponent::SetSpeedScale(float scale) {
+        Math::Vector2 velocity = GetVelocity();
+        float magnitude = velocity.Magnitude() * scale;
+        velocity.SafeNormalized();
+        mForwardSpeed = (velocity * magnitude).y;
+        mStrafeSpeed = (velocity * magnitude).x;
+    }
 }
