@@ -46,8 +46,8 @@ namespace Waternion::ECS
     void Particle2DComponent::OnStart() {
         mOwnerTransform = GetOwner()->GetComponent<TransformComponent>();
         mOwnerSprite = GetOwner()->GetComponent<SpriteComponent>();
-        float spriteWidth = mOwnerSprite->GetWidth();
-        float spriteHeight = mOwnerSprite->GetHeight();
+        float spriteWidth = mOwnerSprite->GetScaledWidth();
+        float spriteHeight = mOwnerSprite->GetScaledHeight();
         const Math::Matrix4& orthoProj = Math::Matrix4::CreateOrtho(Application::GetInstance()->GetWindowWidth(), Application::GetInstance()->GetWindowHeight(), -10.0f, 1000.0f);
         // Set particle defeault shader
         Shared<Shader> shader = ResourceManager::LoadShader(Settings::ParticleVertexSource, Settings::ParticleFragmentSource, "", Settings::ParticleShaderName);
@@ -59,7 +59,7 @@ namespace Waternion::ECS
     }
 
     void Particle2DComponent::OnUpdate(float deltaTime) {
-        this->RespawnParticles(-mOwnerSprite->GetWidth() / 2.0f);
+        this->RespawnParticles({-mOwnerSprite->GetScaledWidth() / 2.0f, -mOwnerSprite->GetScaledHeight() / 2.0f});
         this->UpdateParticles(deltaTime);
     }
 
@@ -71,8 +71,8 @@ namespace Waternion::ECS
         GetTexture()->Bind();
         glActiveTexture(GL_TEXTURE0);
 
-        float spriteWidth = mOwnerSprite->GetWidth();
-        float spriteHeight = mOwnerSprite->GetHeight();
+        float spriteWidth = mOwnerSprite->GetScaledWidth();
+        float spriteHeight = mOwnerSprite->GetScaledHeight();
         for (uint32_t i = 0 ; i < mMaxParticles; i++) {
             const Particle& particle = mParticles[i];
 

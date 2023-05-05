@@ -6,6 +6,9 @@
 
 #include"Core/Application.h"
 
+#include"Window/Window.h"
+#include"Core/Event/EventDispatcher.h"
+
 namespace Waternion
 {
     const static float MAX_SHAKE_TIME = 0.05f;
@@ -20,6 +23,16 @@ namespace Waternion
             return false;
         }
         this->InitRenderData();
+
+        Window::sEventDispatcher->RegisterCallback<WindowResizedEvent>([&](const WindowResizedEvent& event) {
+            mFramebuffer->Clear();
+            if (mFramebuffer->Init(event.GetWidth(), event.GetHeight())) {
+                return false;
+            }
+            WATERNION_LOG_ERROR("Failed to resize framebuffer");
+            return true;
+        });
+
         return true;
     }
 

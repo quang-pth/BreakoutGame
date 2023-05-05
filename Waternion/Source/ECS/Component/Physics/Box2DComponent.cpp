@@ -5,7 +5,9 @@
 namespace Waternion::ECS
 {
     Box2DComponent::Box2DComponent() : Component(), mLocalBox(), mWorldBox() {
+    }
 
+    void Box2DComponent::OnStart() {
     }
 
     void Box2DComponent::OnUpdateWorldTransform() {
@@ -21,7 +23,7 @@ namespace Waternion::ECS
         // Translate
         mWorldBox.Min.x += transform->GetPosition().x;
         mWorldBox.Min.y += transform->GetPosition().y;
-        mWorldBox.Max.x += mWorldBox.Min.x + sprite->GetWidth();
-        mWorldBox.Max.y += mWorldBox.Min.y + sprite->GetHeight();
+        mWorldBox.Max.x += mWorldBox.Min.x + sprite->GetScaledWidth();
+        mWorldBox.Max.y += mWorldBox.Min.y + sprite->GetScaledHeight();
     }
 }

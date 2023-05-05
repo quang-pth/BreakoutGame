@@ -1,15 +1,32 @@
 #include"Framebuffer.h"
 #include"Texture.h"
 
+#include"Window/Window.h"
+#include"Core/Event/EventDispatcher.h"
+
 namespace Waternion
 {
     Framebuffer::Framebuffer() {
-
+        Window::sEventDispatcher->RegisterCallback<WindowResizedEvent>([&](const WindowResizedEvent& event) {
+            if (mID) {
+                glDeleteFramebuffers(1, &mID);
+            }
+            if (mRenderBuffer) {
+                glDeleteRenderbuffers(1, &mRenderBuffer);
+            }
+            if (mTexture) {
+                mTexture->Delete();
+            }
+            if (Init(event.GetWidth(), event.GetHeight())) {
+                return true;
+            }
+            WATERNION_LOG_INFO("Failed to resize framebuffer");
+            return false;
+        });
     }
 
     Framebuffer::~Framebuffer() {
-        glDeleteFramebuffers(1, &mID);
-        glDeleteRenderbuffers(1, &mRenderBuffer);
+        this->Clear();
     }
 
     bool Framebuffer::Init(uint32_t width, uint32_t height) {
@@ -45,5 +62,11 @@ namespace Waternion
         glClear(GL_COLOR_BUFFER_BIT);
         glActiveTexture(GL_TEXTURE0);
         mTexture->Bind();
+    }
+
+    void Framebuffer::Clear() {
+        glDeleteFramebuffers(1, &mID);
+        glDeleteRenderbuffers(1, &mRenderBuffer);
+        mTexture->Delete();
     }
 } // namespace Waternion

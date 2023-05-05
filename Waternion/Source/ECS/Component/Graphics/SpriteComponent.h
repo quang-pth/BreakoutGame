@@ -15,8 +15,10 @@ namespace Waternion {
                 SpriteComponent(const SpriteComponent&) = default;
                 virtual void Init(const char* filepath, bool alpha, const char* name);
                 virtual void Draw(float deltaTime = 0.0f);
-                float GetWidth() const; 
-                float GetHeight() const;
+                float GetScaledWidth() const; 
+                float GetScaledHeight() const;
+                float GetTextureWidth() const;
+                float GetTextureHeight() const;
                 WATERNION_INLINE void SetSize(const Math::Vector2& size) {
                     mSize = size;
                 }

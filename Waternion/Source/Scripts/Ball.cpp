@@ -52,7 +52,7 @@ namespace Waternion
         mMove = AddComponent<MoveComponent>();
 
         Shared<CircleComponent> circle = AddComponent<CircleComponent>();
-        circle->SetRadius(mSprite->GetWidth() / 2.0f);
+        circle->SetRadius(mSprite->GetScaledWidth() / 2.0f);
 
         Shared<Particle2DComponent> particle = AddComponent<Particle2DComponent>();
         particle->SetLifeTime(1.2f);
@@ -103,11 +103,11 @@ namespace Waternion
         mMove->IsInBoundsX(inLeftBound, inRightBound);
         
         if (!inLeftBound) {
-            mTransform->SetPositionX(Application::GetInstance()->GetWindowWidth() / -2.0f - mSprite->GetWidth() / 2.0f);
+            mTransform->SetPositionX(Application::GetInstance()->GetWindowWidth() / -2.0f - mSprite->GetScaledWidth() / 2.0f);
         }
 
         if (!inRightBound) {
-            mTransform->SetPositionX(Application::GetInstance()->GetWindowWidth() / 2.0f - mSprite->GetWidth() / 2.0f);
+            mTransform->SetPositionX(Application::GetInstance()->GetWindowWidth() / 2.0f - mSprite->GetScaledWidth() / 2.0f);
         }
 
         if (!inLeftBound || !inRightBound) {
@@ -120,7 +120,7 @@ namespace Waternion
         mMove->IsInBoundsY(inLowerBound, inUpperBound);
         
         if (!inUpperBound) {
-            mTransform->SetPositionY(Application::GetInstance()->GetWindowHeight() / 2.0f - mSprite->GetHeight() / 2.0f);
+            mTransform->SetPositionY(Application::GetInstance()->GetWindowHeight() / 2.0f - mSprite->GetScaledHeight() / 2.0f);
             mMove->SetForwardSpeed(mMove->GetForwardSpeed() * -1.0f);
         }
     }
@@ -138,10 +138,10 @@ namespace Waternion
     void Ball::ResolveCollidesWithPaddle(float speed) {
             Shared<ECS::TransformComponent> paddleTransform = mPaddle->GetComponent<ECS::TransformComponent>(); 
             Shared<ECS::SpriteComponent> paddleSprite = mPaddle->GetComponent<ECS::SpriteComponent>();
-            float paddleCenterX = paddleTransform->GetPosition().x + paddleSprite->GetWidth() / 2.0f;
+            float paddleCenterX = paddleTransform->GetPosition().x + paddleSprite->GetScaledWidth() / 2.0f;
             float distanceToCenter = GetComponent<ECS::CircleComponent>()->GetCenter().x - paddleCenterX;
             
-            float percentage = distanceToCenter / (paddleSprite->GetWidth() / 2.0f);
+            float percentage = distanceToCenter / (paddleSprite->GetScaledWidth() / 2.0f);
             float strength = 4.5f;
 
             const Math::Vector2& oldVelocity = mMove->GetVelocity();

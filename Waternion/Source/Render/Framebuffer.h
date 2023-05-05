@@ -11,6 +11,7 @@ namespace Waternion
             bool Init(uint32_t width, uint32_t height);
             void Bind();
             void Unbind();
+            void Clear();
         private:
             uint32_t mID;
             uint32_t mRenderBuffer;

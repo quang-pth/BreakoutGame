@@ -1,5 +1,8 @@
 #include"Application.h"
 
+#include"ECS/System/InputSystem.h"
+#include"Core/Event/EventDispatcher.h"
+
 namespace Waternion {
     Shared<Application> Application::GetInstance() {
         static Shared<Application> application;
@@ -9,18 +12,29 @@ namespace Waternion {
         return application;
     }
 
-    Application::Application() : mTimeScale(1.0f) {
+    Application::Application() : mTimeScale(1.0f), mIsRunning(true) {
         
     }
 
     bool Application::Init(int width, int height, const std::string& title, const std::string& version) {
         mCoordinator.reset(new ECS::Coordinator());
         mScene.reset(new ECS::Scene());
-        mWindow.reset(new Window());
 
-        if (!mWindow->Init(width, height, title)) {
+        if (!Window::Init(width, height, title)) {
             WATERNION_LOG_ERROR("Init Window succesfully");
         }
+
+        Window::sEventDispatcher->RegisterCallback<WindowResizedEvent>([](const WindowResizedEvent& event) {
+            glViewport(0, 0, event.GetWidth(), event.GetHeight());            
+            return true;
+        });
+
+        Window::sEventDispatcher->RegisterCallback<KeyPressedEvent>([&](const KeyPressedEvent& event) {
+            if (event.GetKey() == GLFW_KEY_ESCAPE) {
+                mIsRunning = false;
+            }
+            return false;
+        });
 
         if (!this->LoadScene()) {
             return false;
@@ -40,7 +54,7 @@ namespace Waternion {
 
     void Application::Run() {
         float lastTime = 0.0f;
-        while (!mWindow->WindowShouldClose()) {
+        while (mIsRunning) {
             float currentTime = GetDeltaTime();
             // Constrainst in 60FPS
             if ((currentTime - lastTime) * 1000 < MAX_DELTA_DIFF_MS) {
@@ -59,12 +73,14 @@ namespace Waternion {
     }
 
     void Application::Shutdown() {
-        mWindow->Shutdown();
+        Window::Shutdown();
         mScene->Shutdown();
     }
 
     void Application::ProcessInput() {
-        mWindow->PollInputEvents();
+        Window::PrepareInputStates();
+        Window::PollInputEvents();
+        mScene->ProcessInput(Window::sInputState);
     }
 
     void Application::Update(float deltaTime) {
@@ -75,6 +91,6 @@ namespace Waternion {
         mScene->BeginScene(deltaTime);
         mScene->Render(deltaTime);
         mScene->EndScene(deltaTime);
-        mWindow->SwapBuffers();
+        Window::SwapBuffers();
     }
 }

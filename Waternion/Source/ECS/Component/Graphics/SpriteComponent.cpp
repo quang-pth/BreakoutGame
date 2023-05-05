@@ -37,7 +37,6 @@ namespace Waternion::ECS {
         int32_t numOfIndices = sizeof(indices) / sizeof(int32_t);
 
         mVAO = MakeShared<VertexArray>(vertices, numOfVertices, indices, numOfIndices);
-
         mShader = ResourceManager::LoadShader(Settings::DefaultVertexSource, Settings::DefaultFragmentSource, "", Settings::DefaultShaderName);
 
         mBox.UpdateMinMax(Math::Vector2(0.0f, 0.0f));
@@ -67,12 +66,20 @@ namespace Waternion::ECS {
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, nullptr);
     }
 
-    float SpriteComponent::GetWidth() const {
+    float SpriteComponent::GetScaledWidth() const {
         return mTexture->Width * GetOwner()->GetComponent<TransformComponent>()->GetScale().x;
     }
 
-    float SpriteComponent::GetHeight() const {
+    float SpriteComponent::GetScaledHeight() const {
         return mTexture->Height * GetOwner()->GetComponent<TransformComponent>()->GetScale().y;
+    }
+
+    float SpriteComponent::GetTextureWidth() const {
+        return mTexture->Width;
+    }
+
+    float SpriteComponent::GetTextureHeight() const {
+        return mTexture->Height;
     }
 
     void SpriteComponent::SetShader(Shared<Shader> shader) {

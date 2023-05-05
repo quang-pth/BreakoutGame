@@ -2,6 +2,8 @@
 #include"Core/Application.h"
 #include"ECS/System/InputSystem.h"
 
+#include"Core/Event/Event.h"
+
 namespace Waternion
 {
     NativeScript::NativeScript() : mEntityID(INVALID_ID), mCoordinator() {
@@ -50,6 +52,10 @@ namespace Waternion
     }
 
     void NativeScript::OnDeactivate() {
+
+    }
+
+    void NativeScript::OnWindowResized(const WindowResizedEvent& event) {
 
     }
 } // namespace Waternion

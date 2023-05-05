@@ -7,6 +7,7 @@ namespace Waternion::ECS
     class ScriptingSystem : public System {
         public:
             ScriptingSystem();
+            virtual bool Init() override;
             virtual void Awake() override;
             virtual void Start() override;
             virtual void PreUpdate(float deltaTime) override;

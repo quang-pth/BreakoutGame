@@ -8,12 +8,15 @@ namespace Waternion
         class TextComponent;
     };
 
+    class Brick;
+
     class GameLevel : public NativeScript {
         public:
             GameLevel();
             GameLevel(ECS::EntityID id);
             virtual void OnAwake() override;
             virtual void OnStart() override;
+            virtual void OnWindowResized(const class WindowResizedEvent&) override;
             void LoadLevel(uint32_t level, const std::string& filepath, uint16_t levelWidth, uint16_t levelHeight);
             bool IsCompleted();
             void Reset(uint32_t level = 0);
@@ -27,7 +30,8 @@ namespace Waternion
         private:
             void ChangeLevel(uint32_t level);
             void Init(uint32_t level, const std::vector<std::vector<uint16_t>>& tiles, uint16_t levelWidth, uint16_t levelHeight);
-            std::vector<std::vector<Shared<ECS::Entity>>> mLevels;
+            std::vector<std::vector<Shared<Brick>>> mLevels;
+            std::unordered_map<uint32_t, std::pair<uint32_t, uint32_t>> mLevelSize;
             uint16_t mLevelWidth, mLevelHeight;
             uint32_t mCurrentLevel;
             uint32_t mPlayerScore;

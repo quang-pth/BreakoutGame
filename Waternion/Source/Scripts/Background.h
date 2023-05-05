@@ -9,6 +9,7 @@ namespace Waternion
             WATERNION_INLINE Background() : NativeScript() {}
             WATERNION_INLINE Background(ECS::EntityID id) : NativeScript(id) {}
             virtual void OnAwake() override;
-            virtual void OnUpdate(float deltaTime) override;
+            virtual void OnStart() override;
+            virtual void OnWindowResized(const class WindowResizedEvent&) override;
     };
 } // namespace Waternion
