@@ -23,6 +23,7 @@ namespace Waternion
             virtual void OnPreUpdate(float deltaTime) override;
             virtual void OnUpdate(float deltaTime) override;
             virtual void OnPostUpdate(float deltaTime) override;
+            virtual void OnWindowResized(const WindowResizedEvent& event) override;
             WATERNION_INLINE void SetMaxSpeed(float speed) {
                 mMaxSpeed = speed;
             }

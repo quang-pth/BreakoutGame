@@ -3,60 +3,58 @@
 #include"ECS/System/InputSystem.h"
 #include"ECS/System/TextRenderer.h"
 
+#include"Core/Event/EventDispatcher.h"
+
 namespace Waternion {
-    static InputState state;
-    static Shared<Application> application;
+    InputState Window::sInputState;
+    Shared<EventDispatcher> Window::sEventDispatcher = MakeShared<EventDispatcher>();
+    GLFWwindow* Window::sInstance;
 
-    static void PrepareInputStates() {
-        memcpy(state.Keyboard.PreviousState, state.Keyboard.CurrentState, NUM_KEYS);
-        memset(state.Keyboard.CurrentState, false, NUM_KEYS);
+    void Window::PrepareInputStates() {
+        memcpy(Window::sInputState.Keyboard.PreviousState, Window::sInputState.Keyboard.CurrentState, NUM_KEYS);
+        memset(Window::sInputState.Keyboard.CurrentState, false, NUM_KEYS);
     }
 
-    static void ResizeCallback(GLFWwindow* window, int width, int height) {
-        glViewport(0, 0, width, height);
+    void Window::ResizeCallback(GLFWwindow* window, int width, int height) {
+        Window::sEventDispatcher->Dispatch<WindowResizedEvent>(width, height);
     }
 
-    static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode) {
-        if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
-            glfwSetWindowShouldClose(window, true);
-        }
+    void Window::KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode) {
         if (glfwGetKey(window, key) == GLFW_PRESS) {
             if (key >= 0 && key <= 1024) {
-                state.Keyboard.CurrentState[key] = true;
+                Window::sInputState.Keyboard.CurrentState[key] = true;
             }
+            Window::sEventDispatcher->Dispatch<KeyPressedEvent>(key, scancode, action, mode);
         }
     }
 
     bool Window::Init(uint32_t width, uint32_t height, const std::string& name) {
-        mWidth = width;
-        mHeight = height;
-
         glfwInit();
         glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
         glfwWindowHint(GLFW_SAMPLES, 4);
 
-        mInstance = glfwCreateWindow(width, height, name.c_str(), NULL, NULL);
-        if (mInstance == nullptr) {
+        sInstance = glfwCreateWindow(width, height, name.c_str(), NULL, NULL);
+        if (sInstance == nullptr) {
             WATERNION_LOG_ERROR("Failed to Init GLFW Window!");
             glfwTerminate();
             return false;
         }
 
         // Make window context
-        glfwMakeContextCurrent(mInstance);
-        glfwSetInputMode(mInstance, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+        glfwMakeContextCurrent(sInstance);
+        glfwSetInputMode(sInstance, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
         // Register window callbacks
-        glfwSetFramebufferSizeCallback(mInstance, ResizeCallback);
-        glfwSetKeyCallback(mInstance, KeyCallback);
+        glfwSetFramebufferSizeCallback(sInstance, Window::ResizeCallback);
+        glfwSetKeyCallback(sInstance, Window::KeyCallback);
 
         if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
             WATERNION_LOG_ERROR("Failed to Init GLAD!");
             return false;
         }
+        glViewport(0, 0, width, height);
 
-        application = Application::GetInstance();
         WATERNION_LOG_INFO("Init Window Successfully!");
         return true;
     }
@@ -66,12 +64,22 @@ namespace Waternion {
     }
 
     void Window::PollInputEvents() {
-        PrepareInputStates();
         glfwPollEvents();
-        application->GetScene()->GetSystem<ECS::InputSystem>()->ProcessInput(state);
     }
 
     void Window::SwapBuffers() {
-        glfwSwapBuffers(mInstance);
+        glfwSwapBuffers(sInstance);
+    }
+
+    uint32_t Window::GetWidth() {
+        int32_t width, height;
+        glfwGetWindowSize(sInstance, &width, &height);
+        return width;
+    }
+
+    uint32_t Window::GetHeight() {
+        int32_t width, height;
+        glfwGetWindowSize(sInstance, &width, &height);
+        return height;
     }
 }

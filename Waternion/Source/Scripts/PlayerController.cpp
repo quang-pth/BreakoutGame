@@ -9,6 +9,7 @@
 #include"ECS/Component/Audio/SoundComponent.h"
 #include"ECS/Component/Behavior/ScriptComponent.h"
 
+#include"Core/Event/Event.h"
 #include"Scripts/GameManager.h"
 
 namespace Waternion
@@ -72,16 +73,20 @@ namespace Waternion
 
     }
 
+    void PlayerController::OnWindowResized(const WindowResizedEvent& event) {
+        mTransform->SetPosition(event.GetWidth() / -8.0f, event.GetHeight() / -2.0f, 10.0f);
+    }
+
     void PlayerController::ConstraintsInBounds() {
         bool inLeftBounds, inRightBounds;
         mMoveComponent->IsInBoundsX(inLeftBounds, inRightBounds);
 
         float windowWidth = Application::GetInstance()->GetWindowWidth();
         if (!inLeftBounds) {
-            mTransform->SetPositionX(-windowWidth / 2.0f - mSprite->GetWidth() / 2.0f);
+            mTransform->SetPositionX(-windowWidth / 2.0f - mSprite->GetScaledWidth() / 2.0f);
         }
         if (!inRightBounds) {
-            mTransform->SetPositionX(windowWidth / 2.0f - mSprite->GetWidth() / 2.0f);
+            mTransform->SetPositionX(windowWidth / 2.0f - mSprite->GetScaledWidth() / 2.0f);
         }
     }
 } // namespace Waternion

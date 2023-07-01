@@ -13,3 +13,4 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/bin)
 # add engine and game
 add_subdirectory(Waternion)
 add_subdirectory(Game)
+add_subdirectory(imgui)

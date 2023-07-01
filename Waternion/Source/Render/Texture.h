@@ -18,5 +18,6 @@ namespace Waternion
             void Init(uint32_t width, uint32_t height, const unsigned char* data);
             void Bind();
             void Unbind();
+            void Delete();
     };
 } // namespace Waternion

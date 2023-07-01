@@ -21,8 +21,8 @@ namespace Waternion {
             WATERNION_API void Shutdown();
             WATERNION_INLINE Shared<ECS::Coordinator> GetCoordinator() { return mCoordinator; }
             WATERNION_INLINE Shared<ECS::Scene> GetScene() { return mScene; }
-            WATERNION_INLINE uint32_t GetWindowWidth() { return mWindow->GetWidth(); }
-            WATERNION_INLINE uint32_t GetWindowHeight() { return mWindow->GetHeight(); }
+            WATERNION_INLINE uint32_t GetWindowWidth() { return Window::GetWidth(); }
+            WATERNION_INLINE uint32_t GetWindowHeight() { return Window::GetHeight(); }
             WATERNION_INLINE void SetTimeScale(float scale) {
                 mTimeScale = scale;
             }
@@ -34,8 +34,8 @@ namespace Waternion {
             void Render(float deltaTime);
         private:
             float mTimeScale;
-            Unique<Window> mWindow;
             Shared<ECS::Coordinator> mCoordinator;
             Shared<ECS::Scene> mScene;
+            bool mIsRunning;
     };
 } 

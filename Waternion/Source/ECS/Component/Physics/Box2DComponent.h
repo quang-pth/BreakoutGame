@@ -8,6 +8,7 @@ namespace Waternion::ECS
     class Box2DComponent : public Component {
         public:
             Box2DComponent();
+            virtual void OnStart() override;
             virtual void OnUpdateWorldTransform() override;
             void SetBox(const AABB2D& box) {
                 mLocalBox = box;

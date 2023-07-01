@@ -34,11 +34,10 @@ namespace Waternion
                 if (inputState.Keyboard.GetKeyState(GLFW_KEY_ENTER) == ButtonState::EPressed) {
                     mGameState = EGameState::Playing;
                 }
-                if (inputState.Keyboard.GetKeyState(GLFW_KEY_1) == ButtonState::EPressed) {
+                if (inputState.Keyboard.GetKeyState(GLFW_KEY_UP) == ButtonState::EPressed) {
                     mGameLevel->Reset(mGameLevel->GetCurrentLevel() + 1);
                 }
-                
-                if (inputState.Keyboard.GetKeyState(GLFW_KEY_2) == ButtonState::EReleased) {
+                if (inputState.Keyboard.GetKeyState(GLFW_KEY_DOWN) == ButtonState::EReleased) {
                     mGameLevel->Reset(mGameLevel->GetCurrentLevel() - 1);
                 }
                 break;

@@ -4,6 +4,7 @@
             "name": "configs",
             "includePath": [
                 "${workspaceFolder}/External/include/**",
+                "${workspaceFolder}/imgui/Source/**",
                 "${workspaceFolder}/Waternion/Source/**"
             ],
             "defines": ["_DEBUG", "WATERNION_EXPORT"],

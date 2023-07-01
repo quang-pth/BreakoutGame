@@ -20,6 +20,7 @@ namespace Waternion {
             virtual void OnDestroy();
             virtual void OnActivate();
             virtual void OnDeactivate();
+            virtual void OnWindowResized(const class WindowResizedEvent&);
             WATERNION_INLINE Shared<ECS::Entity> GetOwner() {
                 return MakeShared<ECS::Entity>(mEntityID, mCoordinator);               
             }

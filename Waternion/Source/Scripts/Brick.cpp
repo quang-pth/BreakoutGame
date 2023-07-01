@@ -1,9 +1,11 @@
 #include"Brick.h"
 #include"Core/Application.h"
+#include"Core/Event/Event.h"
 #include"Render/PostProcessor.h"
 
 // Components 
 #include"ECS/Component/Behavior/ScriptComponent.h"
+#include"ECS/Component/Graphics/SpriteComponent.h"
 #include"ECS/Component/Audio/SoundComponent.h"
 
 #include"Scripts/Powers/PowerManager.h"
@@ -18,7 +20,6 @@ namespace Waternion
     }
 
     Brick::Brick(EntityID id) : NativeScript(id) {
-
     }
 
     void Brick::OnActivate() {
@@ -49,5 +50,12 @@ namespace Waternion
         if (value < probability) {
             mPowerManager->SpawnRandomPower(GetOwner()->GetComponent<TransformComponent>());
         }
+    }
+
+    void Brick::Place(float width, float height, float unitWidth, float unitHeight) {
+        Shared<TransformComponent> transform = GetOwner()->GetComponent<TransformComponent>(); 
+        Shared<SpriteComponent> sprite = GetOwner()->GetComponent<SpriteComponent>();
+        transform->SetPosition(-width / 2.0f + unitWidth * mCol, height / 2.0f - unitHeight * mRow, 0.0f);
+        transform->SetScale(unitWidth / sprite->GetTextureWidth(), unitHeight / sprite->GetTextureHeight(), 1.0f);
     }
 } // namespace Waternion

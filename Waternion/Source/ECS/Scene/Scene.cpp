@@ -59,10 +59,10 @@ namespace Waternion {
             uint32_t windowHeight = Application::GetInstance()->GetWindowHeight();
             Shared<Entity> gameLevel = MakeShared<Entity>("GameLevel");
             gameLevel->AddComponent<ScriptComponent>()->Bind<GameLevel>();
-            gameLevel->GetComponent<ScriptComponent>()->GetInstance<GameLevel>()->LoadLevel(0, "assets/levels/one.lvl", windowWidth, windowHeight / 2.0f);
-            gameLevel->GetComponent<ScriptComponent>()->GetInstance<GameLevel>()->LoadLevel(1, "assets/levels/two.lvl", windowWidth, windowHeight / 2.0f);
-            gameLevel->GetComponent<ScriptComponent>()->GetInstance<GameLevel>()->LoadLevel(2, "assets/levels/three.lvl", windowWidth, windowHeight / 2.0f);
-            gameLevel->GetComponent<ScriptComponent>()->GetInstance<GameLevel>()->LoadLevel(3, "assets/levels/four.lvl", windowWidth, windowHeight / 2.0f);
+            gameLevel->GetComponent<ScriptComponent>()->GetInstance<GameLevel>()->LoadLevel(0, "assets/levels/one.lvl", windowWidth, windowHeight);
+            gameLevel->GetComponent<ScriptComponent>()->GetInstance<GameLevel>()->LoadLevel(1, "assets/levels/two.lvl", windowWidth, windowHeight);
+            gameLevel->GetComponent<ScriptComponent>()->GetInstance<GameLevel>()->LoadLevel(2, "assets/levels/three.lvl", windowWidth, windowHeight);
+            gameLevel->GetComponent<ScriptComponent>()->GetInstance<GameLevel>()->LoadLevel(3, "assets/levels/four.lvl", windowWidth, windowHeight);
 
             if (!this->InitSystems()) {
                 return false;
@@ -93,6 +93,10 @@ namespace Waternion {
             for (auto& [_, system] : mSystemsMap) {
                 system->Start();
             }
+        }
+
+        void Scene::ProcessInput(const InputState& inputState) {
+            GetSystem<InputSystem>()->ProcessInput(inputState);
         }
 
         void Scene::Update(float deltaTime) {

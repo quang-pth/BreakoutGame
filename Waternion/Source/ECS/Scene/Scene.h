@@ -8,6 +8,7 @@
 namespace Waternion
 {
     class PostProcessor;
+    struct InputState;
 
     namespace ECS
     {
@@ -20,6 +21,7 @@ namespace Waternion
                 void Shutdown();
                 void Awake();
                 void Start();
+                void ProcessInput(const InputState&);
                 void Update(float);
                 void BeginScene(float);
                 void Render(float);
@@ -44,6 +46,10 @@ namespace Waternion
                 }
 
                 Shared<Entity> FindEntity(const std::string& name) const;
+                
+                WATERNION_INLINE const std::vector<EntityID>& GetEntities() const {
+                    return mEntities;
+                }
 
                 void AddEntity(EntityID id);
             private:

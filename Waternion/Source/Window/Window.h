@@ -5,28 +5,25 @@
 
 namespace Waternion {
     class Window {
+            friend class Application;
         public:
-            WATERNION_INLINE Window() = default;
-            WATERNION_INLINE Window(const Window&) = default;
-            WATERNION_API bool Init(uint32_t width, uint32_t height, const std::string& title);
-            WATERNION_API void Shutdown();
-            WATERNION_API void PollInputEvents();
-            WATERNION_INLINE bool WindowShouldClose() {
-                return StaticCast<bool>(glfwWindowShouldClose(mInstance));
-            }
-            WATERNION_API void SwapBuffers();
-            WATERNION_INLINE uint32_t GetWidth() const { 
-                int32_t width, height;
-                glfwGetWindowSize(mInstance, &width, &height);
-                return width; 
-            }
-            WATERNION_INLINE uint32_t GetHeight() const { 
-                int32_t width, height;
-                glfwGetWindowSize(mInstance, &width, &height);
-                return height; 
-            }
+            static Shared<class EventDispatcher> sEventDispatcher;
         private:
-            GLFWwindow* mInstance;
-            uint32_t mWidth, mHeight;
+            Window() = default;
+            static void PrepareInputStates();
+            static void ResizeCallback(GLFWwindow* window, int width, int height);
+            static void KeyCallback(GLFWwindow* window, int key, int scancode, int action, int mode);
+            static bool Init(uint32_t width, uint32_t height, const std::string& title);
+            static void Shutdown();
+            static void PollInputEvents();
+            static void SwapBuffers();
+            static bool WindowShouldClose() {
+                return StaticCast<bool>(glfwWindowShouldClose(sInstance));
+            }
+            static uint32_t GetWidth();
+            static uint32_t GetHeight();
+        private:
+            static GLFWwindow* sInstance;
+            static struct InputState sInputState; 
     };
 }
