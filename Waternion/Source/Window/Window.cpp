@@ -56,6 +56,7 @@ namespace Waternion {
         glViewport(0, 0, width, height);
 
         WATERNION_LOG_INFO("Init Window Successfully!");
+        
         return true;
     }
 

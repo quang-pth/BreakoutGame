@@ -57,6 +57,7 @@
         "xutility": "cpp",
         "fstream": "cpp",
         "*.rh": "cpp",
-        "map": "cpp"
+        "map": "cpp",
+        "deque": "cpp"
     }
 }

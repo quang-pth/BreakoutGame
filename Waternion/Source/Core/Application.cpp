@@ -2,6 +2,7 @@
 
 #include"ECS/System/InputSystem.h"
 #include"Core/Event/EventDispatcher.h"
+#include"Layer/GUI/GUI.h"
 
 namespace Waternion {
     Shared<Application> Application::GetInstance() {
@@ -40,6 +41,12 @@ namespace Waternion {
             return false;
         }
 
+        GUI* gui = new GUI();
+        gui->SetWindow(Window::sInstance);
+        if (!gui->Init()) {
+            return false; 
+        }
+
         return true;
     }
 
@@ -75,6 +82,20 @@ namespace Waternion {
     void Application::Shutdown() {
         Window::Shutdown();
         mScene->Shutdown();
+        for (auto iter = mLayers.crbegin(); iter != mLayers.crend(); iter++) {
+            (*iter)->Shutdown();
+        }
+    }
+
+    void Application::PushLayer(Layer* layer) {
+        Shared<Layer> newLayer;
+        newLayer.reset(layer);
+        auto iter = std::find(mLayers.begin(), mLayers.end(), newLayer);
+        if (iter == mLayers.end()) {
+            mLayers.emplace_back(newLayer);
+            return;
+        }
+        WATERNION_LOG_WARNING("Pushing already existed layer");
     }
 
     void Application::ProcessInput() {
@@ -85,12 +106,24 @@ namespace Waternion {
 
     void Application::Update(float deltaTime) {
         mScene->Update(deltaTime);
+        for (auto iter = mLayers.crbegin(); iter != mLayers.crend(); iter++) {
+            (*iter)->Update(deltaTime);
+        }
     }
 
     void Application::Render(float deltaTime) {
         mScene->BeginScene(deltaTime);
         mScene->Render(deltaTime);
         mScene->EndScene(deltaTime);
+
+        if (const Shared<GUI>& gui = this->GetLayer<GUI>()) {
+            gui->Begin();
+            for (auto iter = mLayers.crbegin(); iter != mLayers.crend(); iter++) {
+                (*iter)->Render();
+            }
+            gui->End();   
+        }
+
         Window::SwapBuffers();
     }
 }

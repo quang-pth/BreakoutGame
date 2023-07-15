@@ -4,6 +4,7 @@
 #include"Window/Window.h"
 #include"ECS/Coordinator.h"
 #include"ECS/Scene/Scene.h"
+#include"Layer/Layer.h"
 
 namespace Waternion {
     struct WindowConfig {
@@ -26,16 +27,34 @@ namespace Waternion {
             WATERNION_INLINE void SetTimeScale(float scale) {
                 mTimeScale = scale;
             }
+            void PushLayer(Layer* layer);
         private:
             Application();
             bool LoadScene();
             void ProcessInput();
             void Update(float deltaTime);
             void Render(float deltaTime);
+            template<typename T>
+            Shared<T> GetLayer() {
+                auto iter = std::find_if(mLayers.begin(), mLayers.end(), [&](const Shared<Layer>& layer) {
+                    if (DyanmicPtrCast<T>(layer)) {
+                        return true;
+                    }
+
+                    return false;
+                });
+
+                if (iter != mLayers.end()) {
+                    return StaticPtrCast<T>(*iter);
+                }
+
+                return nullptr;
+            }
         private:
             float mTimeScale;
             Shared<ECS::Coordinator> mCoordinator;
             Shared<ECS::Scene> mScene;
+            std::vector<Shared<Layer>> mLayers;
             bool mIsRunning;
     };
 } 

@@ -3,6 +3,11 @@
 #include"pch.h"
 #include"ECS/Scene/Scene.h"
 
+#include "imgui.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
+#include <stdio.h>
+
 namespace Waternion {
     class Window {
             friend class Application;
