@@ -52,6 +52,9 @@ namespace Waternion
                 }
 
                 void AddEntity(EntityID id);
+                const Shared<PostProcessor>& GetPostProcessor() {
+                    return mPostProcessor;
+                }
             private:
                 bool InitSystems();
                 std::unordered_map<UUID, Shared<System>> mSystemsMap;

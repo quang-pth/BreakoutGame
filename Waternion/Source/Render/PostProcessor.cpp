@@ -13,7 +13,8 @@ namespace Waternion
 {
     const static float MAX_SHAKE_TIME = 0.05f;
 
-    PostProcessor::PostProcessor() : mChaos(false), mConfuse(false), mShake(false), mShakeTime(MAX_SHAKE_TIME) {
+    PostProcessor::PostProcessor() : mChaos(false), mConfuse(false), 
+        mShake(false), mShakeTime(MAX_SHAKE_TIME) {
     }
 
     bool PostProcessor::Init(Shared<Shader> shader, uint32_t width, uint32_t height) {

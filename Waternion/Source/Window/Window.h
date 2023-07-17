@@ -11,6 +11,7 @@
 namespace Waternion {
     class Window {
             friend class Application;
+            friend class GUI;
         public:
             static Shared<class EventDispatcher> sEventDispatcher;
         private:

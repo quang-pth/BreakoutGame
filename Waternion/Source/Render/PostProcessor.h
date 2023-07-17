@@ -20,6 +20,9 @@ namespace Waternion {
             WATERNION_INLINE void SetConfuse(bool value) {
                 mConfuse = value;
             }
+            const Shared<class Framebuffer> GetFramebuffer() {
+                return mFramebuffer;
+            }
         private:
             void InitRenderData();
             Shared<class Shader> mShader;

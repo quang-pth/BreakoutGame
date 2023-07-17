@@ -1,6 +1,7 @@
 #pragma once
 
 #include"pch.h"
+#include"Texture.h"
 
 namespace Waternion
 {
@@ -12,9 +13,12 @@ namespace Waternion
             void Bind();
             void Unbind();
             void Clear();
+            WATERNION_INLINE uint32_t GetID() {
+                return mTexture->ID;
+            }
         private:
             uint32_t mID;
             uint32_t mRenderBuffer;
-            Unique<class Texture2D> mTexture;
+            Unique<Texture2D> mTexture;
     };
 } // namespace Waternion

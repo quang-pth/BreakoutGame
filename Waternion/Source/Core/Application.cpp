@@ -42,7 +42,6 @@ namespace Waternion {
         }
 
         GUI* gui = new GUI();
-        gui->SetWindow(Window::sInstance);
         if (!gui->Init()) {
             return false; 
         }

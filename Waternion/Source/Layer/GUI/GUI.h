@@ -1,8 +1,10 @@
 #include"Layer/Layer.h"
 
-class GLFWwindow;
-
 namespace Waternion {
+    namespace Editor {
+        class Editor;
+    };
+
     class GUI : public Layer {
         public:
             GUI();
@@ -12,8 +14,7 @@ namespace Waternion {
             virtual void Render() override;
             void Begin();
             void End();
-            void SetWindow(GLFWwindow*);
         private:
-            GLFWwindow* mWindow;
+            Unique<Editor::Editor> mEditor;
     };
 } // namespace Waternion
