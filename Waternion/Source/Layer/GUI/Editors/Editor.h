@@ -13,6 +13,8 @@ namespace Waternion {
                 virtual ~Editor() = default;
                 virtual void OnUpdate(float deltaTime) {}
                 virtual void OnRender() {}
+                virtual void AddEditor(Editor* editor) {}
+                virtual void RemoveEditor(Editor* editor) {}
             protected:
                 Editor() : mOpen(true) {}
                 bool mOpen;

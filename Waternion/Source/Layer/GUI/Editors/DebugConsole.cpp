@@ -9,9 +9,11 @@ namespace Waternion::Editor
     }
     
     void DebugConsole::OnRender() {
-        ImGuiContext& g = ImGuiContext(nullptr);
-        if (!(g.NextWindowData.Flags & ImGuiNextWindowDataFlags_HasSize))
+        ImGuiContext& g = *GImGui;
+        if (!(g.NextWindowData.Flags & ImGuiNextWindowDataFlags_HasSize)) {
             ImGui::SetNextWindowSize(ImVec2(0.0f, ImGui::GetFontSize() * 12.0f), ImGuiCond_FirstUseEver);
+        }
+     
         if (!ImGui::Begin("Dear ImGui Debug Log", &mOpen) || ImGui::GetCurrentWindow()->BeginCount > 1)
         {
             ImGui::End();
@@ -71,5 +73,7 @@ namespace Waternion::Editor
             ImGui::SetScrollHereY(1.0f);
         
         ImGui::EndChild();
+
+        ImGui::End();
     }
 } // namespace Waternion::Editor

@@ -11,6 +11,9 @@
 #include"Render/Framebuffer.h"
 
 #include"Layer/GUI/Editors/DockSpace.h"
+#include"Layer/GUI/Editors/GameViewport.h"
+#include"Layer/GUI/Editors/DebugConsole.h"
+#include"Layer/GUI/Editors/DemoSpace.h"
 
 namespace Waternion
 {
@@ -46,6 +49,9 @@ namespace Waternion
         WATERNION_LOG_INFO("Init GUI successfully");
 
         mEditor.reset(new Editor::DockSpace());
+        mEditor->AddEditor(new Editor::GameViewport());
+        mEditor->AddEditor(new Editor::DebugConsole());
+        mEditor->AddEditor(new Editor::DemoSpace());
 
         return true;
     }
