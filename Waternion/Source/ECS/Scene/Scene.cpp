@@ -13,6 +13,7 @@
 #include"ECS/System/PhysicWorld.h"
 #include"ECS/System/AudioSystem.h"
 #include"ECS/System/TextRenderer.h"
+#include"ECS/System/BatchRenderer.h"
 
 // Components
 #include"ECS/Component/Behavior/ScriptComponent.h"
@@ -32,6 +33,7 @@ namespace Waternion {
 
             this->RegisterSystem<InputSystem>();
             this->RegisterSystem<SpriteRenderer>();
+            this->RegisterSystem<BatchRenderer>();
             this->RegisterSystem<ScriptingSystem>();
             this->RegisterSystem<PhysicWorld>();
             this->RegisterSystem<ParticleSystem>();

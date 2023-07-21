@@ -10,9 +10,6 @@ uniform bool confuse;
 uniform bool shake;
 uniform float time;
 
-uniform mat4 Transform;
-uniform mat4 Projection;
-
 void main() {
     TexCoords = aTexCoords;
     gl_Position = vec4(aPosition, 1.0);

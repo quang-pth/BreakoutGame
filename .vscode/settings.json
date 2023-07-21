@@ -58,6 +58,8 @@
         "fstream": "cpp",
         "*.rh": "cpp",
         "map": "cpp",
-        "deque": "cpp"
+        "deque": "cpp",
+        "array": "cpp",
+        "stack": "cpp"
     }
 }

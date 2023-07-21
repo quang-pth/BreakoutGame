@@ -8,7 +8,7 @@ namespace Waternion {
     std::unordered_map<std::string, Shared<Shader>> ResourceManager::ShadersMap;
     std::unordered_map<std::string, Shared<Texture2D>> ResourceManager::Texture2DsMap;
 
-    Shared<Shader>  ResourceManager::LoadShader(const char* vertexPath, const char* fragmentPath, const char* geometryPath, const std::string& name)
+    Shared<Shader> ResourceManager::LoadShader(const char* vertexPath, const char* fragmentPath, const char* geometryPath, const std::string& name)
     {
         if (ShadersMap.find(name) == ShadersMap.end()) {
             ShadersMap[name] = LoadShaderFromFile(vertexPath, fragmentPath, geometryPath, name.c_str());

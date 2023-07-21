@@ -13,7 +13,7 @@ namespace Waternion
             ~VertexArray();
             void Bind();
             void Unbind();
-        private:
+        protected:
             uint32_t mArrayBufferID;
             uint32_t mVertexBufferID;
             uint32_t mIndexBufferID;

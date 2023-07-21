@@ -41,10 +41,12 @@ namespace Waternion {
             return false;
         }
 
+#if _DEBUG
         GUI* gui = new GUI();
         if (!gui->Init()) {
             return false; 
         }
+#endif
 
         return true;
     }
@@ -115,14 +117,15 @@ namespace Waternion {
         mScene->Render(deltaTime);
         mScene->EndScene(deltaTime);
 
+#if _DEBUG
         if (const Shared<GUI>& gui = this->GetLayer<GUI>()) {
             gui->Begin();
             for (auto iter = mLayers.crbegin(); iter != mLayers.crend(); iter++) {
                 (*iter)->Render();
             }
-            gui->End();   
+            gui->End();
         }
-
+#endif
         Window::SwapBuffers();
     }
 }
