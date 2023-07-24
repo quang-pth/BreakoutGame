@@ -64,6 +64,7 @@ namespace Waternion
             Shared<ECS::TextComponent> mText;
             Shared<BallState> mState;
             Shared<GameManager> mGameManager;
+            Shared<class GameScene> mGameScene;
             uint32_t mLives;
             float mSpeedScale;
     };

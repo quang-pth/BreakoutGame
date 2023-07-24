@@ -38,5 +38,6 @@ namespace Waternion
             Shared<ECS::TextComponent> mText;
             Shared<class Ball> mBall;
             Shared<class PowerManager> mPowerManager;
+            Shared<class GameScene> mGameScene;
     };
 } // namespace Waternion

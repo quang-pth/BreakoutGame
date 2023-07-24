@@ -13,6 +13,7 @@ namespace Waternion
         public:
             Brick();
             Brick(ECS::EntityID id);
+            virtual void OnAwake() override;
             virtual void OnCollision(const ECS::CollisionDetails& details) override;
             virtual void OnActivate() override;
             WATERNION_INLINE void SetIsSolid(bool solid) {
@@ -42,5 +43,6 @@ namespace Waternion
             Shared<class GameLevel> mGameLevel;
             uint32_t mRow, mCol;
             float mUnitWidth, mUnitHeight;
+            Shared<class GameScene> mGameScene;
     }; 
 } // namespace Waternion

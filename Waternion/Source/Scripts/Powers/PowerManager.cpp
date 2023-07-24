@@ -49,6 +49,10 @@ namespace Waternion {
             script->GetInstance<PowerUp>()->SetPower<Sticky>("assets/textures/powerup_sticky.png", Math::Vector4(1.0f, 0.5f, 1.0f));
             mPowerUps.emplace_back(script->GetInstance<PowerUp>());
         }
+
+        for (const Shared<PowerUp>& powerUp : mPowerUps) {
+            powerUp->OnAwake();
+        }
     }
 
     void PowerManager::OnStart() {

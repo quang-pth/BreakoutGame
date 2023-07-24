@@ -10,9 +10,11 @@
 #include"Render/PostProcessor.h"
 #include"Render/Framebuffer.h"
 
+#include"Scene/GameScene.h"
+
 namespace Waternion::Editor {
     GameViewport::GameViewport() : Editor() {
-
+        mGameScene = Application::GetInstance()->FindScene<GameScene>();
     }
 
     void GameViewport::OnUpdate(float deltaTime) {
@@ -24,7 +26,7 @@ namespace Waternion::Editor {
         ImVec2 viewportSize = this->CalculateViewportSize();
         ImVec2 viewportPosition  = this->CalculateViewportCenterPosition(viewportSize);
         ImGui::SetCursorPos(viewportPosition);
-        int framebufferId = Application::GetInstance()->GetScene()->GetPostProcessor()->GetFramebuffer()->GetID();
+        int framebufferId = mGameScene->GetPostProcessor()->GetFramebuffer()->GetID();
         ImGui::Image(ImTextureID(framebufferId), viewportSize, ImVec2(0, 1), ImVec2(1, 0));
         ImGui::End();
     }

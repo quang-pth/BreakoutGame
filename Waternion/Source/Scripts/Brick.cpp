@@ -2,6 +2,8 @@
 #include"Core/Application.h"
 #include"Core/Event/Event.h"
 #include"Render/PostProcessor.h"
+#include"Scene/SceneManager.h"
+#include"Scene/GameScene.h"
 
 // Components 
 #include"ECS/Component/Behavior/ScriptComponent.h"
@@ -16,21 +18,25 @@ namespace Waternion
     using namespace ECS;
 
     Brick::Brick() : NativeScript() {
-
+        
     }
 
     Brick::Brick(EntityID id) : NativeScript(id) {
     }
 
+    void Brick::OnAwake() {
+        mGameScene = Application::GetInstance()->FindScene<GameScene>();
+    }
+
     void Brick::OnActivate() {
-        Shared<Entity> powerManager = Application::GetInstance()->GetScene()->FindEntity("PowerManager");
+        Shared<Entity> powerManager = mGameScene->FindEntity("PowerManager");
         mPowerManager = powerManager->GetComponent<ScriptComponent>()->GetInstance<PowerManager>();
-        Shared<Entity> gameLevel = Application::GetInstance()->GetScene()->FindEntity("GameLevel");
+        Shared<Entity> gameLevel = mGameScene->FindEntity("GameLevel");
         mGameLevel = gameLevel->GetComponent<ScriptComponent>()->GetInstance<GameLevel>();
     }
 
     void Brick::OnCollision(const ECS::CollisionDetails& details) {
-        Shared<Entity> ball = Application::GetInstance()->GetScene()->FindEntity("Ball");
+        Shared<Entity> ball = mGameScene->FindEntity("Ball");
 
         if (details.Collider->GetID() == ball->GetID()) {
             GetOwner()->GetComponent<SoundComponent>()->Play();
@@ -40,7 +46,7 @@ namespace Waternion
                 mGameLevel->SetPlayerScore(mGameLevel->GetPlayerScore() + 1);
             }
             else {
-                Application::GetInstance()->GetScene()->GetPostProcessor()->SetShake(true);
+                mGameScene->GetPostProcessor()->SetShake(true);
             }
         }
     }

@@ -1,6 +1,7 @@
 #include"TextComponent.h"
 
 #include"Core/Application.h"
+#include"Scene/GameScene.h"
 
 #include"Core/Manager/ResourceManager.h"
 #include"Render/Shader.h"
@@ -25,7 +26,7 @@ namespace Waternion
             glBindBuffer(GL_ARRAY_BUFFER, 0);
             glBindVertexArray(0);
 
-            mTextRenderer = Application::GetInstance()->GetScene()->GetSystem<TextRenderer>();
+            mTextRenderer = Application::GetInstance()->FindScene<GameScene>()->GetSystem<TextRenderer>();
         }
 
         void TextComponent::Draw(float deltaTime) {

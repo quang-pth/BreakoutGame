@@ -33,5 +33,6 @@ namespace Waternion
             EGameState mGameState;
             Shared<class GameLevel> mGameLevel;
             Shared<ECS::TextComponent> mText;
+            Shared<class GameScene> mGameScene;
     };
 } // namespace Waternion

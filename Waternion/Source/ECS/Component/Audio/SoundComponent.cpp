@@ -2,12 +2,13 @@
 
 #include"Core/Application.h"
 #include"ECS/System/AudioSystem.h"
+#include"Scene/GameScene.h"
 
 namespace Waternion
 {
     namespace ECS {
         SoundComponent::SoundComponent() : Component(), mClip() {
-            mAudioSystem = Application::GetInstance()->GetScene()->GetSystem<AudioSystem>();
+            mAudioSystem = Application::GetInstance()->FindScene<GameScene>()->GetSystem<AudioSystem>();
         }
 
         SoundComponent::SoundComponent(const std::string& clipPath, bool looped) : 
@@ -15,7 +16,7 @@ namespace Waternion
         {
             mClip.ClipPath = clipPath;
             mClip.Looped = looped;
-            mAudioSystem = Application::GetInstance()->GetScene()->GetSystem<AudioSystem>();
+            mAudioSystem = Application::GetInstance()->FindScene<GameScene>()->GetSystem<AudioSystem>();
         }
 
         void SoundComponent::SetClip(const std::string& clipPath, bool looped) {

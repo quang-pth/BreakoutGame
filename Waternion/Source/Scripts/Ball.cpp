@@ -1,6 +1,8 @@
 #include"Ball.h"
 #include"ECS/System/InputSystem.h"
 #include"Core/Application.h"
+#include"Scene/SceneManager.h"
+#include"Scene/GameScene.h"
 
 // Components
 #include"ECS/Component/Defaults.h"
@@ -41,7 +43,8 @@ namespace Waternion
     }
 
     void Ball::OnAwake() {
-        mPaddle = Application::GetInstance()->GetScene()->FindEntity("Paddle");
+        mGameScene = Application::GetInstance()->FindScene<GameScene>(); 
+        mPaddle = mGameScene->FindEntity("Paddle");
         mTransform = GetComponent<TransformComponent>();
         mTransform->SetScale(0.045f);
         mTransform->SetPositionZ(1.0f);
@@ -73,7 +76,7 @@ namespace Waternion
     }
 
     void Ball::OnStart() {
-        Shared<Entity> gameManager = Application::GetInstance()->GetScene()->FindEntity("GameManager");
+        Shared<Entity> gameManager = mGameScene->FindEntity("GameManager");
         mGameManager = gameManager->GetComponent<ScriptComponent>()->GetInstance<GameManager>();
         mState->OnStart();
     }

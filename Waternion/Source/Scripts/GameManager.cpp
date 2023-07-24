@@ -2,6 +2,7 @@
 
 #include"Core/Application.h"
 #include"ECS/System/InputSystem.h"
+#include"Scene/GameScene.h"
 
 // Components
 #include"ECS/Component/Behavior/ScriptComponent.h"
@@ -20,10 +21,12 @@ namespace Waternion
         mText = AddComponent<TextComponent>(Application::GetInstance()->GetWindowWidth(), Application::GetInstance()->GetWindowHeight());
         mText->SetFont("assets/fonts/OCRAEXT.TTF", 30);
         mText->SetColor(Math::Vector3(1.0f, 1.0f, 1.0f));
+
+        mGameScene = Application::GetInstance()->FindScene<GameScene>();
     }
 
     void GameManager::OnStart() {
-        Shared<Entity> level = Application::GetInstance()->GetScene()->FindEntity("GameLevel");
+        Shared<Entity> level = mGameScene->FindEntity("GameLevel");
         mGameLevel = level->GetComponent<ScriptComponent>()->GetInstance<GameLevel>();
     }
 

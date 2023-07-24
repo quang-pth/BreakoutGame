@@ -2,11 +2,20 @@
 
 #include"Application.h"
 
-// extern void Waternion::RunApplication(const Waternion::AppConfig&);
+extern Waternion::Application* Waternion::CreateApplication();
 
-// int main() 
-// {
-//     Waternion::AppConfig appConfig = Waternion::CreateApplication();
-//     Waternion::RunApplication(appConfig);
-//     return 1;
-// }
+int main() {
+    Waternion::Application* application = Waternion::CreateApplication();
+
+    bool success = application->Init();
+    
+    if (success) {
+        application->Run();
+    }
+
+    application->Shutdown();
+    delete application;
+    application = nullptr;
+
+    return 1;
+}

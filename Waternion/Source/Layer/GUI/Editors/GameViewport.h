@@ -1,8 +1,13 @@
 #pragma once
 
+#include"pch.h"
 #include"Editor.h"
 
 struct ImVec2;
+
+namespace Waternion {
+    class GameScene;
+}
 
 namespace Waternion::Editor {
     class GameViewport : public Editor {
@@ -13,5 +18,6 @@ namespace Waternion::Editor {
         private:
             ImVec2 CalculateViewportSize();
             ImVec2 CalculateViewportCenterPosition(const ImVec2& viewportSize);
+            Shared<class GameScene> mGameScene;
     };
 }

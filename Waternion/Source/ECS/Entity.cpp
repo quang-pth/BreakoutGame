@@ -1,6 +1,7 @@
 #include"Entity.h"
 #include"Core/Application.h"
 #include"Component/Defaults.h"
+#include"Scene/GameScene.h"
 
 namespace Waternion {
     namespace ECS {
@@ -12,7 +13,7 @@ namespace Waternion {
             this->AddComponent<InfoComponent>()->SetName(name);
             this->AddComponent<TransformComponent>();
 
-            Application::GetInstance()->GetScene()->AddEntity(mID);
+            Application::GetInstance()->FindScene<GameScene>()->AddEntity(mID);
         }
 
         Entity::Entity(EntityID id, Shared<Coordinator> coordinator) : mID(id), mCoordinator(coordinator) {

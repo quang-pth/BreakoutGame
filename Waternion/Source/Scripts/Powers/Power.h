@@ -98,6 +98,7 @@ namespace Waternion
             Shared<ECS::SoundComponent> mSound;
             Shared<ECS::Entity> mPaddle;
             Shared<PowerManager> mPowerManager;
+            Shared<class GameScene> mGameScene;
             bool mStart;
     };
 } // namespace Waternion

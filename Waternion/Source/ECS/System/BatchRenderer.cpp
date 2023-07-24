@@ -8,11 +8,7 @@ namespace Waternion::ECS
     }
 
     void BatchRenderer::BeginScene(float deltaTime) {
-        if (mRenderBatches.size() > 0) return;
-
-        for (Shared<Entity> entity : System::GetEntitiesHaveComponent<SpriteComponent>()) {
-            this->AddSprite(entity->GetComponent<SpriteComponent>());
-        }
+        
     }
 
     void BatchRenderer::Draw(float deltaTime) {

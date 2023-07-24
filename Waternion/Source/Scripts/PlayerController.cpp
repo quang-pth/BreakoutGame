@@ -11,6 +11,7 @@
 
 #include"Core/Event/Event.h"
 #include"Scripts/GameManager.h"
+#include"Scene/GameScene.h"
 
 namespace Waternion
 {
@@ -42,7 +43,7 @@ namespace Waternion
     }
 
     void PlayerController::OnStart() {
-        Shared<Entity> gameManager = Application::GetInstance()->GetScene()->FindEntity("GameManager");
+        Shared<Entity> gameManager = Application::GetInstance()->FindScene<GameScene>()->FindEntity("GameManager");
         mGameManager = gameManager->GetComponent<ScriptComponent>()->GetInstance<GameManager>();
     }
 

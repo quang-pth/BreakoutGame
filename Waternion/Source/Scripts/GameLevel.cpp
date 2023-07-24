@@ -2,6 +2,7 @@
 #include"Core/Manager/ResourceManager.h"
 #include"Core/Application.h"
 #include"Core/Event/Event.h"
+#include"Scene/GameScene.h"
 
 // Components
 #include"ECS/Component/Behavior/ScriptComponent.h"
@@ -36,13 +37,15 @@ namespace Waternion
         mText->SetColor(Math::Vector3(1.0f));
         mText->SetScale(1.2f);
         mText->SetPosition(Math::Vector2( StaticCast<float>(windowWidth) / -2.0f + 50.0f, StaticCast<float>(windowHeight) / 2.0f) - 30.0f);
+        
+        mGameScene = Application::GetInstance()->FindScene<GameScene>();
     }
 
     void GameLevel::OnStart() {
-        Shared<Entity> ball = Application::GetInstance()->GetScene()->FindEntity("Ball");
+        Shared<Entity> ball = mGameScene->FindEntity("Ball");
         mBall = ball->GetComponent<ECS::ScriptComponent>()->GetInstance<Ball>();
 
-        Shared<Entity> powerManager = Application::GetInstance()->GetScene()->FindEntity("PowerManager");
+        Shared<Entity> powerManager = mGameScene->FindEntity("PowerManager");
         mPowerManager = powerManager->GetComponent<ECS::ScriptComponent>()->GetInstance<PowerManager>();
 
         Reset();

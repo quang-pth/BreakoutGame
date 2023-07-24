@@ -4,6 +4,9 @@
 #include"Core/Event/EventDispatcher.h"
 #include"Layer/GUI/GUI.h"
 
+#include"Scene/SceneManager.h"
+#include"Scene/GameScene.h"
+
 namespace Waternion {
     Shared<Application> Application::GetInstance() {
         static Shared<Application> application;
@@ -19,7 +22,8 @@ namespace Waternion {
 
     bool Application::Init(int width, int height, const std::string& title, const std::string& version) {
         mCoordinator.reset(new ECS::Coordinator());
-        mScene.reset(new ECS::Scene());
+        mSceneManager = MakeShared<SceneManager>();
+        mSceneManager->AddScene<GameScene>();
 
         if (!Window::Init(width, height, title)) {
             WATERNION_LOG_ERROR("Init Window succesfully");
@@ -37,7 +41,7 @@ namespace Waternion {
             return false;
         });
 
-        if (!this->LoadScene()) {
+        if (!mSceneManager->Init()) {
             return false;
         }
 
@@ -51,15 +55,6 @@ namespace Waternion {
         return true;
     }
 
-    bool Application::LoadScene() {
-        if (mScene->Load()) {
-            mScene->Awake();
-            mScene->Start();
-            return true;
-        }
-        return false;
-    }
-
     void Application::Run() {
         float lastTime = 0.0f;
         while (mIsRunning) {
@@ -68,6 +63,7 @@ namespace Waternion {
             if ((currentTime - lastTime) * 1000 < MAX_DELTA_DIFF_MS) {
                 continue;
             }
+
             float deltaTime = currentTime - lastTime;
             lastTime = currentTime;
             if (deltaTime >= MAX_DELTA_TIME) {
@@ -82,7 +78,7 @@ namespace Waternion {
 
     void Application::Shutdown() {
         Window::Shutdown();
-        mScene->Shutdown();
+        mSceneManager->Shutdown();
         for (auto iter = mLayers.crbegin(); iter != mLayers.crend(); iter++) {
             (*iter)->Shutdown();
         }
@@ -99,23 +95,27 @@ namespace Waternion {
         WATERNION_LOG_WARNING("Pushing already existed layer");
     }
 
+    void Application::AddScene(Scene* scene) {
+        
+    }
+
     void Application::ProcessInput() {
         Window::PrepareInputStates();
         Window::PollInputEvents();
-        mScene->ProcessInput(Window::sInputState);
+        mSceneManager->ProcessInput(Window::sInputState);
     }
 
     void Application::Update(float deltaTime) {
-        mScene->Update(deltaTime);
+        mSceneManager->Update(deltaTime);
         for (auto iter = mLayers.crbegin(); iter != mLayers.crend(); iter++) {
             (*iter)->Update(deltaTime);
         }
     }
 
     void Application::Render(float deltaTime) {
-        mScene->BeginScene(deltaTime);
-        mScene->Render(deltaTime);
-        mScene->EndScene(deltaTime);
+        mSceneManager->BeginScene(deltaTime);
+        mSceneManager->Render(deltaTime);
+        mSceneManager->EndScene(deltaTime);
 
 #if _DEBUG
         if (const Shared<GUI>& gui = this->GetLayer<GUI>()) {
