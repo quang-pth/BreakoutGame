@@ -7,22 +7,16 @@
 #include"Scene/SceneManager.h"
 
 namespace Waternion {
-    struct WindowConfig {
-        int Width = 0;
-        int Height = 0;
-        std::string Title;
-        std::string Version;
-    };
-
     class GameScene;
     class Scene;
 
-    class Application {
+    class WATERNION_API Application {
         public:
-            WATERNION_API static Shared<Application> GetInstance();
-            WATERNION_API bool Init(int width = 1920, int height = 1080, const std::string& title, const std::string& version);
-            WATERNION_API void Run();
-            WATERNION_API void Shutdown();
+            Application();
+            static Shared<Application> GetInstance();
+            virtual bool Init(int width, int height, const std::string& title);
+            void Run();
+            void Shutdown();
             WATERNION_INLINE Shared<ECS::Coordinator> GetCoordinator() { return mCoordinator; }
             
             template<typename T>
@@ -37,9 +31,17 @@ namespace Waternion {
                 mTimeScale = scale;
             }
             void PushLayer(Layer* layer);
-            void AddScene(Scene* scene);
+            
+            template<typename T>
+            void AddScene() {
+                mSceneManager->AddScene<T>();
+            }
+
+            void AddScene(Scene* scene) {
+                mSceneManager->AddScene(scene);
+            }
+
         private:
-            Application();
             void ProcessInput();
             void Update(float deltaTime);
             void Render(float deltaTime);
@@ -59,6 +61,8 @@ namespace Waternion {
 
                 return nullptr;
             }
+        private:
+            static Shared<Application> sInstance;
         private:
             float mTimeScale;
             Shared<ECS::Coordinator> mCoordinator;

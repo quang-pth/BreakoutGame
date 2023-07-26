@@ -16,7 +16,7 @@ namespace Waternion
     
     class GameManager;
 
-    class Ball : public NativeScript {
+    class WATERNION_API Ball : public NativeScript {
             friend class BallState;
             friend class MovingState;
             friend class StickState;

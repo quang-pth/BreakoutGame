@@ -23,6 +23,12 @@ namespace Waternion
                 mScenes.emplace_back(MakeShared<T>());
             }
 
+            void AddScene(Scene* scene) {
+                Shared<Scene> newScene;
+                newScene.reset(scene);
+                mScenes.emplace_back(newScene);
+            }
+
             template<typename T>
             Shared<T> FindScene() {
                 for (Shared<Scene> scene : mScenes) {

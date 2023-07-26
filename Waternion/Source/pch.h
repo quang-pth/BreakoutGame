@@ -137,7 +137,7 @@ namespace Waternion {
     WATERNION_API UUID GenerateUUID();
 
     template<typename T>
-    WATERNION_INLINE UUID GetTypeID() {
+    WATERNION_API WATERNION_INLINE UUID GetTypeID() {
         static UUID id = GenerateUUID();
         return id;
     }

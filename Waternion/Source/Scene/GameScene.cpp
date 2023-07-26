@@ -29,9 +29,6 @@ namespace Waternion
     using namespace ECS;
 
     GameScene::GameScene() : Scene() {
-    }
-
-    bool GameScene::Init() {
         Scene::RegisterSystem<InputSystem>();
         Scene::RegisterSystem<SpriteRenderer>();
         Scene::RegisterSystem<BatchRenderer>();
@@ -40,13 +37,15 @@ namespace Waternion
         Scene::RegisterSystem<ParticleSystem>();
         Scene::RegisterSystem<AudioSystem>();
         Scene::RegisterSystem<TextRenderer>();
+        mPostProcessor = MakeShared<PostProcessor>();
+    }
 
+    bool GameScene::Init() {
         if (!this->InitSystems()) {
             return false;
         }            
-
         Shared<Shader> postProcessingShader = ResourceManager::LoadShader(Settings::PostProcessingVertexSource, Settings::PostProcessingFragmentSource, "", Settings::PostProcessingShaderName);
-        mPostProcessor = MakeShared<PostProcessor>();
+
         if (!mPostProcessor->Init(postProcessingShader, Application::GetInstance()->GetWindowWidth(), Application::GetInstance()->GetWindowHeight())) {
             return false;
         }
@@ -61,29 +60,7 @@ namespace Waternion
     }
 
     void GameScene::Load() {
-        Shared<Entity> player = MakeShared<Entity>("Paddle");
-        player->AddComponent<ScriptComponent>()->Bind<PlayerController>();
 
-        Shared<Entity> background = MakeShared<Entity>("Background");
-        background->AddComponent<ScriptComponent>()->Bind<Background>();
-
-        Shared<Entity> ball = MakeShared<Entity>("Ball");
-        ball->AddComponent<ScriptComponent>()->Bind<Ball>();
-
-        Shared<Entity> powerManager = MakeShared<Entity>("PowerManager");
-        powerManager->AddComponent<ScriptComponent>()->Bind<PowerManager>();
-
-        Shared<Entity> gameManager = MakeShared<Entity>("GameManager");
-        gameManager->AddComponent<ScriptComponent>()->Bind<GameManager>();
-
-        uint32_t windowWidth = Application::GetInstance()->GetWindowWidth();
-        uint32_t windowHeight = Application::GetInstance()->GetWindowHeight();
-        Shared<Entity> gameLevel = MakeShared<Entity>("GameLevel");
-        gameLevel->AddComponent<ScriptComponent>()->Bind<GameLevel>();
-        gameLevel->GetComponent<ScriptComponent>()->GetInstance<GameLevel>()->LoadLevel(0, "assets/levels/one.lvl", windowWidth, windowHeight);
-        gameLevel->GetComponent<ScriptComponent>()->GetInstance<GameLevel>()->LoadLevel(1, "assets/levels/two.lvl", windowWidth, windowHeight);
-        gameLevel->GetComponent<ScriptComponent>()->GetInstance<GameLevel>()->LoadLevel(2, "assets/levels/three.lvl", windowWidth, windowHeight);
-        gameLevel->GetComponent<ScriptComponent>()->GetInstance<GameLevel>()->LoadLevel(3, "assets/levels/four.lvl", windowWidth, windowHeight);
     }
 
     void GameScene::Awake() {

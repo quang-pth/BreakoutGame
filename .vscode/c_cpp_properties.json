@@ -5,7 +5,8 @@
             "includePath": [
                 "${workspaceFolder}/External/include/**",
                 "${workspaceFolder}/imgui/Source/**",
-                "${workspaceFolder}/Waternion/Source/**"
+                "${workspaceFolder}/Waternion/Source/**",
+                "${workspaceFolder}/Game/Source/**"
             ],
             "defines": ["_DEBUG", "WATERNION_EXPORT"],
             "cStandard": "c17",

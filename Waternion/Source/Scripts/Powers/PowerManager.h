@@ -8,7 +8,7 @@ namespace Waternion
         class TransformComponent;
     };
 
-    class PowerManager : public NativeScript {
+    class WATERNION_API PowerManager : public NativeScript {
         public:
             PowerManager();
             PowerManager(ECS::EntityID id);

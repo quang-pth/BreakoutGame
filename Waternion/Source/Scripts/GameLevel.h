@@ -10,7 +10,7 @@ namespace Waternion
 
     class Brick;
 
-    class GameLevel : public NativeScript {
+    class WATERNION_API GameLevel : public NativeScript {
         public:
             GameLevel();
             GameLevel(ECS::EntityID id);

@@ -4,7 +4,7 @@
 
 namespace Waternion {
     namespace ECS {
-        class Entity {
+        class WATERNION_API Entity {
             public:
                 Entity(const std::string& name = "Entity");
                 Entity(EntityID entID, Shared<Coordinator> coordinator); 

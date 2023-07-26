@@ -9,4 +9,4 @@ add_executable(${PROJECT_NAME} ${SRC_FILES})
 target_link_libraries(${PROJECT_NAME} Waternion)
 
 # includes directories
-include_directories(${CMAKE_SOURCE_DIR}/Waternion/Source)
+include_directories(${CMAKE_SOURCE_DIR}/Waternion/Source ${CMAKE_SOURCE_DIR}/Game/Source)

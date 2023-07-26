@@ -25,6 +25,7 @@ namespace Waternion::ECS
     }
 
     void ScriptingSystem::Awake() {
+        auto entities = System::GetEntitiesHaveComponent<ScriptComponent>();
         for (Shared<Entity> entity : System::GetEntitiesHaveComponent<ScriptComponent>()) {
             Shared<ScriptComponent> script = entity->GetComponent<ScriptComponent>();
             script->OnAwake();

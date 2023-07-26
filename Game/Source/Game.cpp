@@ -1,6 +1,6 @@
-#include<Core/Application.h>
+#include<Core/Entry.h>
+#include"Client/SandboxApplication.h"
 
-// TODO: init application here
 Waternion::Application* Waternion::CreateApplication() {
-    return new Waternion::Application();
+    return new Client::SandboxApplication();
 }

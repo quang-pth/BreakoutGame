@@ -14,6 +14,11 @@ namespace Waternion::ECS
             WATERNION_INLINE void Bind() {
                 mInstance = DyanmicPtrCast<NativeScript>(MakeShared<T>(GetOwner()->GetID()));
             }
+            void Bind(NativeScript* nativeScript) {
+                Shared<NativeScript> script = MakeShared<NativeScript>();
+                script.reset(nativeScript);
+                mInstance = script;
+            }
             void OnAwake();
             virtual void OnStart() override;
             void OnProcessInput(const struct InputState&);

@@ -8,22 +8,24 @@
 #include"Scene/GameScene.h"
 
 namespace Waternion {
+    Shared<Application> Application::sInstance;
+
     Shared<Application> Application::GetInstance() {
-        static Shared<Application> application;
-        if (application == nullptr) {
-            application.reset(new Application());
+        if (Application::sInstance == nullptr) {
+            Application::sInstance = MakeShared<Application>();
         }
-        return application;
+        return Application::sInstance;
     }
 
     Application::Application() : mTimeScale(1.0f), mIsRunning(true) {
-        
-    }
-
-    bool Application::Init(int width, int height, const std::string& title, const std::string& version) {
+        Application::sInstance.reset(this);
         mCoordinator.reset(new ECS::Coordinator());
         mSceneManager = MakeShared<SceneManager>();
-        mSceneManager->AddScene<GameScene>();
+        WATERNION_ASSERT(Application::sInstance != nullptr && "Failed to init application");
+    }
+
+    bool Application::Init(int width, int height, const std::string& title) {
+        // mSceneManager->AddScene(new GameScene());
 
         if (!Window::Init(width, height, title)) {
             WATERNION_LOG_ERROR("Init Window succesfully");
@@ -93,10 +95,6 @@ namespace Waternion {
             return;
         }
         WATERNION_LOG_WARNING("Pushing already existed layer");
-    }
-
-    void Application::AddScene(Scene* scene) {
-        
     }
 
     void Application::ProcessInput() {

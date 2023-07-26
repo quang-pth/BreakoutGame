@@ -1,7 +1,9 @@
 #pragma once
 
+#include"pch.h"
+
 namespace Waternion {
-    class Layer {
+    class WATERNION_API Layer {
         public:
             virtual ~Layer() = default;
             virtual bool Init() = 0;

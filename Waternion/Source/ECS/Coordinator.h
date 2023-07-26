@@ -42,6 +42,7 @@ namespace Waternion {
                     EntityIDList ids;
                     for (auto& pair : mEnabledEntities) {
                         Signature signature = mSignatureMap.at(pair.first);
+                        ComponentID id = GetTypeID<T>();
                         if (signature.count(GetTypeID<T>())) {
                             ids.insert(pair.first);
                         }
@@ -109,7 +110,7 @@ namespace Waternion {
                 template<typename T> 
                 WATERNION_INLINE void AddComponentArray() {
                     ComponentID componentID = GetTypeID<T>();
-                    mComponentArrayMap.insert({componentID, std::make_shared<ComponentArray<T>>()});
+                    mComponentArrayMap.insert({componentID, MakeShared<ComponentArray<T>>()});
                 }
             private:
                 std::unordered_map<ComponentID, Shared<ComponentArrayBase>> mComponentArrayMap;

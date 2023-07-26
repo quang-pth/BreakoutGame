@@ -12,7 +12,7 @@ namespace Waternion
 
     class GameManager;
 
-    class PlayerController : public NativeScript {
+    class WATERNION_API PlayerController : public NativeScript {
         public:
             PlayerController();
             PlayerController(ECS::EntityID id);

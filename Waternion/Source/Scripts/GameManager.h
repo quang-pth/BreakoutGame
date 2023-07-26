@@ -15,13 +15,13 @@ namespace Waternion
         class TextComponent;
     };
 
-    class GameManager : public NativeScript {
+    class WATERNION_API GameManager : public NativeScript {
         public:
             GameManager() = default;
             GameManager(ECS::EntityID id);
             virtual void OnAwake() override;
             virtual void OnStart() override;
-            virtual void OnProcessInput(const struct InputState&);
+            virtual void OnProcessInput(const struct InputState&) override;
             virtual void OnUpdate(float deltaTime) override;
             WATERNION_INLINE EGameState GetGameState() const {
                 return mGameState;
