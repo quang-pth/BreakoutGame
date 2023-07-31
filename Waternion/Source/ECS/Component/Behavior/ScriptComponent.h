@@ -1,12 +1,12 @@
 #pragma once
 
 #include"ECS/Component/Defaults.h"
-#include"Scripts/Native.h"
+#include"Core/Native.h"
 #include"ECS/System/PhysicWorld.h"
 
 namespace Waternion::ECS
 {
-    class ScriptComponent : public Component {
+    class WATERNION_API ScriptComponent : public Component {
         public:
             ScriptComponent();
             ScriptComponent(const ScriptComponent&) = default;
@@ -14,11 +14,7 @@ namespace Waternion::ECS
             WATERNION_INLINE void Bind() {
                 mInstance = DyanmicPtrCast<NativeScript>(MakeShared<T>(GetOwner()->GetID()));
             }
-            void Bind(NativeScript* nativeScript) {
-                Shared<NativeScript> script = MakeShared<NativeScript>();
-                script.reset(nativeScript);
-                mInstance = script;
-            }
+            void Bind(NativeScript* nativeScript);
             void OnAwake();
             virtual void OnStart() override;
             void OnProcessInput(const struct InputState&);

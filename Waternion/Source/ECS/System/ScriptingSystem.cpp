@@ -5,8 +5,7 @@
 
 #include"Window/Window.h"
 #include"Core/Event/EventDispatcher.h"
-
-#include"Scripts/Native.h"
+#include"Core/Native.h"
 
 namespace Waternion::ECS
 {

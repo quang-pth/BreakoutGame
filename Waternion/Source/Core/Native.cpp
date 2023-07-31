@@ -7,12 +7,12 @@
 namespace Waternion
 {
     NativeScript::NativeScript() : mEntityID(INVALID_ID), mCoordinator() {
-
+        mCoordinator = Application::GetInstance()->GetCoordinator();
     }
 
     NativeScript::NativeScript(ECS::EntityID id) : mEntityID(id) {
         mCoordinator = Application::GetInstance()->GetCoordinator();
-        WATERNION_ASSERT(mCoordinator != nullptr && "Reference Coordinator as nullptr");
+    WATERNION_ASSERT(mCoordinator != nullptr && "Reference Coordinator as nullptr");
     }
     
     void NativeScript::OnAwake() {

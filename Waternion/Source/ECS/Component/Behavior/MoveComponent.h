@@ -3,7 +3,7 @@
 #include"ECS/Component/Defaults.h"
 
 namespace Waternion::ECS {
-    class MoveComponent : public Component {
+    class WATERNION_API MoveComponent : public Component {
         public:
             MoveComponent();
             virtual void Update(float deltaTime);

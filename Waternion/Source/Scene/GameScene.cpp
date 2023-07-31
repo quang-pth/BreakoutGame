@@ -15,14 +15,7 @@
 #include"ECS/System/TextRenderer.h"
 #include"ECS/System/BatchRenderer.h"
 
-// Components
-#include"ECS/Component/Behavior/ScriptComponent.h"
-#include"Scripts/PlayerController.h"
-#include"Scripts/Background.h"
-#include"Scripts/Ball.h"
-#include"Scripts/GameLevel.h"
-#include"Scripts/Powers/PowerManager.h"
-#include"Scripts/GameManager.h"
+#include"ECS/Component/Defaults.h"
 
 namespace Waternion
 {

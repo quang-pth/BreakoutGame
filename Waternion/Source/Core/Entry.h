@@ -14,8 +14,6 @@ int main() {
     }
 
     application->Shutdown();
-    delete application;
-    application = nullptr;
 
     return 1;
 }

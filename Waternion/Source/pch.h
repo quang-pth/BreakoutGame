@@ -97,7 +97,7 @@ namespace Waternion {
     template<typename T> using Unique = std::unique_ptr<T>;
 
     template<typename T, typename... Args>
-    WATERNION_API WATERNION_INLINE Shared<T> MakeShared(Args&&... args) {
+    WATERNION_INLINE Shared<T> MakeShared(Args&&... args) {
         return std::make_shared<T>(std::forward<Args>(args)...);
     }
     

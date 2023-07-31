@@ -9,9 +9,10 @@
 
 namespace Waternion {
     namespace ECS {
-        class SpriteComponent : public Component {
+        class WATERNION_API SpriteComponent : public Component {
             public:
                 SpriteComponent();
+                SpriteComponent(const char* filepath, bool alpha, const char* name);
                 SpriteComponent(const SpriteComponent&) = default;
                 virtual void Init(const char* filepath, bool alpha, const char* name);
                 virtual void Draw(float deltaTime = 0.0f);

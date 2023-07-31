@@ -7,6 +7,13 @@ namespace Waternion::ECS
         mInstance.reset();
     }
 
+    void ScriptComponent::Bind(NativeScript* nativeScript) {
+        nativeScript->SetEntityID(Component::GetOwner()->GetID());
+        Shared<NativeScript> script = MakeShared<NativeScript>();
+        script.reset(nativeScript);
+        mInstance = script;
+    } 
+
     void ScriptComponent::OnAwake() {
         mInstance->OnAwake();
     }

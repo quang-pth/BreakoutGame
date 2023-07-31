@@ -24,6 +24,12 @@ namespace Waternion {
             WATERNION_INLINE Shared<ECS::Entity> GetOwner() {
                 return MakeShared<ECS::Entity>(mEntityID, mCoordinator);               
             }
+            WATERNION_INLINE ECS::EntityID GetEntityID() {
+                return mEntityID;
+            }
+            WATERNION_INLINE void SetEntityID(ECS::EntityID id) {
+                mEntityID = id;
+            }
         protected:
             template<typename T, typename... Args>
             WATERNION_INLINE Shared<T> AddComponent(Args&&... args) {

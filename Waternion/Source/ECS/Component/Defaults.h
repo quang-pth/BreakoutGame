@@ -60,7 +60,7 @@ namespace Waternion
                 std::string mTag = "None";
         };
 
-        class TransformComponent : public Component {
+        class WATERNION_API TransformComponent : public Component {
             public:
                 TransformComponent();
                 WATERNION_INLINE TransformComponent(const TransformComponent&) = default;

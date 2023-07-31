@@ -11,6 +11,12 @@ namespace Waternion::ECS {
     {
 
     }
+    
+    SpriteComponent::SpriteComponent(const char* filepath, bool alpha, const char* name) : 
+        Component(), mColor(Math::Vector4(1.0f)), mIsVisible(true), mBox()  
+    {
+        this->Init(filepath, alpha, name);
+    }
 
     void SpriteComponent::Init(const char* filepath, bool alpha, const char* name) {
         mTexture = ResourceManager::LoadTexture(filepath, alpha, name);
