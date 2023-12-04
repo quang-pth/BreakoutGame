@@ -20,6 +20,9 @@ namespace Waternion {
                 float GetScaledHeight() const;
                 float GetTextureWidth() const;
                 float GetTextureHeight() const;
+                WATERNION_INLINE Math::Vector2 GetSize() {
+                    return mSize;
+                }
                 WATERNION_INLINE void SetSize(const Math::Vector2& size) {
                     mSize = size;
                 }

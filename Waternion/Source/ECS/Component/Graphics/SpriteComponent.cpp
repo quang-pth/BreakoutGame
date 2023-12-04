@@ -44,6 +44,9 @@ namespace Waternion::ECS {
 
         mVAO = MakeShared<VertexArray>(vertices, numOfVertices, indices, numOfIndices);
         mShader = ResourceManager::LoadShader(Settings::DefaultVertexSource, Settings::DefaultFragmentSource, "", Settings::DefaultShaderName);
+        const Math::Matrix4& orthoProj = Math::Matrix4::CreateOrtho(Application::GetInstance()->GetWindowWidth(), Application::GetInstance()->GetWindowHeight(), -10.0f, 1000.0f);
+        mShader->Use();
+        mShader->SetMatrix4("Projection", orthoProj);
 
         mBox.UpdateMinMax(Math::Vector2(0.0f, 0.0f));
         mBox.UpdateMinMax(Math::Vector2(1.0f, 1.0f));
@@ -59,10 +62,8 @@ namespace Waternion::ECS {
         model *= Math::Matrix4::CreateFromRotationZ(transform->GetRotation());
         model *= Math::Matrix4::CreateFromTranslation(mSize.x / 2, mSize.y / 2, 0.0f);
         model *= Math::Matrix4::CreateFromTranslation(transform->GetPosition());
-        const Math::Matrix4& orthoProj = Math::Matrix4::CreateOrtho(Application::GetInstance()->GetWindowWidth(), Application::GetInstance()->GetWindowHeight(), -10.0f, 1000.0f);
 
         mShader->Use();
-        mShader->SetMatrix4("Projection", orthoProj);
         mShader->SetMatrix4("Transform", model);
         mShader->SetVector4("color", mColor);
         mShader->SetInt("image", 0);

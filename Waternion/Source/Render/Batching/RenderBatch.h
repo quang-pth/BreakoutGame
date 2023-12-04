@@ -31,6 +31,7 @@ namespace Waternion {
             void AddSprite(Shared<ECS::SpriteComponent> sprite);
             bool GetHasSlot() const { return mHasSlot; }
             void SetHasSlot(bool hasSlot) { mHasSlot = hasSlot; }
+            void Clear();
         private:
             std::vector<uint32_t> GenerateIndices();
             void uploadSpriteAsVertexProperties(Shared<ECS::SpriteComponent> sprite, uint32_t idx);

@@ -12,18 +12,18 @@ namespace Waternion::ECS
     }
 
     void BatchRenderer::Draw(float deltaTime) {
-        for (const Unique<RenderBatch>& batch : mRenderBatches) {
+        for (const Shared<RenderBatch>& batch : mRenderBatches) {
             batch->Render();
         }
     }
 
     void BatchRenderer::EndScene(float deltaTime) {
-
+       
     }
 
     void BatchRenderer::AddSprite(Shared<SpriteComponent> sprite) {
         bool isSpriteAdded = false;
-        for (const Unique<RenderBatch>& batch : mRenderBatches) {
+        for (const Shared<RenderBatch>& batch : mRenderBatches) {
             if (batch->GetHasSlot()) {
                 batch->AddSprite(sprite);
                 isSpriteAdded = true;
@@ -32,7 +32,7 @@ namespace Waternion::ECS
         }
 
         if (!isSpriteAdded) {
-            mRenderBatches.emplace_back(MakeUnique<RenderBatch>(MAX_BATCH_SIZE));
+            mRenderBatches.emplace_back(MakeShared<RenderBatch>(MAX_BATCH_SIZE));
             if (mRenderBatches.back()->Init()) {
                 mRenderBatches.back()->AddSprite(sprite);
             }

@@ -14,16 +14,12 @@ namespace Waternion {
     {
         mSprites.resize(mMaxBatchSize);
 
-        mVertices.reserve(mMaxBatchSize * QUAD_VERTICES);
-        for (int i = 0; i < mMaxBatchSize; i++) {
-            mVertices.emplace_back(Vertex());
-        }     
+        mVertices.resize(mMaxBatchSize * QUAD_VERTICES);
 
         mShader = ResourceManager::LoadShader("assets/shaders/batching_vs.glsl", "assets/shaders/batching_fs.glsl", "", "BatchingShader");
+        const Math::Matrix4& orthoProj = Math::Matrix4::CreateSimpleViewProj(Application::GetInstance()->GetWindowWidth(), Application::GetInstance()->GetWindowHeight());
         mShader->Use();
-        // const Math::Matrix4& orthoProj = Math::Matrix4::CreateOrtho(Application::GetInstance()->GetWindowWidth(), Application::GetInstance()->GetWindowHeight(), -10.0f, 1000.0f);
-        // mShader->SetMatrix4("simpleViewProjection", orthoProj);
-        mShader->SetMatrix4("simpleViewProjection", Math::Matrix4::CreateSimpleViewProj(1920, 1080));
+        mShader->SetMatrix4("orthoProj", orthoProj);
     }
 
     bool RenderBatch::Init() {
@@ -66,6 +62,13 @@ namespace Waternion {
         }
     }
 
+    void RenderBatch::Clear() {
+        mVertices.clear();
+        mSprites.clear();
+        mCurrentSpriteIndex = 0;
+        mHasSlot = true;
+    }
+
     std::vector<uint32_t> RenderBatch::GenerateIndices() {
         uint32_t* indices = new uint32_t[INDICES_PER_QUAD * mMaxBatchSize];
 
@@ -102,8 +105,8 @@ namespace Waternion {
             }
             
             Shared<ECS::TransformComponent> transform = sprite->GetOwner()->GetComponent<ECS::TransformComponent>();
-            Math::Vector3 currentPosition(transform->GetPosition().x + (xCoordsAlignment * transform->GetScale().x),
-                    transform->GetPosition().y + (yCoordsAlignment * transform->GetScale().y), transform->GetPosition().z);
+            Math::Vector3 currentPosition(transform->GetPosition().x + (xCoordsAlignment * sprite->GetSize().x),
+                    transform->GetPosition().y + (yCoordsAlignment * sprite->GetSize().y), transform->GetPosition().z);
             
             mVertices[idx].Position = currentPosition;
             mVertices[idx].Color = color;

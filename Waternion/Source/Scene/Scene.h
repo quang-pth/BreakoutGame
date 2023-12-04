@@ -42,7 +42,7 @@ namespace Waternion
             }
 
             void AddEntity(ECS::EntityID id);
-            Shared<ECS::Entity> FindEntity(const std::string& name) const;
+            WATERNION_API Shared<ECS::Entity> FindEntity(const std::string& name) const;
             
             WATERNION_INLINE const std::vector<ECS::EntityID>& GetEntities() const {
                 return mEntities;

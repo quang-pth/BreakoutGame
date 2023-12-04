@@ -16,6 +16,7 @@
 #include"ECS/System/BatchRenderer.h"
 
 #include"ECS/Component/Defaults.h"
+#include"ECS/Component/Graphics/SpriteComponent.h"
 
 namespace Waternion
 {
@@ -53,7 +54,6 @@ namespace Waternion
     }
 
     void GameScene::Load() {
-
     }
 
     void GameScene::Awake() {
@@ -88,19 +88,19 @@ namespace Waternion
     }
     
     void GameScene::BeginScene(float deltaTime) {
-        GetSystem<SpriteRenderer>()->BeginScene(deltaTime);
+        GetSystem<BatchRenderer>()->BeginScene(deltaTime);
     }
     
     void GameScene::Render(float deltaTime) {
         mPostProcessor->BeginRender();
-        GetSystem<SpriteRenderer>()->Draw(deltaTime);
+        GetSystem<BatchRenderer>()->Draw(deltaTime);
         GetSystem<TextRenderer>()->Draw(deltaTime);
         mPostProcessor->EndRender();
         mPostProcessor->Render(deltaTime);
     }
     
     void GameScene::EndScene(float deltaTime) {
-        GetSystem<SpriteRenderer>()->EndScene(deltaTime);
+        GetSystem<BatchRenderer>()->EndScene(deltaTime);
     }
 
     bool GameScene::InitSystems() {

@@ -9,15 +9,14 @@ namespace Waternion::ECS
 
     class SpriteComponent;
 
-    class BatchRenderer : public Renderer {
+    class WATERNION_API BatchRenderer : public Renderer {
         public:
             BatchRenderer();
             virtual void BeginScene(float deltaTime) override;
             virtual void Draw(float deltaTime) override;
             virtual void EndScene(float deltaTime) override;
-        private:
             void AddSprite(Shared<SpriteComponent> sprite);
         private:
-            std::vector<Unique<RenderBatch>> mRenderBatches; 
+            std::vector<Shared<RenderBatch>> mRenderBatches; 
     };
 } // namespace Waternion::ECS

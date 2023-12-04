@@ -21,6 +21,7 @@ namespace Waternion
 
         void AudioSystem::Shutdown() {
             mSoundEngine->drop();
+            mSoundEngine.release();
             WATERNION_LOG_INFO("AudioSystem is closed!");
         }
 

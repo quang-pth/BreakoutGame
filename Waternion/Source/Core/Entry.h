@@ -14,6 +14,7 @@ int main() {
     }
 
     application->Shutdown();
+    WATERNION_FREE(application);
 
     return 1;
 }
