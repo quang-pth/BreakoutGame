@@ -27,5 +27,12 @@ namespace Waternion
             private:
                 std::unordered_map<uint32_t, std::vector<Shared<class SpriteComponent>>> mSpritesMap;
         };
+
+        class AnimationSystem : public Renderer {
+            public:
+                AnimationSystem() : Renderer() {}
+                virtual void Update(float deltaTime) override;
+                virtual void Draw(float deltaTime = 0.0f) override;
+        };
     }
 } // namespace Waternion

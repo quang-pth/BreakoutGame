@@ -8,6 +8,14 @@
 #include"Render/Shader.h"
 
 namespace Waternion {
+    struct Sprite {
+        Shared<class Texture2D> Texture;
+        Shared<class VertexArray> VAO;
+        Shared<class Shader> Shader;
+        Math::Vector4 Color;
+        Math::Vector2 Size;
+    };
+
     namespace ECS {
         class SpriteComponent : public Component {
             public:
@@ -19,20 +27,21 @@ namespace Waternion {
                 float GetScaledHeight() const;
                 float GetTextureWidth() const;
                 float GetTextureHeight() const;
+                WATERNION_INLINE void SetSprite(Sprite* sprite) { mSprite = sprite; }
                 WATERNION_INLINE void SetSize(const Math::Vector2& size) {
-                    mSize = size;
+                    mSprite->Size = size;
                 }
                 WATERNION_INLINE void SetColor(const Math::Vector4& color) {
                     SetColor(color.x, color.y, color.z, color.w);
                 }
                 WATERNION_INLINE void SetColor(float r, float g, float b, float a) {
-                    mColor.x = r;
-                    mColor.y = g;
-                    mColor.z = b;
-                    mColor.w = a;
+                    mSprite->Color.x = r;
+                    mSprite->Color.y = g;
+                    mSprite->Color.z = b;
+                    mSprite->Color.w = a;
                 }
                 WATERNION_INLINE const Math::Vector4& GetColor() const {
-                    return mColor;
+                    return mSprite->Color;
                 }
                 WATERNION_INLINE void SetIsVisible(bool visible) {
                     mIsVisible = visible;
@@ -46,20 +55,16 @@ namespace Waternion {
                 void SetShader(Shared<class Shader> shader);
                 void SetShader(const char* shaderName);
                 WATERNION_INLINE Shared<class Shader> GetShader() const {
-                    return mShader;
+                    return mSprite->Shader;
                 }
                 WATERNION_INLINE Shared<class Texture2D> GetTexture() const {
-                    return mTexture;
+                    return mSprite->Texture;
                 }
                 WATERNION_INLINE Shared<class VertexArray> GetVertexArray() const {
-                    return mVAO;
+                    return mSprite->VAO;
                 }
             private:
-                Shared<class Texture2D> mTexture;
-                Shared<class VertexArray> mVAO;
-                Shared<class Shader> mShader;
-                Math::Vector4 mColor;
-                Math::Vector2 mSize;
+                Sprite* mSprite;
                 bool mIsVisible;
                 AABB2D mBox;
         };

@@ -1,12 +1,12 @@
 #include<Core/Application.h>
 
 int main() {
-    bool success = Waternion::Application::GetInstance()->Init(800, 600, "BreakOut", "v0.1");
-    
+    int success = Waternion::Application::GetInstance()->Init(800, 600, "MegamanZero", "project-zero");
+
     if (success) {
         Waternion::Application::GetInstance()->Run();
     }
 
     Waternion::Application::GetInstance()->Shutdown();
-    return 1;
+    return 0;
 }

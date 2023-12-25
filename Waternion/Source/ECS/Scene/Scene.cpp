@@ -16,12 +16,6 @@
 
 // Components
 #include"ECS/Component/Behavior/ScriptComponent.h"
-#include"Scripts/PlayerController.h"
-#include"Scripts/Background.h"
-#include"Scripts/Ball.h"
-#include"Scripts/GameLevel.h"
-#include"Scripts/Powers/PowerManager.h"
-#include"Scripts/GameManager.h"
 
 namespace Waternion {
     namespace ECS
@@ -40,39 +34,15 @@ namespace Waternion {
         }
 
         bool Scene::Load() {
-            Shared<Entity> player = MakeShared<Entity>("Paddle");
-            player->AddComponent<ScriptComponent>()->Bind<PlayerController>();
-
-            Shared<Entity> background = MakeShared<Entity>("Background");
-            background->AddComponent<ScriptComponent>()->Bind<Background>();
-
-            Shared<Entity> ball = MakeShared<Entity>("Ball");
-            ball->AddComponent<ScriptComponent>()->Bind<Ball>();
-
-            Shared<Entity> powerManager = MakeShared<Entity>("PowerManager");
-            powerManager->AddComponent<ScriptComponent>()->Bind<PowerManager>();
-
-            Shared<Entity> gameManager = MakeShared<Entity>("GameManager");
-            gameManager->AddComponent<ScriptComponent>()->Bind<GameManager>();
-
-            uint32_t windowWidth = Application::GetInstance()->GetWindowWidth();
-            uint32_t windowHeight = Application::GetInstance()->GetWindowHeight();
-            Shared<Entity> gameLevel = MakeShared<Entity>("GameLevel");
-            gameLevel->AddComponent<ScriptComponent>()->Bind<GameLevel>();
-            gameLevel->GetComponent<ScriptComponent>()->GetInstance<GameLevel>()->LoadLevel(0, "assets/levels/one.lvl", windowWidth, windowHeight);
-            gameLevel->GetComponent<ScriptComponent>()->GetInstance<GameLevel>()->LoadLevel(1, "assets/levels/two.lvl", windowWidth, windowHeight);
-            gameLevel->GetComponent<ScriptComponent>()->GetInstance<GameLevel>()->LoadLevel(2, "assets/levels/three.lvl", windowWidth, windowHeight);
-            gameLevel->GetComponent<ScriptComponent>()->GetInstance<GameLevel>()->LoadLevel(3, "assets/levels/four.lvl", windowWidth, windowHeight);
-
             if (!this->InitSystems()) {
                 return false;
             }            
 
-            Shared<Shader> postProcessingShader = ResourceManager::LoadShader(Settings::PostProcessingVertexSource, Settings::PostProcessingFragmentSource, "", Settings::PostProcessingShaderName);
-            mPostProcessor = MakeShared<PostProcessor>();
-            if (!mPostProcessor->Init(postProcessingShader, Application::GetInstance()->GetWindowWidth(), Application::GetInstance()->GetWindowHeight())) {
-                return false;
-            }
+            // Shared<Shader> postProcessingShader = ResourceManager::LoadShader(Settings::PostProcessingVertexSource, Settings::PostProcessingFragmentSource, "", Settings::PostProcessingShaderName);
+            // mPostProcessor = MakeShared<PostProcessor>();
+            // if (!mPostProcessor->Init(postProcessingShader, Application::GetInstance()->GetWindowWidth(), Application::GetInstance()->GetWindowHeight())) {
+            //     return false;
+            // }
 
             return true;
         }
@@ -100,7 +70,7 @@ namespace Waternion {
         }
 
         void Scene::Update(float deltaTime) {
-            mPostProcessor->Update(deltaTime);
+            // mPostProcessor->Update(deltaTime);
             for (EntityID id : mCoordinator->GetEntityIDsHaveComponent<TransformComponent>()) {
                 MakeShared<Entity>(id, mCoordinator)->GetComponent<TransformComponent>()->UpdateWorldTransform();
             }
@@ -119,11 +89,12 @@ namespace Waternion {
         }
 
         void Scene::Render(float deltaTime) {
-            mPostProcessor->BeginRender();
+            // mPostProcessor->BeginRender();
             GetSystem<SpriteRenderer>()->Draw(deltaTime);
             GetSystem<TextRenderer>()->Draw(deltaTime);
-            mPostProcessor->EndRender();
-            mPostProcessor->Render(deltaTime);
+            GetSystem<AnimationSystem>()->Draw(deltaTime);
+            // mPostProcessor->EndRender();
+            // mPostProcessor->Render(deltaTime);
         }
 
         void Scene::EndScene(float deltaTime) {

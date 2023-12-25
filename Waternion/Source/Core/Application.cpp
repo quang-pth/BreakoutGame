@@ -2,6 +2,7 @@
 
 #include"ECS/System/InputSystem.h"
 #include"Core/Event/EventDispatcher.h"
+#include"ECS/Scene/MZeroScene.h"
 
 namespace Waternion {
     Shared<Application> Application::GetInstance() {
@@ -18,7 +19,7 @@ namespace Waternion {
 
     bool Application::Init(int width, int height, const std::string& title, const std::string& version) {
         mCoordinator.reset(new ECS::Coordinator());
-        mScene.reset(new ECS::Scene());
+        mScene.reset(new ECS::MZeroScene());
 
         if (!Window::Init(width, height, title)) {
             WATERNION_LOG_ERROR("Init Window succesfully");

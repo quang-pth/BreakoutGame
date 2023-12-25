@@ -15,9 +15,10 @@ namespace Waternion
         class Scene {
             public:
                 Scene();
+                virtual ~Scene() = default;
                 WATERNION_INLINE Scene(const Scene&) = default;
 
-                bool Load();
+                virtual bool Load();
                 void Shutdown();
                 void Awake();
                 void Start();
@@ -52,11 +53,13 @@ namespace Waternion
                 }
 
                 void AddEntity(EntityID id);
-            private:
+            protected:
                 bool InitSystems();
-                std::unordered_map<UUID, Shared<System>> mSystemsMap;
+            protected:
                 std::vector<EntityID> mEntities;
                 Shared<Coordinator> mCoordinator;
+            private:
+                std::unordered_map<UUID, Shared<System>> mSystemsMap;
                 Shared<PostProcessor> mPostProcessor;
                 float mShakeTime;
         };
